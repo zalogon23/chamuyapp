@@ -18,15 +18,15 @@ function ImagesSlider({ images, ...props }: Props): ReactElement {
         {
           images.map(image => (
             <Box w={`${100 / images.length}%`}>
-              <Image w="100%" h="60vh" fit="contain" bg="black" src={image} fallback={<Box w="100%" h="20rem" bg="black" />} />
+              <Image w="100%" minH="60vh" maxH="35rem" alt="Imagen del usuario" fit="contain" bg="black" src={image} fallback={<Box w="100%" h="20rem" bg="black" />} />
             </Box>
           ))
         }
       </Box>
-      <IconButton rounded="full" aria-label="Ir a la imagen anterior" pos="absolute" top="50%" translateY="-50%" left="0.5rem" onClick={left}>
+      <IconButton opacity={first() ? "0.25" : "1"} colorScheme="whiteAlpha" rounded="full" aria-label="Ir a la imagen anterior" pos="absolute" top="50%" transform="translateY(-50%)" left="0.5rem" onClick={left}>
         <FontAwesomeIcon icon={faArrowLeft} />
       </IconButton>
-      <IconButton rounded="full" aria-label="Ir a la siguiente imagen" pos="absolute" top="50%" translateY="-50%" right="0.5rem" onClick={right}>
+      <IconButton opacity={last() ? "0.25" : "1"} colorScheme="whiteAlpha" rounded="full" aria-label="Ir a la siguiente imagen" pos="absolute" top="50%" transform="translateY(-50%)" right="0.5rem" onClick={right}>
         <FontAwesomeIcon icon={faArrowRight} />
       </IconButton>
     </Box>
@@ -37,6 +37,12 @@ function ImagesSlider({ images, ...props }: Props): ReactElement {
   }
   function right() {
     if (current < images.length - 1) setCurrent(current + 1)
+  }
+  function first(): boolean {
+    return current === 0
+  }
+  function last(): boolean {
+    return current === images.length - 1
   }
 }
 

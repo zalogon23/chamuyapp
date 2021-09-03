@@ -1,4 +1,4 @@
-import { Stack, Link as ChakraLink, Box } from '@chakra-ui/layout'
+import { Link as ChakraLink, Box } from '@chakra-ui/layout'
 import React, { ReactElement } from 'react'
 import Link from "next/link"
 import { fontSize } from '../lib/styles'
