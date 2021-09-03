@@ -4,5 +4,6 @@ const fontSize = {
 }
 
 const lineHeight = "2em"
+const headingLineHeight = "1.4em"
 
-export { fontSize, lineHeight }
+export { fontSize, lineHeight, headingLineHeight }

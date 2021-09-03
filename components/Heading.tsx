@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import { Heading as ChakraHeading } from "@chakra-ui/react"
-import { fontSize, lineHeight } from '../lib/styles'
+import { fontSize, headingLineHeight, lineHeight } from '../lib/styles'
 
 interface Props {
   children: string,
@@ -9,7 +9,7 @@ interface Props {
 
 function Heading({ children, ...props }: Props): ReactElement {
   return (
-    <ChakraHeading lineHeight={lineHeight} fontSize={fontSize.heading} {...props}>
+    <ChakraHeading lineHeight={headingLineHeight} fontSize={fontSize.heading} {...props}>
       {children}
     </ChakraHeading>
   )
