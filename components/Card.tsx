@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/layout'
 import { Image } from '@chakra-ui/react'
 import React, { ReactElement } from 'react'
 import Heading from './Heading'
+import ImagesSlider from './ImagesSlider'
 import Text from './Text'
 
 interface Props {
@@ -13,12 +14,11 @@ interface Props {
 
 function Card({ name, description, images, ...props }: Props): ReactElement {
   return (
-    <Box rounded="lg" overflow="hidden" boxShadow="0 0 0.7em #0005" {...props}>
-      {
-        images.map(image => (
-          <Image w="100%" h="60vh" fit="contain" bg="black" src={image} fallback={<Box w="100%" h="20rem" bg="black" />} />
-        ))
-      }
+    <Box as="article" rounded="lg" overflow="hidden" boxShadow="0 0 0.7em #0005" {...props}>
+      <ImagesSlider images={[
+        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
+        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg"
+      ]} />
       <Box p="4" pt="2">
         <Heading pb="2">{name}</Heading>
         <Text>
