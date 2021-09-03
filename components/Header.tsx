@@ -6,6 +6,7 @@ import Link from "next/link"
 import React, { ReactElement, useState } from 'react'
 import { fontSize } from '../lib/styles'
 import Heading from './Heading'
+import HNavBar from './HNavBar'
 import VNavBar from './VNavBar'
 
 const links = [
@@ -26,11 +27,11 @@ function Header(): ReactElement {
   return (
     <Box bg="red.500" as="header">
       <Flex py="2" px="3" align="center">
-        <HStack fontSize={fontSize.paragraph} spacing="3">
+        <HStack fontSize={fontSize.paragraph} spacing="4">
           <IconButton color="red.700" display="inline-block" _hover={{
-            transform: "translateX(-0.1em) rotate(-35deg)"
+            transform: "rotate(-35deg)"
           }}
-            rounded="full" aria-label="Ir a inicio" fontSize="1.2em">
+            rounded="full" aria-label="Ir a inicio" fontSize="1.55em">
             <FontAwesomeIcon icon={faHorse} />
           </IconButton>
           <Link href="/" passHref>
@@ -40,9 +41,12 @@ function Header(): ReactElement {
           </Link>
         </HStack>
         <Spacer />
-        <Button onClick={() => setOpenNav(!openNav)} fontSize={fontSize.paragraph} colorScheme="red" aria-label="Abrir menu">
+        {/* Small Device */}
+        <Button display={{ "lg": "none" }} onClick={() => setOpenNav(!openNav)} fontSize={fontSize.heading} colorScheme="red" aria-label="Abrir menu">
           <FontAwesomeIcon icon={faBars} />
         </Button>
+        {/* Big Device */}
+        <HNavBar links={links} />
       </Flex>
       <VNavBar links={links} open={openNav} setOpen={setOpenNav} />
     </Box>
