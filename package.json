@@ -16,6 +16,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
+    "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "graphql": "^15.5.2",
     "next": "11.1.2",

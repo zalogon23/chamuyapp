@@ -16,9 +16,9 @@ const links = [
     aria: "Ir a inicio"
   },
   {
-    url: "/",
-    to: "Inicio",
-    aria: "Ir a inicio"
+    url: "/register",
+    to: "Registrarme",
+    aria: "Ir a registrarme"
   }
 ]
 
@@ -28,12 +28,13 @@ function Header(): ReactElement {
     <Box bg="red.500" as="header">
       <Flex py="2" px="3" align="center">
         <HStack fontSize={fontSize.paragraph} spacing="4">
-          <IconButton color="red.700" display="inline-block" _hover={{
-            transform: "rotate(-35deg)"
-          }}
-            rounded="full" aria-label="Ir a inicio" fontSize="1.55em">
-            <FontAwesomeIcon icon={faHorse} />
-          </IconButton>
+          <Link href="/" passHref>
+            <IconButton color="red.700" display="inline-block" _hover={{
+              transform: "rotate(-35deg)"
+            }}
+              rounded="full" aria-label="Ir a inicio" fontSize="1.55em">
+              <FontAwesomeIcon icon={faHorse} />
+            </IconButton></Link>
           <Link href="/" passHref>
             <ChakraLink fontSize={fontSize.heading} aria-label="Ir a inicio" color="white">
               <Heading as="h2" color="white">Hola Bateria</Heading>
