@@ -1,6 +1,5 @@
 import { Box, Container } from '@chakra-ui/layout'
 import { Skeleton } from '@chakra-ui/skeleton'
-import { Button } from '@chakra-ui/react'
 import React, { ReactElement, useContext, useState } from 'react'
 import { showingUsersContext } from '../context/showingUsers'
 import Card, { User } from './Card'
@@ -10,9 +9,9 @@ interface Props {
 }
 
 function CardsSlider({ }: Props): ReactElement {
-  const { users, currentUser, like, dislike, loading } = useContext(showingUsersContext)
+  const { users, currentUser, loading } = useContext(showingUsersContext)
   return (
-    <Box as="main" overflow="hidden" w="100%" bg="">
+    <Box py="3" as="main" overflow="hidden" w="100%" bg="">
       {
         loading || !users || !users.length ?
           <Container px="5" maxW="container.md">
@@ -41,8 +40,6 @@ function CardsSlider({ }: Props): ReactElement {
                 ))
               }
             </Box>
-            <Button onClick={dislike}>Dis</Button>
-            <Button onClick={like}>Like</Button>
           </>
       }
     </Box>
