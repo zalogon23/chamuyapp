@@ -16,8 +16,8 @@ function ImagesSlider({ images, ...props }: Props): ReactElement {
     <Box pos="relative" overflow="hidden" {...props}>
       <Box display="flex" transitionDuration="400ms" transform={`translateX(-${current * 100 / images.length}%)`} w={`${images.length * 100}%`}>
         {
-          images.map(image => (
-            <Box w={`${100 / images.length}%`}>
+          images.map((image, id) => (
+            <Box key={id} w={`${100 / images.length}%`}>
               <Image w="100%" minH="60vh" maxH="35rem" alt="Imagen del usuario" fit="contain" bg="black" src={image} fallback={<Box w="100%" h="20rem" bg="black" />} />
             </Box>
           ))
