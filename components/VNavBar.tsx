@@ -24,7 +24,7 @@ function VNavBar({ open, setOpen, links }: Props): ReactElement {
         {
           links.map((link, id) => (
             <Link key={id} href={link.url} passHref>
-              <ChakraLink letterSpacing="0.15em" my="0.2rem" h="3.2rem" display="flex" alignItems="center" justifyContent="center" color="white" textAlign="center" fontSize={fontSize.paragraph} aria-label={link.aria}>
+              <ChakraLink onClick={() => setOpen(false)} letterSpacing="0.15em" my="0.2rem" h="3.2rem" display="flex" alignItems="center" justifyContent="center" color="white" textAlign="center" fontSize={fontSize.paragraph} aria-label={link.aria}>
                 {link.to}
               </ChakraLink>
             </Link>
