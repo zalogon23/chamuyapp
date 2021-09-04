@@ -5,13 +5,14 @@ import ImagesSlider from './ImagesSlider'
 import Text from './Text'
 
 export interface User {
+  id: number,
   description: string,
   name: string,
   images: string[],
   [props: string]: any
 }
 
-function Card({ name, description, images, ...props }: User): ReactElement {
+function Card({ id, name, description, images, ...props }: User): ReactElement {
   return (
     <Box as="article" rounded="lg" overflow="hidden" boxShadow="0 0 0.7em #0005" {...props}>
       <ImagesSlider images={images} />
