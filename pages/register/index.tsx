@@ -1,12 +1,16 @@
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormHelperText, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Container, HStack, Stack } from "@chakra-ui/layout";
+import { Container, Flex, HStack, Stack, Wrap } from "@chakra-ui/layout";
 import { Radio, RadioGroup } from "@chakra-ui/radio";
+import { Divider } from "@chakra-ui/react";
+import { faCat } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { signIn } from "next-auth/client";
 import Heading from "../../components/Heading";
+import Text from "../../components/Text";
 
 interface Values {
   name: string,
@@ -39,7 +43,7 @@ const Register: NextPage = () => {
           values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Stack px="4" pb="6" spacing="3">
+            <Stack px="4" pb="10" spacing="3">
               <Heading pt="1.5em" pb="1em">Registrarme</Heading>
               <FormControl>
                 <FormLabel>Nombre:</FormLabel>
@@ -71,11 +75,21 @@ const Register: NextPage = () => {
                 </RadioGroup>
                 <FormHelperText>Elegí el que te represente mas</FormHelperText>
               </FormControl>
-              <Button onClick={() => signIn()} isLoading={isSubmitting} type="submit">Dale!</Button>
+              <Button isLoading={isSubmitting} type="submit">Dale!</Button>
             </Stack>
           </Form>
         )}
       </Formik>
+      <Divider borderColor="gray.500" />
+      <Text pt="4" pb="6" textAlign="center">o</Text>
+      <Wrap justify="center" pb="8">
+        <Button flexGrow={1} colorScheme="green" leftIcon={
+          <FontAwesomeIcon icon={faCat} />
+        } onClick={() => signIn()}>Registrate con GitHub</Button>
+        <Button flexGrow={1} colorScheme="green" leftIcon={
+          <FontAwesomeIcon icon={faCat} />
+        } onClick={() => signIn()}>Registrate con GitHub</Button>
+      </Wrap>
     </Container>
   )
   function validate(values: Values): Values {

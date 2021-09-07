@@ -38,17 +38,16 @@ export default NextAuth({
       if (!token.id && user?.login) {
         const userData = user.login
         if (userData.provider !== "custom") {
-          console.log("This is the used data on query: ", userData)
           //This is only with providers
-          const createdUser = await client.mutate({
-            mutation: queries.registerProvider,
+          const signedUser = await client.mutate({
+            mutation: queries.signInProvider,
             variables: {
               createUserProvidersEmail: userData.email || "",
               createUserProvidersId: userData.id,
               createUserProvidersProvider: userData.provider
             }
           })
-          const id = createdUser?.data?.createUserProviders?.id || null
+          const id = signedUser?.data?.createUserProviders?.id || null
           if (id !== null) token.id = id
         } else {
           //This is the custom sign in process
