@@ -56,7 +56,7 @@ export default NextAuth({
       return token
     },
     async session(session, token: JWT) {
-      if (token.id) session.data = await getUserByID(token.id as number)
+      if (token.id) session.user = await getUserByID(token.id as number)
       console.log("This is the receivde session by client!: ", session)
       return session
 

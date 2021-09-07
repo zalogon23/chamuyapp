@@ -8,16 +8,16 @@ import Heading from "../../components/Heading";
 
 const Profile: NextPage = () => {
   const [session] = useSession()
-  const data = session?.data as User | undefined
+  const user = session?.user as User | undefined
   useEffect(() => {
-    if (data === undefined) window.location.replace("/register")
-  }, [data])
+    if (session === null) window.location.replace("/register")
+  }, [session])
   return (
     <>
       {
-        data ?
+        user ?
           <>
-            <Heading>{data.name}</Heading>
+            <Heading>{user.name}</Heading>
           </>
           :
           <Square minH="90vh">
