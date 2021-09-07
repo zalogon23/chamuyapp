@@ -46,34 +46,34 @@ const Register: NextPage = () => {
             <Stack px="4" pb="10" spacing="3">
               <Heading pt="1.5em" pb="1em">Registrarme</Heading>
               <FormControl>
-                <FormLabel>Nombre:</FormLabel>
-                <Input borderColor={errors.name && touched.name ? "red.500" : ""} value={values.name} onBlur={handleBlur} onChange={handleChange} name="name" type="text" />
-                <FormHelperText>{touched.name && errors.name}</FormHelperText>
+                <FormLabel htmlFor="name" id="nameLabel">Nombre:</FormLabel>
+                <Input id="name" borderColor={errors.name && touched.name ? "red.500" : ""} value={values.name} onBlur={handleBlur} onChange={handleChange} name="name" type="text" />
+                <FormHelperText id="nameHelp">{touched.name && errors.name}</FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>Email:</FormLabel>
-                <Input borderColor={errors.email && touched.email ? "red.500" : ""} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" />
-                <FormHelperText>{touched.email && errors.email}</FormHelperText>
+                <FormLabel htmlFor="email" id="emailLabel">Email:</FormLabel>
+                <Input id="email" borderColor={errors.email && touched.email ? "red.500" : ""} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" />
+                <FormHelperText id="emailHelp">{touched.email && errors.email}</FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>Contraseña:</FormLabel>
-                <Input borderColor={errors.password && touched.password ? "red.500" : ""} value={values.password} onBlur={handleBlur} onChange={handleChange} name="password" type="password" />
-                <FormHelperText>{touched.password && errors.password}</FormHelperText>
+                <FormLabel htmlFor="password" id="passwordLabel">Contraseña:</FormLabel>
+                <Input id="password" borderColor={errors.password && touched.password ? "red.500" : ""} value={values.password} onBlur={handleBlur} onChange={handleChange} name="password" type="password" />
+                <FormHelperText id="passwordHelp">{touched.password && errors.password}</FormHelperText>
               </FormControl>
               <FormControl>
-                <FormLabel>Edad:</FormLabel>
-                <Input borderColor={errors.age && touched.age ? "red.500" : ""} value={values.age} onBlur={handleBlur} onChange={handleChange} name="age" type="number" />
-                <FormHelperText>{touched.age && errors.age}</FormHelperText>
+                <FormLabel htmlFor="age" id="ageLabel">Edad:</FormLabel>
+                <Input id="age" borderColor={errors.age && touched.age ? "red.500" : ""} value={values.age} onBlur={handleBlur} onChange={handleChange} name="age" type="number" />
+                <FormHelperText id="ageHelp">{touched.age && errors.age}</FormHelperText>
               </FormControl>
               <FormControl pb="6" as="fieldset">
-                <FormLabel as="legend">Soy:</FormLabel>
-                <RadioGroup name="gender" value={values.gender}>
+                <FormLabel htmlFor="genderGroup" id="gender" as="legend">Soy:</FormLabel>
+                <RadioGroup id="genderGroup" name="gender" value={values.gender}>
                   <HStack spacing="4">
-                    <Radio onChange={handleChange} name="gender" value="woman">Mujer</Radio>
-                    <Radio onChange={handleChange} name="gender" value="man">Hombre</Radio>
+                    <Radio id="radioWoman" onChange={handleChange} name="gender" value="woman">Mujer</Radio>
+                    <Radio id="radioMan" onChange={handleChange} name="gender" value="man">Hombre</Radio>
                   </HStack>
                 </RadioGroup>
-                <FormHelperText>Elegí el que te represente mas</FormHelperText>
+                <FormHelperText id="genderHelp">Elegí el que te represente mas</FormHelperText>
               </FormControl>
               <Button isLoading={isSubmitting} type="submit">Dale!</Button>
             </Stack>
