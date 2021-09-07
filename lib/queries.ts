@@ -14,6 +14,13 @@ const queries = {
       name
     }
   }
+  `,
+  getUserByID: gql`
+  query Query($getUserByIdId: Float!) {
+    getUserByID(id: $getUserByIdId) {
+      name, gender, age, description, images, votedUsers, likedUsers, matchedUsers,genderPreference
+    }
+  }
   `
 }
 

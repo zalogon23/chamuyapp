@@ -57,8 +57,16 @@ export default NextAuth({
       return token
     },
     async session(session, token: JWT) {
-      //get user by id
+      if (token.id) session.data = await getUserByID(token.id as number)
+      console.log("This is the receivde session by client!: ", session)
       return session
+
+      async function getUserByID(id: number) {
+        const user = await client.query({ query: queries.getUserByID, variables: { getUserByIdId: id } })
+        if (!user) return ({ error: "There's no user with that ID" })
+        const data = user?.data?.getUserByID
+        return data
+      }
     }
   }
 })
