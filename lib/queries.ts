@@ -4,7 +4,7 @@ const queries = {
   registerProvider: gql`
   mutation CreateUserProvidersMutation($createUserProvidersEmail: String!, $createUserProvidersProvider: String!, $createUserProvidersId: Float!) {
     createUserProviders(email: $createUserProvidersEmail, provider: $createUserProvidersProvider, id: $createUserProvidersId) {
-      name, images, description, githubID
+      id
     }
   }
   `,

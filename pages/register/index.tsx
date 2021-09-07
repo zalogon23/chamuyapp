@@ -4,8 +4,8 @@ import { Input } from "@chakra-ui/input";
 import { Container, HStack, Stack } from "@chakra-ui/layout";
 import { Radio, RadioGroup } from "@chakra-ui/radio";
 import { Form, Formik } from "formik";
-import { validate } from "graphql";
 import { NextPage } from "next";
+import { signIn } from "next-auth/client";
 import Heading from "../../components/Heading";
 
 interface Values {
@@ -71,7 +71,7 @@ const Register: NextPage = () => {
                 </RadioGroup>
                 <FormHelperText>Elegí el que te represente mas</FormHelperText>
               </FormControl>
-              <Button isLoading={isSubmitting} type="submit">Dale!</Button>
+              <Button onClick={() => signIn()} isLoading={isSubmitting} type="submit">Dale!</Button>
             </Stack>
           </Form>
         )}

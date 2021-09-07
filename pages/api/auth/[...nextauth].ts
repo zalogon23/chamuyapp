@@ -4,14 +4,14 @@ import Providers from "next-auth/providers"
 import client from "../../../lib/apolloClient"
 import queries from "../../../lib/queries"
 
-interface UserLoginData {
-  provider: string,
-  id: number | string,
+interface User {
+  id: number,
   email: string,
-  password: string
+  password: string,
+  provider: "github" | "facebook" | "custom"
 }
 
-type JWTUserLoginData = { login: UserLoginData } & JWT
+type JWTUser = JWT & { login: User }
 
 export default NextAuth({
   providers: [
@@ -34,27 +34,30 @@ export default NextAuth({
     redirect(_, baseUrl) {
       return baseUrl + "/profile"
     },
-    async jwt(token: JWTUserLoginData, user) {
-      if (user?.login) token.login = user?.login as UserLoginData
+    async jwt(token: JWT, user: JWTUser) {
+      if (!token.id && user?.login) {
+        const userData = user.login
+        if (userData.provider !== "custom") {
+          console.log("This is the used data on query: ", userData)
+          //This is only with providers
+          const createdUser = await client.mutate({
+            mutation: queries.registerProvider,
+            variables: {
+              createUserProvidersEmail: userData.email || "",
+              createUserProvidersId: userData.id,
+              createUserProvidersProvider: userData.provider
+            }
+          })
+          const id = createdUser?.data?.createUserProviders?.id || null
+          if (id !== null) token.id = id
+        } else {
+          //This is the custom sign in process
+        }
+      }
       return token
     },
-    async session(session, userToken: JWTUserLoginData) {
-      //Here I should get the actual user
-      const userData = userToken.login
-      console.log(userData)
-      let user
-      if (userData.provider !== "custom") {
-        user = await client.mutate({
-          mutation: queries.registerProvider, variables: {
-            createUserProvidersEmail: userData.email ?? "", //Prevent NULL accident
-            createUserProvidersProvider: userData.provider,
-            createUserProvidersId: userData.id
-          }
-        })
-      } else {
-        // Aca iría el método personalizado
-      }
-      session.data = user?.data?.createUserProviders
+    async session(session, token: JWT) {
+      //get user by id
       return session
     }
   }
