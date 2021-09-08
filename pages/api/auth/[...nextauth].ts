@@ -54,19 +54,27 @@ export default NextAuth({
       if (!token.id && user?.login) {
         const userData = user.login
         if (userData.provider !== "custom") {
-          //This is only with providers
+          //Providers login
           const signedUser = await client.mutate({
             mutation: queries.loginProvider,
             variables: {
-              createUserProvidersEmail: userData.email || "",
-              createUserProvidersId: userData.id,
-              createUserProvidersProvider: userData.provider
+              getUserProvidersId: userData.id,
+              getUserProvidersProvider: userData.provider
             }
           })
-          const id = signedUser?.data?.createUserProviders?.id || null
+          const id = signedUser?.data?.getUserProviders?.id || null
           if (id !== null) token.id = id
         } else {
-          console.log("The JWT method received this user for custom login: ", user)
+          //Custom login
+          const signedUser = await client.query({
+            query: queries.login,
+            variables: {
+              getUserByLoginEmail: user.email,
+              getUserByLoginPassword: user.password
+            }
+          })
+          const id = signedUser?.data?.getUserByLogin?.id || null
+          if (id !== null) token.id = id
         }
       }
       return token
