@@ -36,23 +36,14 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn(user, account) {
-      console.log("The received account from Sign In: ", account)
-      console.log("The received user from Sign In: ", user)
       const provider = account.provider || user.provider
-      user.login = {
-        provider,
-        id: account.id,
-        email: user.email,
-        password: user.password
-      }
-      return true
-    },
-    redirect(_, baseUrl) {
-      return baseUrl + "/profile"
-    },
-    async jwt(token: JWT, user: JWTUser) {
-      if (!token.id && user?.login) {
-        const userData = user.login
+      try {
+        const userData = {
+          provider,
+          id: account.id,
+          email: user.email,
+          password: user.password
+        }
         if (userData.provider !== "custom") {
           //Providers login
           const signedUser = await client.mutate({
@@ -63,7 +54,10 @@ export default NextAuth({
             }
           })
           const id = signedUser?.data?.getUserProviders?.id || null
-          if (id !== null) token.id = id
+          if (id !== null) {
+            user.userID = id
+            return true
+          }
         } else {
           //Custom login
           const signedUser = await client.query({
@@ -74,13 +68,29 @@ export default NextAuth({
             }
           })
           const id = signedUser?.data?.getUserByLogin?.id || null
-          if (id !== null) token.id = id
+          if (id !== null) {
+            user.userID = id
+            return true
+          }
         }
+        return false
+      } catch (err) {
+        console.log("There was an error on JWT callback: ", err)
+        return false
+      }
+    },
+    redirect(_, baseUrl) {
+      return baseUrl + "/profile"
+    },
+    async jwt(token: JWT, user: JWTUser) {
+      if (user) {
+        if (user.userID) token.id = user.userID
       }
       return token
     },
     async session(session, token: JWT) {
-      if (token.id) session.user = await getUserByID(token.id as number)
+      if (!!token.id) session.user = await getUserByID(token.id as number)
+      console.log("the returned session is this: ", session)
       return session
 
       async function getUserByID(id: number) {

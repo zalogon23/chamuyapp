@@ -32,8 +32,9 @@ const Login: NextPage = () => {
           age: 18
         }}
         validate={values => validate(values)}
-        onSubmit={(values) => {
-          signIn("credentials", { ...values })
+        onSubmit={async (values, { setSubmitting }) => {
+          const result = await signIn("credentials", { ...values })
+          console.log("This is the fucking submit result: ", result)
         }}
       >
         {({

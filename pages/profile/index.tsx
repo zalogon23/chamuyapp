@@ -10,7 +10,8 @@ const Profile: NextPage = () => {
   const [session] = useSession()
   const user = session?.user as User | undefined
   useEffect(() => {
-    if (session === null) window.location.replace("/register")
+    console.log(session)
+    if (session === null) window.location.replace("/login")
   }, [session])
   return (
     <>
