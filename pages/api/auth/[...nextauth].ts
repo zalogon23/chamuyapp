@@ -44,7 +44,7 @@ export default NextAuth({
           email: user.email,
           password: user.password
         }
-        if (userData.provider !== "custom") {
+        if (provider !== "custom") {
           //Providers login
           const signedUser = await client.mutate({
             mutation: queries.loginProvider,
@@ -68,16 +68,16 @@ export default NextAuth({
             }
           })
           const id = signedUser?.data?.getUserByLogin?.id || null
+          console.log("This is the custom id: ", id)
           if (id !== null) {
             user.userID = id
             return true
           }
         }
-        return false
       } catch (err) {
         console.log("There was an error on JWT callback: ", err)
-        return false
       }
+      return false
     },
     redirect(_, baseUrl) {
       return baseUrl + "/profile"
@@ -100,5 +100,8 @@ export default NextAuth({
         return data
       }
     }
+  },
+  pages: {
+    error: "/login"
   }
 })
