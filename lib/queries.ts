@@ -18,7 +18,7 @@ const queries = {
   register: gql`
   mutation CreateUserMutation($createUserVariables: UserInput!) {
     createUser(variables: $createUserVariables) {
-      name
+      id
     }
   }
   `,
