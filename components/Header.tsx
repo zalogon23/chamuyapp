@@ -19,6 +19,11 @@ const links = [
     url: "/login",
     to: "Logueate",
     aria: "Ir a loguearme"
+  },
+  {
+    url: "/register",
+    to: "Registrate",
+    aria: "Ir a registrarme"
   }
 ]
 
