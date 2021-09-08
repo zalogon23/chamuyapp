@@ -18,16 +18,32 @@ export default NextAuth({
     Providers.GitHub({
       clientId: process.env.CLIENT_ID_GITHUB,
       clientSecret: process.env.CLIENT_SECRET_GITHUB
+    }),
+    Providers.Credentials({
+      name: "custom",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Contraseña", type: "password" },
+      },
+      async authorize(credentials, req) {
+        return ({
+          email: credentials.email,
+          password: credentials.password,
+          provider: "custom"
+        })
+      }
     })
   ],
   callbacks: {
     async signIn(user, account) {
-      const provider = account.provider || "custom"
+      console.log("The received account from Sign In: ", account)
+      console.log("The received user from Sign In: ", user)
+      const provider = account.provider || user.provider
       user.login = {
         provider,
         id: account.id,
         email: user.email,
-        password: "ah"
+        password: user.password
       }
       return true
     },
@@ -40,7 +56,7 @@ export default NextAuth({
         if (userData.provider !== "custom") {
           //This is only with providers
           const signedUser = await client.mutate({
-            mutation: queries.signInProvider,
+            mutation: queries.loginProvider,
             variables: {
               createUserProvidersEmail: userData.email || "",
               createUserProvidersId: userData.id,
@@ -50,14 +66,13 @@ export default NextAuth({
           const id = signedUser?.data?.createUserProviders?.id || null
           if (id !== null) token.id = id
         } else {
-          //This is the custom sign in process
+          console.log("The JWT method received this user for custom login: ", user)
         }
       }
       return token
     },
     async session(session, token: JWT) {
       if (token.id) session.user = await getUserByID(token.id as number)
-      console.log("This is the receivde session by client!: ", session)
       return session
 
       async function getUserByID(id: number) {

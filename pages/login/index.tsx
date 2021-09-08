@@ -20,7 +20,7 @@ interface Values {
   age: number | string,
 }
 
-const Register: NextPage = () => {
+const Login: NextPage = () => {
   return (
     <Container>
       <Formik
@@ -32,11 +32,8 @@ const Register: NextPage = () => {
           age: 18
         }}
         validate={values => validate(values)}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            console.log(JSON.stringify(values, null, 2))
-            setSubmitting(false)
-          }, 3000)
+        onSubmit={(values) => {
+          signIn("credentials", { ...values })
         }}
       >
         {({
@@ -44,12 +41,12 @@ const Register: NextPage = () => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <Stack px="4" pb="10" spacing="3">
-              <Heading pt="1.5em" pb="1em">Registrarme</Heading>
-              <FormControl>
+              <Heading pt="1.5em" pb="1em">Logueate</Heading>
+              {/* <FormControl>
                 <FormLabel htmlFor="name" id="nameLabel">Nombre:</FormLabel>
                 <Input id="name" borderColor={errors.name && touched.name ? "red.500" : ""} value={values.name} onBlur={handleBlur} onChange={handleChange} name="name" type="text" />
                 <FormHelperText id="nameHelp">{touched.name && errors.name}</FormHelperText>
-              </FormControl>
+              </FormControl>*/}
               <FormControl>
                 <FormLabel htmlFor="email" id="emailLabel">Email:</FormLabel>
                 <Input id="email" borderColor={errors.email && touched.email ? "red.500" : ""} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" />
@@ -60,7 +57,7 @@ const Register: NextPage = () => {
                 <Input id="password" borderColor={errors.password && touched.password ? "red.500" : ""} value={values.password} onBlur={handleBlur} onChange={handleChange} name="password" type="password" />
                 <FormHelperText id="passwordHelp">{touched.password && errors.password}</FormHelperText>
               </FormControl>
-              <FormControl>
+              {/* <FormControl>
                 <FormLabel htmlFor="age" id="ageLabel">Edad:</FormLabel>
                 <Input id="age" borderColor={errors.age && touched.age ? "red.500" : ""} value={values.age} onBlur={handleBlur} onChange={handleChange} name="age" type="number" />
                 <FormHelperText id="ageHelp">{touched.age && errors.age}</FormHelperText>
@@ -74,8 +71,8 @@ const Register: NextPage = () => {
                   </HStack>
                 </RadioGroup>
                 <FormHelperText id="genderHelp">Elegí el que te represente mas</FormHelperText>
-              </FormControl>
-              <Button isLoading={isSubmitting} type="submit">Dale!</Button>
+              </FormControl> */}
+              <Button isLoading={isSubmitting} type="submit">Entrar</Button>
             </Stack>
           </Form>
         )}
@@ -106,14 +103,14 @@ const Register: NextPage = () => {
     } else if (values.password.length < 8) {
       errors.password = "Mínimo de 8 caracteres"
     }
-    if (!values.name) {
-      errors.name = "Debes escribir tu nombre"
-    }
-    if (values.age < 18) {
-      errors.age = "Si sos menor de edad no podés registrarte"
-    }
+    // if (!values.name) {
+    //   errors.name = "Debes escribir tu nombre"
+    // }
+    // if (values.age < 18) {
+    //   errors.age = "Si sos menor de edad no podés registrarte"
+    // }
     return errors
   }
 }
 
-export default Register
+export default Login

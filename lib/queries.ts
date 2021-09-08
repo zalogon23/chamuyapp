@@ -1,7 +1,7 @@
 import gql from "graphql-tag"
 
 const queries = {
-  signInProvider: gql`
+  loginProvider: gql`
   mutation CreateUserProvidersMutation($createUserProvidersEmail: String!, $createUserProvidersProvider: String!, $createUserProvidersId: Float!) {
     createUserProviders(email: $createUserProvidersEmail, provider: $createUserProvidersProvider, id: $createUserProvidersId) {
       id
