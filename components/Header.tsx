@@ -2,6 +2,7 @@ import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Flex, HStack, Link as ChakraLink, Spacer } from '@chakra-ui/layout'
 import { faBars, faHorse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useSession } from 'next-auth/client'
 import Link from "next/link"
 import React, { ReactElement, useState } from 'react'
 import { fontSize } from '../lib/styles'
@@ -9,7 +10,13 @@ import Heading from './Heading'
 import HNavBar from './HNavBar'
 import VNavBar from './VNavBar'
 
-const links = [
+interface Link {
+  url: string,
+  to: string,
+  aria: string
+}
+
+const links: Link[] = [
   {
     url: "/",
     to: "Inicio",
@@ -24,11 +31,18 @@ const links = [
     url: "/register",
     to: "Registrate",
     aria: "Ir a registrarme"
+  },
+  {
+    url: "/profile",
+    to: "Perfil",
+    aria: "Ir al perfil"
   }
 ]
 
 function Header(): ReactElement {
   const [openNav, setOpenNav] = useState(false)
+  const [session] = useSession()
+  const isLoggedIn = session !== undefined && session !== null
   return (
     <Box bg="red.500" as="header">
       <Flex py="2" px="3" align="center">
@@ -52,11 +66,18 @@ function Header(): ReactElement {
           <FontAwesomeIcon icon={faBars} />
         </Button>
         {/* Big Device */}
-        <HNavBar links={links} />
+        <HNavBar links={filterLinks(links)} />
       </Flex>
-      <VNavBar links={links} open={openNav} setOpen={setOpenNav} />
+      <VNavBar links={filterLinks(links)} open={openNav} setOpen={setOpenNav} />
     </Box>
   )
+  function filterLinks(links: Link[]): Link[] {
+    if (isLoggedIn) {
+      return links.filter(link => link.to !== "Registrate" && link.to !== "Logueate")
+    } else {
+      return links.filter(link => link.to !== "Perfil")
+    }
+  }
 }
 
 export default Header
