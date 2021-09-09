@@ -12,10 +12,11 @@ export interface Link {
 export interface Props {
   open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,
-  links: Link[]
+  links: Link[],
+  children?: ReactElement | ReactElement[]
 }
 
-function VNavBar({ open, setOpen, links }: Props): ReactElement {
+function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
   return (
     <Box aria-label="Barra de Navegacion Vertical" bg="red.700" as="nav" display={{ "lg": "none" }}
       transitionDuration="400ms" overflow="hidden" visibility={open ? "visible" : "hidden"}
@@ -30,6 +31,7 @@ function VNavBar({ open, setOpen, links }: Props): ReactElement {
             </Link>
           ))
         }
+        {children}
       </Box>
     </Box>
   )

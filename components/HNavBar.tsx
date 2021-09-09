@@ -5,7 +5,12 @@ import Link from "next/link"
 import { Link as ChakraLink } from "@chakra-ui/react"
 import { fontSize } from '../lib/styles'
 
-function HNavBar({ links }: { links: LinkType[] }): ReactElement {
+interface Props {
+  links: LinkType[],
+  children?: ReactElement | ReactElement[]
+}
+
+function HNavBar({ links, children }: Props): ReactElement {
   return (
     <Box aria-label="Barra de Navegacion Horizontal" as="nav" display={{ "base": "none", "lg": "block" }}>
       <HStack spacing="4" as="ul" px="4">
@@ -18,6 +23,7 @@ function HNavBar({ links }: { links: LinkType[] }): ReactElement {
             </Link>
           ))
         }
+        {children}
       </HStack>
     </Box>
   )

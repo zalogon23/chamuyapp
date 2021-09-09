@@ -2,7 +2,7 @@ import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Flex, HStack, Link as ChakraLink, Spacer } from '@chakra-ui/layout'
 import { faBars, faHorse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useSession } from 'next-auth/client'
+import { signOut, useSession } from 'next-auth/client'
 import Link from "next/link"
 import React, { ReactElement, useState } from 'react'
 import { fontSize } from '../lib/styles'
@@ -66,9 +66,13 @@ function Header(): ReactElement {
           <FontAwesomeIcon icon={faBars} />
         </Button>
         {/* Big Device */}
-        <HNavBar links={filterLinks(links)} />
+        <HNavBar links={filterLinks(links)}>
+          {isLoggedIn ? <Button colorScheme="red" fontSize={fontSize.paragraph} onClick={() => signOut()}>Salir</Button> : undefined}
+        </HNavBar>
       </Flex>
-      <VNavBar links={filterLinks(links)} open={openNav} setOpen={setOpenNav} />
+      <VNavBar links={filterLinks(links)} open={openNav} setOpen={setOpenNav}>
+        {isLoggedIn ? <Button colorScheme="red" fontSize={fontSize.paragraph} onClick={() => signOut()}>Salir</Button> : undefined}
+      </VNavBar>
     </Box>
   )
   function filterLinks(links: Link[]): Link[] {
