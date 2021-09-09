@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Chamuyapp
 
-## Getting Started
+Este proyecto está compuesto por dos partes. Este es el Front End (principalmente)
 
-First, run the development server:
+Algunas de las tecnologías usadas:
+- Chakra UI
+- Next.js
+- Next Auth
+- GIT
+- etc
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Algunas cosas aprendidas durante el camino
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Mejorar mi forma de componer, y crear componentes mas reutilizables. Permitiendo el paso de ...props libremente.
+- Aumentar la facilidad a la hora de TABear la página, para personas con limitaciones visuales (y mejores aria-label para orientar sobre el contenido).
+- Diferenciar entre el proceso de Auntenticación y el de Autorización. Siendo el primero el que, verificando tus email, contraseña (credenciales), permite que recibas un Identificador. Y el segundo el que decide si el Identificador que tienes te permite ingresar a determinada página.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Como viajar por este proyecto
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Librerías auxiliares:
+- apolloClient (Aca esta la conexion con la segunda parte del proyecto, el puro BACKEND. Donde estan registrados los usuarios.)
+- queries (Aquí tenemos las queries de GraphQL para el apolloClient)
+- styles (Algunos estilos fundamentales, fontSizes, lineHeight, etc)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Contexto:
+- showingUser (Se encarga de solicitar al BACKEND, via apolloClient los usuarios que puede ver nuestro usuario, dependiendo de sus preferencias, y de si ya ha votado a dicha persona. En cuyo caso ya no se le mostrara tal usuario. Estos usuarios son desplegados mediante el COMPONENTE CardsSlider)
 
-## Learn More
+Componentes:
+- CardsSlider (Recibe un Array de objetos usuario y lo despliega conforme a la informacion recibida. Utilizando un COMPONENTE Card para cada uno. Muestra botones para pasar de un slide a otro).
+- Card (Recibe un objeto Usuario y lo despliega. Contiene un COMPONENTE ImagesSlider para las imagenes).
+- ImagesSlider (Recibe un Array de images (string) y los despliega. Muestra unos botones para pasar de una imagen a otra).
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
