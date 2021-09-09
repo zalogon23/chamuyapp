@@ -12,7 +12,7 @@ interface Props {
 function EditableDescription({ defaultValue }: Props): ReactElement {
 
   return (
-    <Editable fontSize={fontSize.paragraph} py="0.8em" defaultValue={defaultValue} pos="relative">
+    <Editable fontSize={fontSize.paragraph} pt="0.2em" mb="1.5em" defaultValue={defaultValue} pos="relative">
       <EditablePreview pr="2.5em" />
       <EditableInput />
       <Logic />
@@ -31,8 +31,8 @@ function Logic() {
     <>
       {
         isEditing ?
-          <ButtonGroup pos="absolute" bottom="-1.5em" left="0">
-            <IconButton colorScheme="green" aria-label="Confirmar cambios en descripcion"
+          <ButtonGroup py="4">
+            <IconButton aria-label="Confirmar cambios en descripcion"
               {...getSubmitButtonProps()}>
               <FontAwesomeIcon icon={faCheck} /></IconButton>
             <IconButton colorScheme="red" aria-label="Cancelar cambios en descripcion"
@@ -40,7 +40,7 @@ function Logic() {
               <FontAwesomeIcon icon={faTimes} /></IconButton>
           </ButtonGroup>
           :
-          <IconButton pos="absolute" right="0" aria-label="Editar descripcion"
+          <IconButton pos="absolute" right="0" top="50%" transform="translateY(-50%)" aria-label="Editar descripcion"
             {...getEditButtonProps()}>
             <FontAwesomeIcon icon={faEdit} />
           </IconButton>
