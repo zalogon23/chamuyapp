@@ -10,14 +10,15 @@ import Loading from "../../components/Loading";
 const Profile: NextPage = () => {
   const [session] = useSession()
   const user = session?.user as User | undefined
+  const isLoggedOut = session === null
+  const isLoggedIn = session !== undefined && session !== null && user
   useEffect(() => {
-    console.log(session)
-    if (session === null) window.location.replace("/login")
+    if (isLoggedOut) window.location.replace("/login")
   }, [session])
   return (
     <>
       {
-        user ?
+        isLoggedIn ?
           <>
             <Heading>{user.name}</Heading>
           </>
