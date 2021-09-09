@@ -2,6 +2,8 @@ import { Link as ChakraLink, Box } from '@chakra-ui/layout'
 import React, { ReactElement } from 'react'
 import Link from "next/link"
 import { fontSize } from '../lib/styles'
+import { Button } from '@chakra-ui/button'
+import { signOut, useSession } from 'next-auth/client'
 
 export interface Link {
   url: string,
@@ -17,10 +19,12 @@ export interface Props {
 }
 
 function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
+  const [session] = useSession()
+  const isLoggedIn = session !== undefined && session !== null
   return (
     <Box aria-label="Barra de Navegacion Vertical" bg="red.700" as="nav" display={{ "lg": "none" }}
       transitionDuration="400ms" overflow="hidden" visibility={open ? "visible" : "hidden"}
-      h={open ? `${links.length * 3.6}rem` : "0rem"}>
+      h={open ? `${(links.length + (isLoggedIn ? 1 : 0)) * 3.6}rem` : "0rem"}>
       <Box display="flex" flexDir="column" as="ul">
         {
           links.map((link, id) => (
@@ -31,7 +35,9 @@ function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
             </Link>
           ))
         }
-        {children}
+        {isLoggedIn ? <Button colorScheme="blackAlpha" bg="red.700" display="flex"
+          letterSpacing="0.15em" my="0.2rem" h="3.2rem" alignItems="center" justifyContent="center" color="white"
+          textAlign="center" fontSize={fontSize.paragraph} onClick={() => signOut()}>Salir</Button> : undefined}
       </Box>
     </Box>
   )

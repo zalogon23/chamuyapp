@@ -66,12 +66,9 @@ function Header(): ReactElement {
           <FontAwesomeIcon icon={faBars} />
         </Button>
         {/* Big Device */}
-        <HNavBar links={filterLinks(links)}>
-          {isLoggedIn ? <Button colorScheme="red" fontSize={fontSize.paragraph} onClick={() => signOut()}>Salir</Button> : undefined}
-        </HNavBar>
+        <HNavBar links={filterLinks(links)} />
       </Flex>
       <VNavBar links={filterLinks(links)} open={openNav} setOpen={setOpenNav}>
-        {isLoggedIn ? <Button colorScheme="red" fontSize={fontSize.paragraph} onClick={() => signOut()}>Salir</Button> : undefined}
       </VNavBar>
     </Box>
   )

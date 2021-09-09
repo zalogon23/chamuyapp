@@ -65,7 +65,7 @@ const Login: NextPage = () => {
             <Wrap justify="center" pb="8">
               <Button flexGrow={1} colorScheme="green" leftIcon={
                 <FontAwesomeIcon icon={faCat} />
-              } onClick={() => signIn()}>Entrar con GitHub</Button>
+              } onClick={() => signIn("github")}>Entrar con GitHub</Button>
             </Wrap>
           </>
           :
