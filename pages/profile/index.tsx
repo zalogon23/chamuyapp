@@ -5,6 +5,7 @@ import { useSession } from "next-auth/client";
 import { useEffect } from "react";
 import { User } from "../../components/Card";
 import Heading from "../../components/Heading";
+import Loading from "../../components/Loading";
 
 const Profile: NextPage = () => {
   const [session] = useSession()
@@ -21,9 +22,7 @@ const Profile: NextPage = () => {
             <Heading>{user.name}</Heading>
           </>
           :
-          <Square minH="90vh">
-            <Spinner size="xl" />
-          </Square>
+          <Loading />
       }
     </>
   )
