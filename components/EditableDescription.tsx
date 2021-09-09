@@ -13,9 +13,9 @@ function EditableDescription({ defaultValue }: Props): ReactElement {
 
   return (
     <Editable fontSize={fontSize.paragraph} pt="0.2em" mb="1.5em" defaultValue={defaultValue} pos="relative">
-      <EditablePreview pr="2.5em" />
       <EditableInput />
       <Logic />
+      <EditablePreview pr="2.5em" />
     </Editable>
   )
 }
