@@ -1,18 +1,18 @@
 import { Box, HStack } from '@chakra-ui/layout'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useContext } from 'react'
 import { Link as LinkType } from "./VNavBar"
 import Link from "next/link"
 import { Link as ChakraLink, Button } from "@chakra-ui/react"
 import { fontSize } from '../lib/styles'
-import { signOut, useSession } from 'next-auth/client'
+import { signOut } from 'next-auth/client'
+import { userContext } from '../context/user'
 
 interface Props {
   links: LinkType[],
 }
 
 function HNavBar({ links }: Props): ReactElement {
-  const [session] = useSession()
-  const isLoggedIn = session !== undefined && session !== null
+  const { isLoggedIn, session } = useContext(userContext)
   return (
     <Box aria-label="Barra de Navegacion Horizontal" as="nav" display={{ "base": "none", "lg": "block" }}>
       <HStack spacing="4" as="ul" px="4">

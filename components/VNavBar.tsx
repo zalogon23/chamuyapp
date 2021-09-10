@@ -1,9 +1,10 @@
 import { Link as ChakraLink, Box } from '@chakra-ui/layout'
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useContext } from 'react'
 import Link from "next/link"
 import { fontSize } from '../lib/styles'
 import { Button } from '@chakra-ui/button'
-import { signOut, useSession } from 'next-auth/client'
+import { signOut } from 'next-auth/client'
+import { userContext } from '../context/user'
 
 export interface Link {
   url: string,
@@ -19,8 +20,7 @@ export interface Props {
 }
 
 function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
-  const [session] = useSession()
-  const isLoggedIn = session !== undefined && session !== null
+  const { session, isLoggedIn } = useContext(userContext)
   return (
     <Box aria-label="Barra de Navegacion Vertical" bg="red.700" as="nav" display={{ "lg": "none" }}
       transitionDuration="400ms" overflow="hidden" visibility={open ? "visible" : "hidden"}

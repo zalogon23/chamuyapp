@@ -9,10 +9,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { signIn, useSession } from "next-auth/client";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
 import Text from "../../components/Text";
+import { userContext } from "../../context/user";
 
 interface Values {
   email: string,
@@ -20,9 +21,7 @@ interface Values {
 }
 
 const Login: NextPage = () => {
-  const [session] = useSession()
-  const isLoggedOut = session === null
-  const isLoggedIn = session !== undefined && session !== null
+  const { session, isLoggedIn, isLoggedOut } = useContext(userContext)
   useEffect(() => {
     if (isLoggedIn) window.location.replace("/profile")
   }, [session])

@@ -2,9 +2,9 @@ import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Flex, HStack, Link as ChakraLink, Spacer } from '@chakra-ui/layout'
 import { faBars, faHorse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { signOut, useSession } from 'next-auth/client'
 import Link from "next/link"
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useContext, useState } from 'react'
+import { userContext } from '../context/user'
 import { fontSize } from '../lib/styles'
 import Heading from './Heading'
 import HNavBar from './HNavBar'
@@ -41,8 +41,7 @@ const links: Link[] = [
 
 function Header(): ReactElement {
   const [openNav, setOpenNav] = useState(false)
-  const [session] = useSession()
-  const isLoggedIn = session !== undefined && session !== null
+  const { isLoggedIn } = useContext(userContext)
   return (
     <Box bg="red.500" as="header">
       <Flex py="2" px="3" align="center">
