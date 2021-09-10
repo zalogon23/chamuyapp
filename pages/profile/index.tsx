@@ -1,12 +1,9 @@
-import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
-import { Badge, Container, HStack, Square } from "@chakra-ui/layout";
-import { Spinner } from "@chakra-ui/spinner";
+import { Badge, Container, HStack } from "@chakra-ui/layout";
 import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
-import { useSession } from "next-auth/client";
+import Router from "next/router";
 import { useContext, useEffect } from "react";
-import { User } from "../../components/Card";
 import EditableDescription from "../../components/EditableDescription";
 import Heading from "../../components/Heading";
 import ImagesSlider from "../../components/ImagesSlider";
@@ -19,7 +16,7 @@ const Profile: NextPage = () => {
   const colorScheme = user?.gender === "woman" ? "pink" : "blue"
   const genderIcon = user?.gender === "woman" ? faVenus : faMars
   useEffect(() => {
-    if (isLoggedOut) window.location.replace("/login")
+    if (isLoggedOut) Router.replace("/login")
     console.log(user)
   }, [session])
   return (

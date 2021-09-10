@@ -5,9 +5,8 @@ import { Container, HStack, Stack } from "@chakra-ui/layout";
 import { Radio, RadioGroup } from "@chakra-ui/radio";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
-import { useSession } from "next-auth/client";
+import Router from "next/router";
 import { useContext, useEffect } from "react";
-import { User } from "../../components/Card";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
 import { userContext } from "../../context/user";
@@ -25,7 +24,7 @@ interface Values {
 const Login: NextPage = () => {
   const { session, isLoggedIn, isLoggedOut } = useContext(userContext)
   useEffect(() => {
-    if (isLoggedIn) window.location.replace("/profile")
+    if (isLoggedIn) Router.replace("/profile")
   }, [session])
   return (
     <Container>

@@ -1,14 +1,14 @@
 import { Button } from "@chakra-ui/button";
 import { FormControl, FormHelperText, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Container, Flex, HStack, Stack, Wrap } from "@chakra-ui/layout";
-import { Radio, RadioGroup } from "@chakra-ui/radio";
+import { Container, Stack, Wrap } from "@chakra-ui/layout";
 import { Divider } from "@chakra-ui/react";
 import { faCat } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
-import { signIn, useSession } from "next-auth/client";
+import { signIn } from "next-auth/client";
+import Router from "next/router";
 import { useContext, useEffect } from "react";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
@@ -23,7 +23,7 @@ interface Values {
 const Login: NextPage = () => {
   const { session, isLoggedIn, isLoggedOut } = useContext(userContext)
   useEffect(() => {
-    if (isLoggedIn) window.location.replace("/profile")
+    if (isLoggedIn) Router.replace("/profile")
   }, [session])
   return (
     <Container>
