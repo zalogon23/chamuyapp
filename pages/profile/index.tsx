@@ -36,13 +36,13 @@ const Profile: NextPage = () => {
               </Badge>
             </HStack>
             <EditableDescription defaultValue={user.description} />
-            <Input type="file" onChange={async e => {
-              const file = e.target?.files?.[0]
-              if (!file) return
+            <Input type="file" multiple onChange={async e => {
+              const files = e.target?.files
+              if (!files?.length) return
               try {
                 const response = await client.mutate({
-                  mutation: queries.sendFile, variables: {
-                    uploadFileFile: file
+                  mutation: queries.sendFiles, variables: {
+                    uploadFileFiles: files
                   }
                 })
               } catch (err) {

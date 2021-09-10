@@ -29,9 +29,9 @@ const queries = {
     }
   }
   `,
-  sendFile: gql`
-  mutation UploadFileMutation($uploadFileFile: Upload!) {
-    uploadFile(file: $uploadFileFile)
+  sendFiles: gql`
+  mutation UploadFileMutation($uploadFileFiles: [Upload!]!) {
+    uploadFile(files: $uploadFileFiles)
   }
   `
 }
