@@ -37,7 +37,10 @@ function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
         }
         {isLoggedIn ? <Button colorScheme="blackAlpha" bg="red.700" display="flex"
           letterSpacing="0.15em" my="0.2rem" h="3.2rem" alignItems="center" justifyContent="center" color="white"
-          textAlign="center" fontSize={fontSize.paragraph} onClick={() => signOut()}>Salir</Button> : undefined}
+          textAlign="center" fontSize={fontSize.paragraph} onClick={() => {
+            signOut({ redirect: false })
+            setOpen(false)
+          }}>Salir</Button> : undefined}
       </Box>
     </Box>
   )

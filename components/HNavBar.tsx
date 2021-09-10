@@ -25,7 +25,7 @@ function HNavBar({ links }: Props): ReactElement {
             </Link>
           ))
         }
-        {isLoggedIn ? <Button colorScheme="red" fontSize={fontSize.paragraph} onClick={() => signOut()}>Salir</Button> : undefined}
+        {isLoggedIn ? <Button colorScheme="red" fontSize={fontSize.paragraph} onClick={() => signOut({ redirect: false })}>Salir</Button> : undefined}
 
       </HStack>
     </Box>
