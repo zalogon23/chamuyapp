@@ -30,8 +30,8 @@ const queries = {
   }
   `,
   sendFiles: gql`
-  mutation UploadFileMutation($uploadFileFiles: [Upload!]!) {
-    uploadFile(files: $uploadFileFiles)
+  mutation UploadFilesMutation($uploadFilesId: Float!, $uploadFilesFiles: [Upload!]!) {
+    uploadFiles(id: $uploadFilesId, files: $uploadFilesFiles)
   }
   `
 }
