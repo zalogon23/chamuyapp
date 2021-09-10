@@ -37,7 +37,10 @@ const Login: NextPage = () => {
                 password: "",
               }}
               validate={values => validate(values)}
-              onSubmit={(values) => signIn("credentials", { ...values })}
+              onSubmit={async (values, { setErrors }) => {
+                const result = await signIn("credentials", { ...values, redirect: false })
+                if (!result?.ok) setErrors({ email: "Email inválido", password: "O contraseña inválida" })
+              }}
             >
               {({
                 values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting
