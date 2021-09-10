@@ -28,6 +28,11 @@ const queries = {
       name, gender, age, description, images, votedUsers, likedUsers, matchedUsers,genderPreference
     }
   }
+  `,
+  sendFile: gql`
+  mutation UploadFileMutation($uploadFileFile: Upload!) {
+    uploadFile(file: $uploadFileFile)
+  }
   `
 }
 

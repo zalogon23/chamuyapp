@@ -1,8 +1,11 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client"
+import { createUploadLink } from "apollo-upload-client"
 
 const client = new ApolloClient({
-  uri: process.env.URL ? process.env.URL + "/graphql" : "http://192.168.0.2:8000/graphql",
   cache: new InMemoryCache(),
+  link: createUploadLink({
+    uri: process.env.URL ? process.env.URL + "/graphql" : "http://192.168.0.2:8000/graphql"
+  }),
   defaultOptions: {
     watchQuery: {
       fetchPolicy: "network-only"

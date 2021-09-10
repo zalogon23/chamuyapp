@@ -1,3 +1,4 @@
+import { Input } from "@chakra-ui/input";
 import { Badge, Container, HStack } from "@chakra-ui/layout";
 import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +10,8 @@ import Heading from "../../components/Heading";
 import ImagesSlider from "../../components/ImagesSlider";
 import Loading from "../../components/Loading";
 import { userContext } from "../../context/user";
+import client from "../../lib/apolloClient";
+import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
 
 const Profile: NextPage = () => {
@@ -33,6 +36,20 @@ const Profile: NextPage = () => {
               </Badge>
             </HStack>
             <EditableDescription defaultValue={user.description} />
+            <Input type="file" onChange={async e => {
+              const file = e.target?.files?.[0]
+              if (!file) return
+              try {
+                const response = await client.mutate({
+                  mutation: queries.sendFile, variables: {
+                    uploadFileFile: file
+                  }
+                })
+              } catch (err) {
+                console.log(err)
+              }
+            }
+            } />
           </Container>
           :
           <Loading />
