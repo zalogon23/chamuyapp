@@ -7,6 +7,7 @@ import Router from "next/router";
 import { useContext, useEffect } from "react";
 import EditableDescription from "../../components/EditableDescription";
 import Heading from "../../components/Heading";
+import ImagesPicker from "../../components/ImagesPicker";
 import ImagesSlider from "../../components/ImagesSlider";
 import Loading from "../../components/Loading";
 import { userContext } from "../../context/user";
@@ -28,6 +29,7 @@ const Profile: NextPage = () => {
         isLoggedIn && user ?
           <Container>
             <Heading py="1em">{user.name}</Heading>
+            <ImagesPicker images={JSON.parse(user.images)} />
             <ImagesSlider images={JSON.parse(user.images)} />
             <HStack spacing="2" py="4">
               <Badge fontSize={fontSize.paragraph} colorScheme={colorScheme}>{user.age}</Badge>
