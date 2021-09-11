@@ -44,7 +44,7 @@ const Profile: NextPage = () => {
               try {
                 const response = await client.mutate({
                   mutation: queries.sendFiles, variables: {
-                    uploadFilesFiles: files, uploadFilesId: 66
+                    uploadFilesFiles: files
                   }
                 })
               } catch (err) {
