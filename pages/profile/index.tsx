@@ -1,4 +1,5 @@
 import { Badge, Container, HStack } from "@chakra-ui/layout";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
@@ -24,10 +25,22 @@ const Profile: NextPage = () => {
     <>
       {
         isLoggedIn && user ?
-          <Container>
+          <Container maxW="container.md">
             <Heading py="1em">{user.name}</Heading>
-            <ImagesPicker images={JSON.parse(user.images)} />
-            <ImagesSlider images={JSON.parse(user.images)} />
+            <Tabs>
+              <TabList>
+                <Tab>Ver</Tab>
+                <Tab>Editar</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel tabIndex={-1} px="0">
+                  <ImagesSlider images={JSON.parse(user.images)} />
+                </TabPanel>
+                <TabPanel tabIndex={-1} px="0">
+                  <ImagesPicker images={JSON.parse(user.images)} />
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
             <HStack spacing="2" py="4">
               <Badge fontSize={fontSize.paragraph} colorScheme={colorScheme}>{user.age}</Badge>
               <Badge px="0.5em" fontSize={fontSize.paragraph} colorScheme={colorScheme}>
