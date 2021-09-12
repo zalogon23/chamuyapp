@@ -20,7 +20,7 @@ function ImagesSlider({ images, ...props }: Props): ReactElement {
             {
               images.map((image, id) => (
                 <Box key={id} w={`${100 / images.length}%`}>
-                  <Image w="100%" minH="60vh" maxH="35rem" alt="Imagen del usuario" fit="contain" bg="black" src={image} fallback={<Box w="100%" minH="60vh" maxH="35rem" bg="black" />} />
+                  <Image w="100%" minH="15rem" h="60vh" maxH="35rem" alt="Imagen del usuario" fit="contain" bg="black" src={image} fallback={<ImagePlaceholder />} />
                 </Box>
               ))
             }
@@ -33,7 +33,7 @@ function ImagesSlider({ images, ...props }: Props): ReactElement {
           </IconButton>
         </>
         :
-        <Box w="100%" bg="black" minH="60vh" maxH="35rem" />
+        <ImagePlaceholder />
       }
     </Box>
   )
@@ -50,6 +50,12 @@ function ImagesSlider({ images, ...props }: Props): ReactElement {
   function last(): boolean {
     return current === images.length - 1
   }
+}
+
+function ImagePlaceholder() {
+  return (
+    <Box w="100%" bg="black" h="60vh" minH="15rem" maxH="35rem" />
+  )
 }
 
 export default ImagesSlider
