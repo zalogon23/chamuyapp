@@ -33,6 +33,11 @@ const queries = {
   mutation UploadFilesMutation($uploadFilesFiles: [Upload!]!) {
     uploadFiles(files: $uploadFilesFiles)
   }
+  `,
+  updateImages: gql`
+  mutation UpdateUserImagesMutation($updateUserImagesImages: String!, $updateUserImagesId: Float!) {
+    updateUserImages(images: $updateUserImagesImages, id: $updateUserImagesId)
+  }
   `
 }
 

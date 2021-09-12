@@ -4,6 +4,7 @@ import { Input } from '@chakra-ui/input'
 import { Box, Stack, Wrap, WrapItem } from '@chakra-ui/layout'
 import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useRouter } from 'next/router'
 import React, { ReactElement, useState } from 'react'
 import client from '../lib/apolloClient'
 import queries from '../lib/queries'
@@ -14,13 +15,14 @@ interface Props {
 }
 
 function ImagesPicker({ images }: Props): ReactElement {
+  const router = useRouter()
   const [currentImages, setCurrentImages] = useState(images)
   const [uploadedImages, setUploadedImages] = useState([] as File[])
   return (
-    <Stack>
-      <Wrap p="1" bg="blue.300" minH="60vh">
+    <Stack p="4" border="1px solid" borderColor="gray.400" rounded="lg" spacing="1em">
+      <Wrap minH="60vh">
         {currentImages.map((image, id) => (
-          <WrapItem key={`userImage${id}`} h="20rem" w="14rem" flexGrow={1} pos="relative">
+          <WrapItem rounded="md" overflow="hidden" key={`userImage${id}`} h="20rem" minW={["", "13rem"]} w="48%" flexGrow={1} pos="relative">
             <IconButton onClick={() => {
               setCurrentImages(currentImages.filter((_, imgID) => imgID !== id))
             }} size="sm" pos="absolute" fontSize={fontSize.paragraph} top="0.2rem" right="0.2rem" colorScheme="red" aria-label={`Eliminar foto ${id}`}>
@@ -31,14 +33,14 @@ function ImagesPicker({ images }: Props): ReactElement {
         ))}
         {
           [1, 2, 3, 4, 5, 6].map(num => num <= 6 - currentImages.length ? (
-            <ImageAdder images={images} num={num} setUploadedImages={setUploadedImages} uploadedImages={uploadedImages} />
+            <ImageAdder rounded="md" overflow="hidden" minW={["", "13rem"]} w="48%" images={images} num={num} setUploadedImages={setUploadedImages} uploadedImages={uploadedImages} />
           )
             :
             null
           )
         }
       </Wrap>
-      <Button aria-label="Actualizar imagenes de perfil" onClick={updateImages}>Actualizar</Button>
+      <Button fontSize={fontSize.paragraph} minW="100%" aria-label="Actualizar imagenes de perfil" onClick={updateImages}>Actualizar</Button>
     </Stack>
   )
   async function updateImages() {
@@ -48,8 +50,14 @@ function ImagesPicker({ images }: Props): ReactElement {
       }
     }))?.data?.uploadFiles as string[]
     const newProfileURLs = [...currentImages, ...updatedImages]
-    console.log("These are the new profile user images: ", newProfileURLs)
-    //Here you need to update the user images
+    console.log("Here you got the new images: ", newProfileURLs)
+    const imagesUpdated = (await client.mutate({
+      mutation: queries.updateImages, variables: {
+        updateUserImagesImages: JSON.stringify(newProfileURLs),
+        updateUserImagesId: 2 // ERROR: THE ID HERE IS HARD CODED!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      }
+    }))?.data?.updateUserImages as string
+    if (JSON.parse(imagesUpdated)?.length) router.reload()
   }
 }
 
@@ -57,14 +65,15 @@ interface ImageProps {
   images: string[],
   num: number,
   setUploadedImages: React.Dispatch<React.SetStateAction<File[]>>,
-  uploadedImages: File[]
+  uploadedImages: File[],
+  [props: string]: any
 }
 
-function ImageAdder({ images, num, setUploadedImages, uploadedImages }: ImageProps) {
+function ImageAdder({ images, num, setUploadedImages, uploadedImages, ...props }: ImageProps) {
   const [image, setImage] = useState((uploadedImages?.[num] ?? null) as File | null)
   return (
     <WrapItem h="20rem" w="14rem" bg="black" flexGrow={1} display="flex"
-      justifyContent="center" alignItems="center" pos="relative" overflow="hidden">
+      justifyContent="center" alignItems="center" pos="relative" overflow="hidden" {...props}>
       {
         image ?
           <>
