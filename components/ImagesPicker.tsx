@@ -19,7 +19,7 @@ function ImagesPicker({ images }: Props): ReactElement {
   const [currentImages, setCurrentImages] = useState(images)
   const [uploadedImages, setUploadedImages] = useState([] as File[])
   return (
-    <Stack p="4" border="1px solid" borderColor="gray.400" rounded="lg" spacing="1em">
+    <Stack p="4" border="2px solid" borderColor="gray.200" rounded="lg" spacing="1em">
       <Wrap minH="60vh">
         {currentImages.map((image, id) => (
           <WrapItem rounded="md" overflow="hidden" key={`userImage${id}`} h="20rem" minW={["", "13rem"]} w="48%" flexGrow={1} pos="relative">
