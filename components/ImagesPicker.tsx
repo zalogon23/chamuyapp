@@ -33,7 +33,7 @@ function ImagesPicker({ images }: Props): ReactElement {
         ))}
         {
           [1, 2, 3, 4, 5, 6].map(num => num <= 6 - currentImages.length ? (
-            <ImageAdder rounded="md" overflow="hidden" minW={["", "13rem"]} w="48%" images={images} num={num} setUploadedImages={setUploadedImages} uploadedImages={uploadedImages} />
+            <ImageAdder rounded="md" overflow="hidden" minW={["", "13rem"]} w="48%" images={images} num={num - 1} setUploadedImages={setUploadedImages} uploadedImages={uploadedImages} />
           )
             :
             null
@@ -70,7 +70,7 @@ interface ImageProps {
 }
 
 function ImageAdder({ images, num, setUploadedImages, uploadedImages, ...props }: ImageProps) {
-  const [image, setImage] = useState((uploadedImages?.[num] ?? null) as File | null)
+  const image = (uploadedImages?.[num] ?? null) as File | null
   return (
     <WrapItem h="20rem" w="14rem" bg="black" flexGrow={1} display="flex"
       justifyContent="center" alignItems="center" pos="relative" overflow="hidden" {...props}>
@@ -86,29 +86,34 @@ function ImageAdder({ images, num, setUploadedImages, uploadedImages, ...props }
           </>
           :
           <>
-            <IconButton onClick={() => (document.querySelector(`#uploadImage${num}`) as HTMLInputElement).click()} rounded="full" aria-label="Agregar foto">
+            <IconButton onClick={() => selectFile()} rounded="full" aria-label="Agregar foto">
               <FontAwesomeIcon icon={faPlus} />
             </IconButton>
-            <Input onChange={(e) => {
-              const file = e?.target?.files?.[0]
-              if (!file) {
-                removeImage()
-                return
-              }
-              addImage(file)
-            }} id={`uploadImage${num}`} type="file" bg="black" pos="absolute" w="0" h="0" right="-1000rem" />
           </>
       }
     </WrapItem>
   )
 
   function removeImage() {
-    setUploadedImages(uploadedImages?.filter(img => img?.name !== image?.name) ?? null)
-    setImage(null)
+    const index = uploadedImages.findIndex(img => img?.name === image?.name)
+    setUploadedImages(uploadedImages.filter((img, id) => id !== index) ?? null)
   }
   function addImage(file: File) {
-    setImage(file)
     setUploadedImages([...uploadedImages, file])
+  }
+
+  function selectFile() {
+    const filePicker = document.createElement("input")
+    filePicker.type = "file"
+    filePicker.addEventListener("change", (e) => {
+      const file = (e?.target as HTMLInputElement)?.files?.[0] as File
+      if (!file) {
+        removeImage()
+        return
+      }
+      addImage(file)
+    })
+    filePicker.click()
   }
 }
 
