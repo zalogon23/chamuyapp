@@ -24,18 +24,11 @@ export function ShowingUsersProvider({ children }: Props) {
   const { isLoggedIn, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
   const loading = false
+  const [voted, setVoted] = useState([] as number[])
   const [users, setUsers] = useState([] as User[])
   useEffect(() => {
-    console.log(user)
     if (!isLoggedIn || !user.id) return
-    (async function () {
-      const showingUsers = (await client.query({
-        query: queries.getShowingUsers, variables: {
-          getShowingUsersUserId: user.id
-        }
-      }))?.data?.getShowingUsers as User[]
-      setUsers(showingUsers)
-    })()
+    searchUsers()
   }, [isLoggedIn, user])
   return (
     <showingUsersContext.Provider value={{
@@ -50,38 +43,50 @@ export function ShowingUsersProvider({ children }: Props) {
   )
 
   async function like() {
-    if (!user.id) return
+    if (!user.id || voted.includes(users[currentUser].id)) return
     const showingUser = users[currentUser]
-    const match = (await vote(true))?.data?.voteUser
-    console.log("There was a match: ", match)
-    move()
+    const match = (await vote(true))?.data?.voteUser || false
+    await move()
   }
 
   async function dislike() {
-    if (!user.id) return
+    if (!user.id || voted.includes(users[currentUser].id)) return
     const showingUser = users[currentUser]
     await vote(false)
-    move()
+    await move()
   }
 
-  function move() {
+  async function move() {
     if (currentUser === users.length - 1) {
-      console.log("Now it should fetch more users")
-      //Fetches
-      setCurrentUser(0)
+      const receivedMore = await searchUsers()
+      if (receivedMore) setCurrentUser(0)
     } else {
       setCurrentUser(currentUser + 1)
     }
   }
 
   function vote(liked: boolean) {
+    setVoted([...voted, users[currentUser].id])
     return client.mutate({
       mutation: queries.voteUser, variables: {
         voteUserLiked: liked,
-        voteUserVotedId: users[currentUser],
+        voteUserVotedId: users[currentUser].id,
         voteUserVoterId: user.id
       }
     })
+  }
+
+  async function searchUsers() {
+    const showingUsers = (await client.query({
+      query: queries.getShowingUsers, variables: {
+        getShowingUsersUserId: user.id
+      }
+    }))?.data?.getShowingUsers as User[]
+    if (showingUsers.length) {
+      setUsers(showingUsers)
+      return true
+    }
+    return false
   }
 }
 
