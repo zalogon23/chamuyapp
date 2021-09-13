@@ -5,17 +5,18 @@ import { Box, Stack, Wrap, WrapItem } from '@chakra-ui/layout'
 import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useContext, useState } from 'react'
+import React, { Dispatch, ReactElement, SetStateAction, useContext, useState } from 'react'
 import { userContext } from '../context/user'
 import client from '../lib/apolloClient'
 import queries from '../lib/queries'
 import { fontSize } from '../lib/styles'
 
 interface Props {
-  images: string[]
+  images: string[],
+  setMode: Dispatch<SetStateAction<number>>
 }
 
-function ImagesPicker({ images }: Props): ReactElement {
+function ImagesPicker({ images, setMode }: Props): ReactElement {
   const [currentImages, setCurrentImages] = useState(images)
   const [uploadedImages, setUploadedImages] = useState([] as File[])
   const { setUser, user } = useContext(userContext)
@@ -45,6 +46,7 @@ function ImagesPicker({ images }: Props): ReactElement {
     </Stack>
   )
   async function updateImages() {
+    setMode(0)
     const updatedImages = (await client.mutate({
       mutation: queries.sendFiles, variables: {
         uploadFilesFiles: uploadedImages

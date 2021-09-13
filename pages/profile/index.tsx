@@ -4,7 +4,7 @@ import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import EditableDescription from "../../components/EditableDescription";
 import Heading from "../../components/Heading";
 import ImagesPicker from "../../components/ImagesPicker";
@@ -17,6 +17,7 @@ const Profile: NextPage = () => {
   const { user, isLoggedIn, isLoggedOut } = useContext(userContext)
   const colorScheme = user?.gender === "woman" ? "pink" : "blue"
   const genderIcon = user?.gender === "woman" ? faVenus : faMars
+  const [mode, setMode] = useState(0)
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
@@ -26,7 +27,7 @@ const Profile: NextPage = () => {
         isLoggedIn && user ?
           <Container maxW="container.md">
             <Heading py="1em">{user.name}</Heading>
-            <Tabs>
+            <Tabs index={mode} onChange={i => setMode(i)}>
               <TabList>
                 <Tab>Ver</Tab>
                 <Tab>Editar</Tab>
@@ -36,7 +37,7 @@ const Profile: NextPage = () => {
                   <ImagesSlider images={JSON.parse(user.images)} />
                 </TabPanel>
                 <TabPanel tabIndex={-1} px="0">
-                  <ImagesPicker images={JSON.parse(user.images)} />
+                  <ImagesPicker setMode={setMode} images={JSON.parse(user.images)} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
