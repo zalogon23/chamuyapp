@@ -5,7 +5,8 @@ import { Box, Stack, Wrap, WrapItem } from '@chakra-ui/layout'
 import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useContext, useState } from 'react'
+import { userContext } from '../context/user'
 import client from '../lib/apolloClient'
 import queries from '../lib/queries'
 import { fontSize } from '../lib/styles'
@@ -15,9 +16,9 @@ interface Props {
 }
 
 function ImagesPicker({ images }: Props): ReactElement {
-  const router = useRouter()
   const [currentImages, setCurrentImages] = useState(images)
   const [uploadedImages, setUploadedImages] = useState([] as File[])
+  const { setUser, user } = useContext(userContext)
   return (
     <Stack p="4" border="2px solid" borderColor="gray.200" rounded="lg" spacing="1em">
       <Wrap minH="60vh">
@@ -57,7 +58,10 @@ function ImagesPicker({ images }: Props): ReactElement {
         updateUserImagesId: 2 // ERROR: THE ID HERE IS HARD CODED!!!!!!!!!!!!!!!!!!!!!!!!!!!
       }
     }))?.data?.updateUserImages as string
-    if (JSON.parse(imagesUpdated)?.length) router.reload()
+    if (JSON.parse(imagesUpdated)?.length) {
+      //Update user on session
+      setUser({ ...user, images: imagesUpdated })
+    }
   }
 }
 
