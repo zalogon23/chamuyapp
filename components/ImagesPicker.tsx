@@ -47,22 +47,27 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
   )
   async function updateImages() {
     setMode(0)
-    const updatedImages = (await client.mutate({
-      mutation: queries.sendFiles, variables: {
-        uploadFilesFiles: uploadedImages
-      }
-    }))?.data?.uploadFiles as string[]
+    let updatedImages = [] as string[];
+    if (uploadedImages.length > 0) {
+      updatedImages = (await client.mutate({
+        mutation: queries.sendFiles, variables: {
+          uploadFilesFiles: uploadedImages
+        }
+      }))?.data?.uploadFiles as string[]
+    }
     const newProfileURLs = [...currentImages, ...updatedImages]
-    console.log("Here you got the new images: ", newProfileURLs)
-    const imagesUpdated = (await client.mutate({
-      mutation: queries.updateImages, variables: {
-        updateUserImagesImages: JSON.stringify(newProfileURLs),
-        updateUserImagesId: 2 // ERROR: THE ID HERE IS HARD CODED!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if (newProfileURLs.find((url, id) => url !== images[id])) {
+      console.log("There was something different.")
+      const imagesUpdated = (await client.mutate({
+        mutation: queries.updateImages, variables: {
+          updateUserImagesImages: JSON.stringify(newProfileURLs),
+          updateUserImagesId: 2 // ERROR: THE ID HERE IS HARD CODED!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
+      }))?.data?.updateUserImages as string
+      if (JSON.parse(imagesUpdated)?.length) {
+        //Update user on session
+        setUser({ ...user, images: imagesUpdated })
       }
-    }))?.data?.updateUserImages as string
-    if (JSON.parse(imagesUpdated)?.length) {
-      //Update user on session
-      setUser({ ...user, images: imagesUpdated })
     }
   }
 }
