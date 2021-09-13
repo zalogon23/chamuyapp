@@ -25,7 +25,7 @@ const queries = {
   getUserByID: gql`
   query Query($getUserByIdId: Float!) {
     getUserByID(id: $getUserByIdId) {
-      name, gender, age, description, images, votedUsers, likedUsers, matchedUsers,genderPreference
+      id, name, gender, age, description, images, votedUsers, likedUsers, matchedUsers,genderPreference
     }
   }
   `,
@@ -37,6 +37,13 @@ const queries = {
   updateImages: gql`
   mutation UpdateUserImagesMutation($updateUserImagesImages: String!, $updateUserImagesId: Float!) {
     updateUserImages(images: $updateUserImagesImages, id: $updateUserImagesId)
+  }
+  `,
+  getShowingUsers: gql`
+  query Query($getShowingUsersUserId: Float!) {
+    getShowingUsers(userID: $getShowingUsersUserId) {
+      id, name, description, age, gender, images
+    }
   }
   `
 }

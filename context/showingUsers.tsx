@@ -1,5 +1,8 @@
-import { createContext, ReactElement, useState } from "react";
+import { createContext, ReactElement, useContext, useEffect, useState } from "react";
 import { User } from "../components/Card";
+import client from "../lib/apolloClient";
+import queries from "../lib/queries";
+import { userContext } from "./user";
 
 
 interface Props {
@@ -17,40 +20,22 @@ interface Context {
 const showingUsersContext = createContext({} as Context)
 
 export function ShowingUsersProvider({ children }: Props) {
+  const { isLoggedIn, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
   const loading = false
-  const [users, setUsers] = useState([
-    {
-      id: 2,
-      name: "Juan Lucas del Prado",
-      images: [
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-      ],
-      description: "Obrero de la mina de ajotepec, en la cima del monte iguazu"
-    },
-    {
-      id: 3,
-      name: "Juan Lucas del Prado",
-      images: [
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-      ],
-      description: "Obrero de la mina de ajotepec, en la cima del monte iguazu"
-    },
-    {
-      id: 3,
-      name: "Juan Lucas del Prado",
-      images: [
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-        "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-      ],
-      description: "Obrero de la mina de ajotepec, en la cima del monte iguazu"
-    },
-  ])
+  const [users, setUsers] = useState([])
+  useEffect(() => {
+    console.log(user)
+    if (!isLoggedIn || !user.id) return
+    (async function () {
+      const showingUsers = (await client.query({
+        query: queries.getShowingUsers, variables: {
+          getShowingUsersUserId: user.id
+        }
+      }))?.data?.getShowingUsers
+      setUsers(showingUsers.map((user: User & { images: string }) => ({ ...user, images: JSON.parse(user.images) })))
+    })()
+  }, [isLoggedIn, user])
   return (
     <showingUsersContext.Provider value={{
       users,
