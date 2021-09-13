@@ -35,7 +35,7 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
         ))}
         {
           [1, 2, 3, 4, 5, 6].map(num => num <= 6 - currentImages.length ? (
-            <ImageAdder rounded="md" overflow="hidden" minW={["", "13rem"]} w="48%" images={images} num={num - 1} setUploadedImages={setUploadedImages} uploadedImages={uploadedImages} />
+            <ImageAdder key={`imageadder${num}`} rounded="md" overflow="hidden" minW={["", "13rem"]} w="48%" images={images} num={num - 1} setUploadedImages={setUploadedImages} uploadedImages={uploadedImages} />
           )
             :
             null
@@ -56,7 +56,8 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
       }))?.data?.uploadFiles as string[]
     }
     const newProfileURLs = [...currentImages, ...updatedImages]
-    if (newProfileURLs.find((url, id) => url !== images[id])) {
+    console.log(newProfileURLs, images)
+    if (newProfileURLs.length !== images.length || newProfileURLs.find((url, id) => url !== images[id])) {
       console.log("There was something different.")
       const imagesUpdated = (await client.mutate({
         mutation: queries.updateImages, variables: {
@@ -64,7 +65,7 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
           updateUserImagesId: 2 // ERROR: THE ID HERE IS HARD CODED!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
       }))?.data?.updateUserImages as string
-      if (JSON.parse(imagesUpdated)?.length) {
+      if (imagesUpdated) {
         //Update user on session
         setUser({ ...user, images: imagesUpdated })
       }
