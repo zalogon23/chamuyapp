@@ -5,6 +5,7 @@ import { fontSize } from '../lib/styles'
 import { Button } from '@chakra-ui/button'
 import { signOut } from 'next-auth/client'
 import { userContext } from '../context/user'
+import Router from 'next/router'
 
 export interface Link {
   url: string,
@@ -37,9 +38,10 @@ function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
         }
         {isLoggedIn ? <Button colorScheme="blackAlpha" bg="red.700" display="flex"
           letterSpacing="0.15em" my="0.2rem" h="3.2rem" alignItems="center" justifyContent="center" color="white"
-          textAlign="center" fontSize={fontSize.paragraph} onClick={() => {
-            signOut({ redirect: false })
+          textAlign="center" fontSize={fontSize.paragraph} onClick={async () => {
             setOpen(false)
+            Router.replace("/login")
+            signOut({ redirect: false })
           }}>Salir</Button> : undefined}
       </Box>
     </Box>
