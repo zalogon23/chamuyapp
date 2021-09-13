@@ -27,7 +27,10 @@ export function ShowingUsersProvider({ children }: Props) {
   const [voted, setVoted] = useState([] as number[])
   const [users, setUsers] = useState([] as User[])
   useEffect(() => {
-    if (!isLoggedIn || !user.id) return
+    if (!isLoggedIn || !user.id) {
+      if (users.length) setUsers([])
+      return
+    }
     searchUsers()
   }, [isLoggedIn, user])
   return (
