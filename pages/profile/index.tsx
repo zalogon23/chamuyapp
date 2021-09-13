@@ -14,13 +14,12 @@ import { userContext } from "../../context/user";
 import { fontSize } from "../../lib/styles";
 
 const Profile: NextPage = () => {
-  const { session, user, isLoggedIn, isLoggedOut } = useContext(userContext)
+  const { user, isLoggedIn, isLoggedOut } = useContext(userContext)
   const colorScheme = user?.gender === "woman" ? "pink" : "blue"
   const genderIcon = user?.gender === "woman" ? faVenus : faMars
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
-    console.log(user)
-  }, [session])
+  }, [isLoggedOut])
   return (
     <>
       {

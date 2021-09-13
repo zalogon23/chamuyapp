@@ -22,10 +22,10 @@ interface Values {
 }
 
 const Login: NextPage = () => {
-  const { session, isLoggedIn, isLoggedOut } = useContext(userContext)
+  const { isLoggedIn, isLoggedOut } = useContext(userContext)
   useEffect(() => {
     if (isLoggedIn) Router.replace("/profile")
-  }, [session])
+  }, [isLoggedIn])
   return (
     <Container>
       {
