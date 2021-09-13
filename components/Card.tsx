@@ -12,7 +12,7 @@ export interface User {
   id: number,
   description: string,
   name: string,
-  images: string[],
+  images: string,
   [props: string]: any
 }
 
@@ -20,7 +20,7 @@ function Card({ id, name, description, images, ...props }: User): ReactElement {
   const { dislike, like } = useContext(showingUsersContext)
   return (
     <Box as="article" rounded="lg" overflow="hidden" boxShadow="0 0 0.7em #0005" {...props}>
-      <ImagesSlider images={images} />
+      <ImagesSlider images={JSON.parse(images)} />
       <Box p="4" pt="2">
         <Heading pb="2">{name}</Heading>
         <Text pb="2">

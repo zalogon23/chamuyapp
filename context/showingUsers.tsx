@@ -1,3 +1,4 @@
+import { move } from "formik";
 import { createContext, ReactElement, useContext, useEffect, useState } from "react";
 import { User } from "../components/Card";
 import client from "../lib/apolloClient";
@@ -23,7 +24,7 @@ export function ShowingUsersProvider({ children }: Props) {
   const { isLoggedIn, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
   const loading = false
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([] as User[])
   useEffect(() => {
     console.log(user)
     if (!isLoggedIn || !user.id) return
@@ -32,8 +33,8 @@ export function ShowingUsersProvider({ children }: Props) {
         query: queries.getShowingUsers, variables: {
           getShowingUsersUserId: user.id
         }
-      }))?.data?.getShowingUsers
-      setUsers(showingUsers.map((user: User & { images: string }) => ({ ...user, images: JSON.parse(user.images) })))
+      }))?.data?.getShowingUsers as User[]
+      setUsers(showingUsers)
     })()
   }, [isLoggedIn, user])
   return (
@@ -48,8 +49,22 @@ export function ShowingUsersProvider({ children }: Props) {
     </showingUsersContext.Provider>
   )
 
-  function like(): void {
-    console.log("You like this guy (talking with server...): ", users[currentUser])
+  async function like() {
+    if (!user.id) return
+    const showingUser = users[currentUser]
+    const match = (await vote(true))?.data?.voteUser
+    console.log("There was a match: ", match)
+    move()
+  }
+
+  async function dislike() {
+    if (!user.id) return
+    const showingUser = users[currentUser]
+    await vote(false)
+    move()
+  }
+
+  function move() {
     if (currentUser === users.length - 1) {
       console.log("Now it should fetch more users")
       //Fetches
@@ -59,15 +74,14 @@ export function ShowingUsersProvider({ children }: Props) {
     }
   }
 
-  function dislike(): void {
-    console.log("You DISlike this guy (talking with server...): ", users[currentUser])
-    if (currentUser === users.length - 1) {
-      console.log("Now it should fetch more users")
-      //Fetches
-      setCurrentUser(0)
-    } else {
-      setCurrentUser(currentUser + 1)
-    }
+  function vote(liked: boolean) {
+    return client.mutate({
+      mutation: queries.voteUser, variables: {
+        voteUserLiked: liked,
+        voteUserVotedId: users[currentUser],
+        voteUserVoterId: user.id
+      }
+    })
   }
 }
 

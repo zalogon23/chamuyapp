@@ -45,6 +45,11 @@ const queries = {
       id, name, description, age, gender, images
     }
   }
+  `,
+  voteUser: gql`
+  mutation VoteUserMutation($voteUserLiked: Boolean!, $voteUserVotedId: Float!, $voteUserVoterId: Float!) {
+    voteUser(liked: $voteUserLiked, votedID: $voteUserVotedId, voterID: $voteUserVoterId)
+  }  
   `
 }
 
