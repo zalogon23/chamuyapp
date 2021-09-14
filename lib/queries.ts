@@ -50,6 +50,13 @@ const queries = {
   mutation VoteUserMutation($voteUserLiked: Boolean!, $voteUserVotedId: Float!, $voteUserVoterId: Float!) {
     voteUser(liked: $voteUserLiked, votedID: $voteUserVotedId, voterID: $voteUserVoterId)
   }  
+  `,
+  getMatches: gql`
+  query Query($getMatchesUserId: Float!) {
+    getMatches(userID: $getMatchesUserId){
+      name, images
+    }
+  }  
   `
 }
 
