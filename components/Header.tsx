@@ -28,6 +28,11 @@ const links: Link[] = [
     aria: "Ir a loguearme"
   },
   {
+    url: "/messages",
+    to: "Mensajes",
+    aria: "Ir a ver mensajes"
+  },
+  {
     url: "/register",
     to: "Registrate",
     aria: "Ir a registrarme"
@@ -75,7 +80,7 @@ function Header(): ReactElement {
     if (isLoggedIn) {
       return links.filter(link => link.to !== "Registrate" && link.to !== "Logueate")
     } else {
-      return links.filter(link => link.to !== "Perfil")
+      return links.filter(link => link.to !== "Perfil" && link.to !== "Mensajes")
     }
   }
 }
