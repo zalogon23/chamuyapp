@@ -54,7 +54,7 @@ const queries = {
   getMatches: gql`
   query Query($getMatchesUserId: Float!) {
     getMatches(userID: $getMatchesUserId){
-      name, images, id
+      name, images, id, content
     }
   }  
   `

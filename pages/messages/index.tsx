@@ -7,15 +7,22 @@ import client from "../../lib/apolloClient"
 import queries from "../../lib/queries"
 import { User } from "../../components/Card"
 import { Image } from "@chakra-ui/image"
-import { Box, HStack } from "@chakra-ui/layout"
+import { Box, HStack, Stack } from "@chakra-ui/layout"
 import { IconButton } from "@chakra-ui/button"
 import Link from "next/link"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
+import { Avatar } from "@chakra-ui/avatar"
+import Text from "../../components/Text"
+
+interface Match extends User {
+  content: string
+}
 
 const Messages: NextPage = () => {
   const { isLoggedIn, isLoggedOut, user } = useContext(userContext)
-  const [matches, setMatches] = useState([] as User[])
+  const [matchesMessages, setMatchesMessages] = useState([] as Match[])
+  const [matchesNoMessages, setMatchesNoMessages] = useState([] as Match[])
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
@@ -26,24 +33,45 @@ const Messages: NextPage = () => {
           query: queries.getMatches, variables: {
             getMatchesUserId: user.id
           }
-        }))?.data?.getMatches as User[] | undefined
-        if (Array.isArray(matchesGraphQL)) setMatches(matchesGraphQL)
+        }))?.data?.getMatches as Match[] | undefined
+        if (Array.isArray(matchesGraphQL)) {
+          setMatchesNoMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length < 1))
+          setMatchesMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length > 0))
+        }
       })()
     }
   }, [isLoggedIn, user?.id])
   return (
     <>
       {
-        isLoggedIn && matches[0]?.id ?
-          <BubbleCarrousel>
-            {
-              matches.map(() => <MatchBubble user={matches[0]} />)
-            }
-          </BubbleCarrousel>
+        isLoggedIn ?
+          <>
+            <BubbleCarrousel>
+              {
+                matchesNoMessages.map(match => <MatchBubble user={match} />)
+              }
+            </BubbleCarrousel>
+            <MessagesDisplay messages={matchesMessages} />
+          </>
           :
           <Loading />
       }
     </>
+  )
+}
+
+function MessagesDisplay({ messages }: { messages: Match[] }) {
+  return (
+    <Stack>
+      {
+        messages.map(mes => (
+          <Box display="flex">
+            <Avatar src={JSON.parse(mes.images)[0]} />
+            <Text>{JSON.parse(mes.content)[0].content}</Text>
+          </Box>
+        ))
+      }
+    </Stack>
   )
 }
 
@@ -82,8 +110,8 @@ function BubbleCarrousel({ children }: { children: ReactElement | ReactElement[]
         aria-label="Deslizar hacia la derecha">
         <FontAwesomeIcon icon={faArrowRight} />
       </IconButton>
-      <HStack transitionDuration="200ms" transform={`translateX(-${slideWidth * current}rem)`} w={`${length}rem`}
-        spacing={`${spacing}rem`} px={`${px}rem`} py="3">
+      <HStack h={`${bubbleW + px}rem`} transitionDuration="200ms" transform={`translateX(-${slideWidth * current}rem)`} w={`${length}rem`}
+        spacing={`${spacing}rem`} p={`${px}rem`}>
         {children}
       </HStack>
     </Box>
