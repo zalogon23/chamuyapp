@@ -6,19 +6,22 @@ import { ShowingUsersProvider } from '../context/showingUsers'
 import client from '../lib/apolloClient'
 import { Provider as SessionProvider } from "next-auth/client"
 import UserProvider from '../context/user'
+import MessagesProvider from '../context/messages'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <UserProvider>
-        <ApolloProvider client={client}>
-          <ShowingUsersProvider>
-            <ChakraProvider>
-              <Header />
-              <Component {...pageProps} />
-            </ChakraProvider>
-          </ShowingUsersProvider>
-        </ApolloProvider>
+        <MessagesProvider>
+          <ApolloProvider client={client}>
+            <ShowingUsersProvider>
+              <ChakraProvider>
+                <Header />
+                <Component {...pageProps} />
+              </ChakraProvider>
+            </ShowingUsersProvider>
+          </ApolloProvider>
+        </MessagesProvider>
       </UserProvider>
     </SessionProvider>
   )

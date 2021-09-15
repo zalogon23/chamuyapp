@@ -15,37 +15,22 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { Avatar } from "@chakra-ui/avatar"
 import Text from "../../components/Text"
 import { Link as ChakraLink } from "@chakra-ui/react"
+import { messagesContext } from "../../context/messages"
 
-interface Match extends User {
+export interface Match extends User {
   content: string
 }
 
 const Messages: NextPage = () => {
-  const { isLoggedIn, isLoggedOut, user } = useContext(userContext)
-  const [matchesMessages, setMatchesMessages] = useState([] as Match[])
-  const [matchesNoMessages, setMatchesNoMessages] = useState([] as Match[])
+  const { isLoggedIn, isLoggedOut } = useContext(userContext)
+  const { matchesMessages, matchesNoMessages } = useContext(messagesContext)
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
-  useEffect(() => {
-    if (isLoggedIn && user) {
-      (async () => {
-        const matchesGraphQL = (await client.query({
-          query: queries.getMatches, variables: {
-            getMatchesUserId: user.id
-          }
-        }))?.data?.getMatches as Match[] | undefined
-        if (Array.isArray(matchesGraphQL)) {
-          setMatchesNoMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length < 1))
-          setMatchesMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length > 0))
-        }
-      })()
-    }
-  }, [isLoggedIn, user?.id])
   return (
     <>
       {
-        isLoggedIn ?
+        isLoggedIn && (matchesNoMessages?.length || matchesMessages?.length) ?
           <>
             <BubbleCarrousel>
               {
