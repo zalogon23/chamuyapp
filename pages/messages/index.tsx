@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { Avatar } from "@chakra-ui/avatar"
 import Text from "../../components/Text"
+import { Link as ChakraLink } from "@chakra-ui/react"
 
 interface Match extends User {
   content: string
@@ -65,10 +66,14 @@ function MessagesDisplay({ messages }: { messages: Match[] }) {
     <Stack>
       {
         messages.map(mes => (
-          <Box display="flex">
-            <Avatar src={JSON.parse(mes.images)[0]} />
-            <Text>{JSON.parse(mes.content)[0].content}</Text>
-          </Box>
+          <Link href={`/messages/${mes.id}`}>
+            <ChakraLink aria-label={`Ir a la conversacion con ${mes.name}`}>
+              <Box display="flex">
+                <Avatar src={JSON.parse(mes.images)[0]} />
+                <Text>{JSON.parse(mes.content)[0].content}</Text>
+              </Box>
+            </ChakraLink>
+          </Link>
         ))
       }
     </Stack>
@@ -79,11 +84,10 @@ function MatchBubble({ user }: { user: User }): ReactElement {
   return (
     <>
       <Link href={`/messages/${user.id}`} passHref>
-        <IconButton rounded="full" w="5rem" h="5rem" aria-label={`Ir al chat con ${user.name}`}>
+        <IconButton rounded="full" w="5rem" h="5rem" aria-label={`Ir a la conversacion con ${user.name}`}>
           <Image rounded="full" w="5rem" h="5rem" fit="cover" src={JSON.parse(user.images)[0]} fallback={<Box rounded="full" w="5rem" h="5rem" bg="black" />} />
         </IconButton>
       </Link>
-
     </>
   )
 }
