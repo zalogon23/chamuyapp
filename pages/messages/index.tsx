@@ -16,6 +16,7 @@ import { Avatar } from "@chakra-ui/avatar"
 import Text from "../../components/Text"
 import { Link as ChakraLink } from "@chakra-ui/react"
 import { messagesContext } from "../../context/messages"
+import Heading from "../../components/Heading"
 
 export interface Match extends User {
   content: string
@@ -51,11 +52,14 @@ function MessagesDisplay({ messages }: { messages: Match[] }) {
     <Stack>
       {
         messages.map(mes => (
-          <Link href={`/messages/${mes.id}`}>
-            <ChakraLink aria-label={`Ir a la conversacion con ${mes.name}`}>
-              <Box display="flex">
-                <Avatar src={JSON.parse(mes.images)[0]} />
-                <Text>{JSON.parse(mes.content)[0].content}</Text>
+          <Link href={`/messages/${mes.id}`} passHref>
+            <ChakraLink _hover={{ textDecoration: "none", filter: "brightness(90%)" }} aria-label={`Ir a la conversacion con ${mes.name}`}>
+              <Box display="flex" alignItems="center">
+                <Avatar src={JSON.parse(mes.images)[0]} mr="1rem" />
+                <Stack spacing="0">
+                  <Heading>{mes.name}</Heading>
+                  <Text>{JSON.parse(mes.content)[0].content}</Text>
+                </Stack>
               </Box>
             </ChakraLink>
           </Link>

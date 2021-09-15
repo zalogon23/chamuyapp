@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
 import Heading from "../../components/Heading";
+import Loading from "../../components/Loading";
 import { messagesContext } from "../../context/messages";
 import { userContext } from "../../context/user";
 
@@ -35,7 +36,12 @@ const MessagesID: NextPage = () => {
   }, [isLoggedOut])
   return (
     <>
-      <Heading>Hello</Heading>
+      {
+        messages.length ?
+          <Heading>Algo</Heading>
+          :
+          <Loading />
+      }
     </>
   )
 }
