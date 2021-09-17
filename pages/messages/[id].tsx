@@ -27,17 +27,18 @@ interface Message {
 
 const MessagesID: NextPage = () => {
   const { isLoggedOut, user } = useContext(userContext)
-  const { matchesMessages, matchesNoMessages } = useContext(messagesContext)
+  const { matchesMessages, matchesNoMessages, loading: messagesLoading } = useContext(messagesContext)
   const [messages, setMessages] = useState([] as Message[])
   const [title, setTitle] = useState("")
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     const pathname = window?.location.pathname
     const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1))
-    if (id) {
+    if (id && !messagesLoading) {
       const conversation = matchesMessages.find(match => match.id === id) ?? matchesNoMessages.find(match => match.id === id)
       const anotherUserName = conversation?.name || ""
       setTitle(anotherUserName)
+      console.log(conversation)
       if (conversation === undefined) {
         Router.replace("/messages") // If no conversation match then redirect
         return
@@ -52,7 +53,7 @@ const MessagesID: NextPage = () => {
       setMessages(avatarMessages.sort(() => -1))
       if (anotherUserName !== "") setLoading(false)
     }
-  }, [matchesMessages])
+  }, [matchesMessages, messagesLoading])
   useEffect(() => {
     if (isLoggedOut) {
       Router.replace("/login")
