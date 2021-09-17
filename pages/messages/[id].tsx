@@ -47,11 +47,12 @@ const MessagesID: NextPage = () => {
         return
       }
       const currentMessages = JSON.parse(conversation?.content || "[]") as Message[]
+      console.log(currentMessages)
       const selfAvatar = JSON.parse(user.images)[0]
       const avatarMessages = currentMessages.map(mes => ({
         ...mes,
-        avatar: mes.id === user.id ? selfAvatar : JSON.parse(conversation.images)[0],
-        self: mes.id === user.id ? true : false
+        avatar: mes.senderID === user.id ? selfAvatar : JSON.parse(conversation.images)[0],
+        self: mes.senderID === user.id ? true : false
       })) as Message[]
       setMessages(avatarMessages.sort(() => -1))
       if (anotherUserName !== "") setLoading(false)
