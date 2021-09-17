@@ -6,7 +6,7 @@ describe("Message Sender COMPONENT", () => {
   const name = "anotheruser"
   let input: HTMLElement, button: HTMLElement
   beforeAll(() => {
-    render(<MessageSender name={name} />)
+    render(<MessageSender from={1} to={2} name={name} />)
     input = screen.getByRole("textbox")
     button = screen.getByRole("button")
   })

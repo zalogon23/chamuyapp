@@ -19,7 +19,8 @@ import { messagesContext } from "../../context/messages"
 import Heading from "../../components/Heading"
 
 export interface Match extends User {
-  content: string
+  content: string,
+  anotherID: number
 }
 
 const Messages: NextPage = () => {

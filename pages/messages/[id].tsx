@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
+import { Match } from ".";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
 import Text from "../../components/Text";
@@ -29,6 +30,7 @@ const MessagesID: NextPage = () => {
   const { isLoggedOut, user } = useContext(userContext)
   const { matchesMessages, matchesNoMessages, loading: messagesLoading } = useContext(messagesContext)
   const [messages, setMessages] = useState([] as Message[])
+  const [anotherUser, setAnotherUser] = useState({} as Match)
   const [name, setName] = useState("")
   const [loading, setLoading] = useState(true)
   useEffect(() => {
@@ -36,6 +38,7 @@ const MessagesID: NextPage = () => {
     const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1))
     if (id && !messagesLoading) {
       const conversation = matchesMessages.find(match => match.id === id) ?? matchesNoMessages.find(match => match.id === id)
+      if (conversation !== undefined) setAnotherUser(conversation)
       const anotherUserName = conversation?.name || ""
       setName(anotherUserName)
       console.log(conversation)
@@ -69,7 +72,7 @@ const MessagesID: NextPage = () => {
             {
               messages.map((mes, id) => <Line key={id} message={mes} />)
             }
-            <MessageSender name={name} />
+            <MessageSender from={user.id} to={anotherUser.anotherID} name={name} />
           </>
           :
           <Loading />
@@ -89,7 +92,13 @@ const MessagesID: NextPage = () => {
 
 }
 
-export function MessageSender({ name }: { name: string }) {
+interface SendMessage {
+  to: number,
+  from: number,
+  name: string
+}
+
+export function MessageSender({ name, from, to }: SendMessage) {
   return (
     <HStack w="100%" pos="fixed" bottom="0" zIndex="dropdown" px="4" py="8"
       left="50%" transform="translateX(-50%)" maxW="45rem" as="form">
