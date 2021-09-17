@@ -2,7 +2,7 @@ import { Avatar } from "@chakra-ui/avatar";
 import { IconButton } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Flex, HStack, Stack } from "@chakra-ui/layout";
+import { Box, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
@@ -70,11 +70,14 @@ const MessagesID: NextPage = () => {
       {
         !loading ?
           <>
-            <Heading px="2" borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
+            <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="2"
+              borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
               py="1.5em">{`Conversación con ${name}`}</Heading>
-            {
-              messages.map((mes, id) => <Line key={id} message={mes} />)
-            }
+            <Box px="4" pb="10rem">
+              {
+                messages.map((mes, id) => <Line key={id} message={mes} />)
+              }
+            </Box>
             <MessageSender from={user.id} to={anotherUser.anotherID} name={name} />
           </>
           :
@@ -87,8 +90,8 @@ const MessagesID: NextPage = () => {
     return (
       <Flex py="0.5em" borderBottom="1px solid" borderBottomColor="gray.200"
         direction={message.self ? "row-reverse" : "row"} alignItems="center" overflow="hidden">
-        <Avatar mx="1rem" src={message.avatar} />
-        <Text wordBreak="break-word">{message.content}</Text>
+        <Avatar zIndex={9} src={message.avatar} />
+        <Text px="1.5rem" wordBreak="break-word">{message.content}</Text>
       </Flex>
     )
   }
@@ -105,16 +108,18 @@ export function MessageSender({ name, from, to }: SendMessage) {
   const [content, setContent] = useState("")
   const [sending, setSending] = useState(false)
   return (
-    <HStack onSubmit={(e) => {
-      sendMessage()
-      e.preventDefault()
-    }} w="100%" pos="fixed" bottom="0" zIndex="dropdown" px="4" py="8"
-      left="50%" transform="translateX(-50%)" maxW="45rem" as="form">
-      <Input value={content} onChange={e => setContent(e.target.value)} fontSize={fontSize.paragraph} />
-      <IconButton disabled={sending} onClick={sendMessage} fontSize={fontSize.paragraph} aria-label={`Enviar mensaje a ${name}`}>
-        <FontAwesomeIcon icon={faPaperPlane} />
-      </IconButton>
-    </HStack>
+    <Square bg="white" boxShadow="0 0 1rem #4445" w="100%" pos="fixed" bottom="0" zIndex="dropdown"
+      left="50%" transform="translateX(-50%)">
+      <HStack onSubmit={(e) => {
+        sendMessage()
+        e.preventDefault()
+      }} w="100%" px="4" py="8" maxW="45rem" as="form">
+        <Input value={content} onChange={e => setContent(e.target.value)} fontSize={fontSize.paragraph} />
+        <IconButton disabled={sending} onClick={sendMessage} fontSize={fontSize.paragraph} aria-label={`Enviar mensaje a ${name}`}>
+          <FontAwesomeIcon icon={faPaperPlane} />
+        </IconButton>
+      </HStack>
+    </Square>
   )
   async function sendMessage() {
     if (content.length) {
