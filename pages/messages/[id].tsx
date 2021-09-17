@@ -81,7 +81,7 @@ const MessagesID: NextPage = () => {
       <Flex py="0.5em" borderBottom="1px solid" borderBottomColor="gray.200"
         direction={message.self ? "row-reverse" : "row"} alignItems="center" overflow="hidden">
         <Avatar mx="1rem" src={message.avatar} />
-        <Text wordWrap="break-word">{message.content}</Text>
+        <Text wordBreak="break-word">{message.content}</Text>
       </Flex>
     )
   }
