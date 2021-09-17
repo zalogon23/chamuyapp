@@ -29,7 +29,7 @@ const MessagesID: NextPage = () => {
   const { isLoggedOut, user } = useContext(userContext)
   const { matchesMessages, matchesNoMessages, loading: messagesLoading } = useContext(messagesContext)
   const [messages, setMessages] = useState([] as Message[])
-  const [title, setTitle] = useState("")
+  const [name, setName] = useState("")
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     const pathname = window?.location.pathname
@@ -37,7 +37,7 @@ const MessagesID: NextPage = () => {
     if (id && !messagesLoading) {
       const conversation = matchesMessages.find(match => match.id === id) ?? matchesNoMessages.find(match => match.id === id)
       const anotherUserName = conversation?.name || ""
-      setTitle(anotherUserName)
+      setName(anotherUserName)
       console.log(conversation)
       if (conversation === undefined) {
         Router.replace("/messages") // If no conversation match then redirect
@@ -65,11 +65,11 @@ const MessagesID: NextPage = () => {
         !loading ?
           <>
             <Heading px="2" borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
-              py="1.5em">{`Conversación con ${title}`}</Heading>
+              py="1.5em">{`Conversación con ${name}`}</Heading>
             {
               messages.map((mes, id) => <Line key={id} message={mes} />)
             }
-            <Sender />
+            <MessageSender name={name} />
           </>
           :
           <Loading />
@@ -87,17 +87,17 @@ const MessagesID: NextPage = () => {
     )
   }
 
-  function Sender() {
-    return (
-      <HStack w="100%" pos="fixed" bottom="0" zIndex="dropdown" px="4" py="8"
-        left="50%" transform="translateX(-50%)" maxW="45rem" as="form">
-        <Input fontSize={fontSize.paragraph} />
-        <IconButton fontSize={fontSize.paragraph} aria-label={`Enviar mensaje a ${title}`}>
-          <FontAwesomeIcon icon={faPaperPlane} />
-        </IconButton>
-      </HStack>
-    )
-  }
 }
 
+export function MessageSender({ name }: { name: string }) {
+  return (
+    <HStack w="100%" pos="fixed" bottom="0" zIndex="dropdown" px="4" py="8"
+      left="50%" transform="translateX(-50%)" maxW="45rem" as="form">
+      <Input fontSize={fontSize.paragraph} />
+      <IconButton fontSize={fontSize.paragraph} aria-label={`Enviar mensaje a ${name}`}>
+        <FontAwesomeIcon icon={faPaperPlane} />
+      </IconButton>
+    </HStack>
+  )
+}
 export default MessagesID
