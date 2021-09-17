@@ -14,6 +14,8 @@ import Loading from "../../components/Loading";
 import Text from "../../components/Text";
 import { messagesContext } from "../../context/messages";
 import { userContext } from "../../context/user";
+import client from "../../lib/apolloClient";
+import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
 
 interface Message {
@@ -100,14 +102,35 @@ interface SendMessage {
 }
 
 export function MessageSender({ name, from, to }: SendMessage) {
+  const [content, setContent] = useState("")
+  const [sending, setSending] = useState(false)
   return (
-    <HStack w="100%" pos="fixed" bottom="0" zIndex="dropdown" px="4" py="8"
+    <HStack onSubmit={(e) => {
+      sendMessage()
+      e.preventDefault()
+    }} w="100%" pos="fixed" bottom="0" zIndex="dropdown" px="4" py="8"
       left="50%" transform="translateX(-50%)" maxW="45rem" as="form">
-      <Input fontSize={fontSize.paragraph} />
-      <IconButton fontSize={fontSize.paragraph} aria-label={`Enviar mensaje a ${name}`}>
+      <Input value={content} onChange={e => setContent(e.target.value)} fontSize={fontSize.paragraph} />
+      <IconButton disabled={sending} onClick={sendMessage} fontSize={fontSize.paragraph} aria-label={`Enviar mensaje a ${name}`}>
         <FontAwesomeIcon icon={faPaperPlane} />
       </IconButton>
     </HStack>
   )
+  async function sendMessage() {
+    if (content.length) {
+      setSending(true)
+      const sent = await client.mutate({
+        mutation: queries.sendMessage, variables: {
+          sendMessageContent: content,
+          sendMessageTo: to,
+          sendMessageFrom: from
+        }
+      })
+      if (sent) {
+        setContent("")
+        setSending(false)
+      }
+    }
+  }
 }
 export default MessagesID
