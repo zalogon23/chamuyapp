@@ -2,7 +2,7 @@ import { Avatar } from "@chakra-ui/avatar";
 import { IconButton } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
+import { Box, Container, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
@@ -65,6 +65,11 @@ const MessagesID: NextPage = () => {
       Router.replace("/login")
     }
   }, [isLoggedOut])
+  useEffect(() => {
+    if (messages.length) {
+      window.scrollTo(0, document.body.scrollHeight)
+    }
+  }, [messages])
   return (
     <>
       {
@@ -73,11 +78,11 @@ const MessagesID: NextPage = () => {
             <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="2"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
               py="1.5em">{`Conversación con ${name}`}</Heading>
-            <Box px="4" pb="10rem">
+            <Container maxW="container.lg" px="4" pb="10rem">
               {
                 messages.map((mes, id) => <Line key={id} message={mes} />)
               }
-            </Box>
+            </Container>
             <MessageSender from={user.id} to={anotherUser.anotherID} name={name} />
           </>
           :
