@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useContext, useEffect, useState } from "react";
+import { createContext, Dispatch, ReactElement, SetStateAction, useContext, useEffect, useState } from "react";
 import client from "../lib/apolloClient";
 import queries from "../lib/queries";
 import { Match } from "../pages/messages";
@@ -7,6 +7,7 @@ import { userContext } from "./user";
 interface Context {
   matchesMessages: Match[],
   matchesNoMessages: Match[],
+  setMatchesMessages: Dispatch<SetStateAction<Match[]>>,
   loading: boolean
 }
 
@@ -42,7 +43,7 @@ export default function MessagesProvider({ children }: Props) {
     }
   }, [isLoggedIn, isLoggedOut, user?.id])
   return (
-    <messagesContext.Provider value={{ matchesMessages, matchesNoMessages, loading }}>
+    <messagesContext.Provider value={{ matchesMessages, matchesNoMessages, setMatchesMessages, loading }}>
       {children}
     </messagesContext.Provider>
   )
