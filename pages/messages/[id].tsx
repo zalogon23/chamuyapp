@@ -7,7 +7,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { Match } from ".";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
@@ -30,7 +30,7 @@ interface Message {
 
 const MessagesID: NextPage = () => {
   const { isLoggedOut, user } = useContext(userContext)
-  const { matchesMessages, matchesNoMessages, loading: messagesLoading } = useContext(messagesContext)
+  const { matchesMessages, matchesNoMessages, setMatchesMessages, loading: messagesLoading } = useContext(messagesContext)
   const [messages, setMessages] = useState([] as Message[])
   const [anotherUser, setAnotherUser] = useState({} as Match)
   const [name, setName] = useState("")
@@ -43,13 +43,11 @@ const MessagesID: NextPage = () => {
       if (conversation !== undefined) setAnotherUser(conversation)
       const anotherUserName = conversation?.name || ""
       setName(anotherUserName)
-      console.log(conversation)
       if (conversation === undefined) {
         Router.replace("/messages") // If no conversation match then redirect
         return
       }
       const currentMessages = JSON.parse(conversation?.content || "[]") as Message[]
-      console.log(currentMessages)
       const selfAvatar = JSON.parse(user.images)[0]
       const avatarMessages = currentMessages.map(mes => ({
         ...mes,
@@ -83,7 +81,7 @@ const MessagesID: NextPage = () => {
                 messages.map((mes, id) => <Line key={id} message={mes} />)
               }
             </Container>
-            <MessageSender from={user.id} to={anotherUser.anotherID} name={name} />
+            <MessageSender matchesMessages={matchesMessages} setMatchesMessages={setMatchesMessages} from={user.id} to={anotherUser.anotherID} name={name} />
           </>
           :
           <Loading />
@@ -106,10 +104,12 @@ const MessagesID: NextPage = () => {
 interface SendMessage {
   to: number,
   from: number,
-  name: string
+  name: string,
+  setMatchesMessages: Dispatch<SetStateAction<Match[]>>,
+  matchesMessages: Match[]
 }
 
-export function MessageSender({ name, from, to }: SendMessage) {
+export function MessageSender({ name, from, to, setMatchesMessages, matchesMessages }: SendMessage) {
   const [content, setContent] = useState("")
   const [sending, setSending] = useState(false)
   return (
@@ -136,6 +136,22 @@ export function MessageSender({ name, from, to }: SendMessage) {
           sendMessageFrom: from
         }
       })
+      setMatchesMessages([...matchesMessages.map(match => {
+        if (match.anotherID !== to) return match
+        const contentParsed = JSON.parse(match.content)
+        const newMessage = {
+          id: Date.now(),
+          senderID: from,
+          receiverID: to,
+          content,
+          createdAt: new Date()
+        }
+        contentParsed.unshift(newMessage)
+        return ({
+          ...match,
+          content: JSON.stringify(contentParsed)
+        })
+      })] as Match[])
       if (sent) {
         setContent("")
         setSending(false)
