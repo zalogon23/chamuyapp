@@ -54,8 +54,13 @@ const queries = {
   getMatches: gql`
   query Query($getMatchesUserId: Float!) {
     getMatches(userID: $getMatchesUserId){
-      name, images, id, content
+      name, images, id, content, anotherID
     }
+  }  
+  `,
+  sendMessage: gql`
+  mutation SendMessageMutation($sendMessageContent: String!, $sendMessageTo: Float!, $sendMessageFrom: Float!) {
+    sendMessage(content: $sendMessageContent, to: $sendMessageTo, from: $sendMessageFrom)
   }  
   `
 }

@@ -6,7 +6,8 @@ import { userContext } from "./user";
 
 interface Context {
   matchesMessages: Match[],
-  matchesNoMessages: Match[]
+  matchesNoMessages: Match[],
+  loading: boolean
 }
 
 const messagesContext = createContext({} as Context)
@@ -16,7 +17,8 @@ interface Props {
 }
 
 export default function MessagesProvider({ children }: Props) {
-  const { user, isLoggedIn } = useContext(userContext)
+  const { user, isLoggedIn, isLoggedOut } = useContext(userContext)
+  const [loading, setLoading] = useState(true)
   const [matchesMessages, setMatchesMessages] = useState([] as Match[])
   const [matchesNoMessages, setMatchesNoMessages] = useState([] as Match[])
 
@@ -32,11 +34,15 @@ export default function MessagesProvider({ children }: Props) {
           setMatchesNoMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length < 1))
           setMatchesMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length > 0))
         }
+        setLoading(false)
       })()
     }
-  }, [isLoggedIn, user?.id])
+    if (isLoggedOut) {
+      setLoading(false)
+    }
+  }, [isLoggedIn, isLoggedOut, user?.id])
   return (
-    <messagesContext.Provider value={{ matchesMessages, matchesNoMessages }}>
+    <messagesContext.Provider value={{ matchesMessages, matchesNoMessages, loading }}>
       {children}
     </messagesContext.Provider>
   )

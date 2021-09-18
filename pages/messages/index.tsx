@@ -16,9 +16,11 @@ import { Avatar } from "@chakra-ui/avatar"
 import Text from "../../components/Text"
 import { Link as ChakraLink } from "@chakra-ui/react"
 import { messagesContext } from "../../context/messages"
+import Heading from "../../components/Heading"
 
 export interface Match extends User {
-  content: string
+  content: string,
+  anotherID: number
 }
 
 const Messages: NextPage = () => {
@@ -34,7 +36,7 @@ const Messages: NextPage = () => {
           <>
             <BubbleCarrousel>
               {
-                matchesNoMessages.map(match => <MatchBubble user={match} />)
+                matchesNoMessages.map((match, id) => <MatchBubble key={id} user={match} />)
               }
             </BubbleCarrousel>
             <MessagesDisplay messages={matchesMessages} />
@@ -50,12 +52,15 @@ function MessagesDisplay({ messages }: { messages: Match[] }) {
   return (
     <Stack>
       {
-        messages.map(mes => (
-          <Link href={`/messages/${mes.id}`}>
-            <ChakraLink aria-label={`Ir a la conversacion con ${mes.name}`}>
-              <Box display="flex">
-                <Avatar src={JSON.parse(mes.images)[0]} />
-                <Text>{JSON.parse(mes.content)[0].content}</Text>
+        messages.map((mes, id) => (
+          <Link key={id} href={`/messages/${mes.id}`} passHref>
+            <ChakraLink _hover={{ textDecoration: "none", filter: "brightness(90%)" }} aria-label={`Ir a la conversacion con ${mes.name}`}>
+              <Box display="flex" alignItems="center">
+                <Avatar src={JSON.parse(mes.images)[0]} mr="1rem" />
+                <Stack spacing="0">
+                  <Heading>{mes.name}</Heading>
+                  <Text>{JSON.parse(mes.content)[0].content}</Text>
+                </Stack>
               </Box>
             </ChakraLink>
           </Link>
