@@ -36,8 +36,8 @@ const MessagesID: NextPage = () => {
   const [name, setName] = useState("")
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    const pathname = window?.location.pathname
-    const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1))
+    const pathname = window?.location?.pathname
+    const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1)) || undefined
     if (id && !messagesLoading) {
       const conversation = matchesMessages.find(match => match.id === id) ?? matchesNoMessages.find(match => match.id === id)
       if (conversation !== undefined) setAnotherUser(conversation)
@@ -71,7 +71,7 @@ const MessagesID: NextPage = () => {
   return (
     <>
       {
-        !loading ?
+        !loading && user ?
           <>
             <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="2"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
