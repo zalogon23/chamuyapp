@@ -28,10 +28,16 @@ const userContext = createContext({} as UserContext)
 export default function UserProvider({ children }: Props) {
   const [session] = useSession()
   const [user, setUser] = useState(session?.user as AppUser)
-  const isLoggedOut = session === null
-  const isLoggedIn = session !== undefined && session !== null && !!user
+  const [isLoggedOut, setIsLoggedOut] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   useEffect(() => {
-    setUser(session?.user as AppUser)
+    if (session?.user) {
+      setUser(session.user as AppUser)
+      setIsLoggedIn(true)
+    }
+    if (session === null) {
+      setIsLoggedOut(true)
+    }
   }, [session])
   return (
     <userContext.Provider value={{ session, user, isLoggedIn, isLoggedOut, setUser }}>
