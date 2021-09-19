@@ -38,7 +38,9 @@ const Profile: NextPage = () => {
       {
         isLoggedIn && user && name && description && age && gender ?
           <Container maxW="container.md">
-            <Heading py="1em">{name}</Heading>
+            <Heading py="10">
+              <EditableDescription m="0" p="0" defaultValue={name} fontSize={fontSize.heading} />
+            </Heading>
             <Tabs index={mode} onChange={i => setMode(i)}>
               <TabList>
                 <Tab>Ver</Tab>

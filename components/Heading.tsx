@@ -3,7 +3,7 @@ import { Heading as ChakraHeading } from "@chakra-ui/react"
 import { fontSize, headingLineHeight, lineHeight } from '../lib/styles'
 
 interface Props {
-  children: string,
+  children: string | ReactElement,
   [props: string]: any
 }
 
