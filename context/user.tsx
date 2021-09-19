@@ -11,6 +11,7 @@ interface AppUser {
   description: string,
   name: string,
   images: string,
+  genderPreference: string,
   [props: string]: any
 }
 

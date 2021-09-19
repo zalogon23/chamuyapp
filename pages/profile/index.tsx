@@ -12,6 +12,7 @@ import Heading from "../../components/Heading";
 import ImagesPicker from "../../components/ImagesPicker";
 import ImagesSlider from "../../components/ImagesSlider";
 import Loading from "../../components/Loading";
+import Text from "../../components/Text";
 import { userContext } from "../../context/user";
 import client from "../../lib/apolloClient";
 import queries from "../../lib/queries";
@@ -22,6 +23,7 @@ const Profile: NextPage = () => {
   const [mode, setMode] = useState(0)
   const [name, setName] = useState("")
   const [gender, setGender] = useState("")
+  const [genderPreference, setGenderPreference] = useState("")
   const [age, setAge] = useState(0)
   const [description, setDescription] = useState("")
   const [changed, setChanged] = useState(false)
@@ -31,10 +33,11 @@ const Profile: NextPage = () => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
   useEffect(() => {
-    if (user?.name && user?.description && user?.age && user?.gender) {
+    if (user?.name && user?.description && user?.age && user?.gender && user?.genderPreference) {
       setName(user.name)
       setDescription(user.description)
       setGender(user.gender)
+      setGenderPreference(user.genderPreference)
       setAge(user.age)
     }
   }, [user])
@@ -69,6 +72,7 @@ const Profile: NextPage = () => {
               <Editable aria-label="Cambiar edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
                 h="2.5rem" w="2.5rem" bg={`${colorScheme}.500`} p="1" onSubmit={val => {
                   if (Number(val) > 18) {
+                    setChanged(true)
                     setAge(Number(val))
                   }
                 }} defaultValue={`${age}`}>
@@ -77,10 +81,21 @@ const Profile: NextPage = () => {
               </Editable>
               <IconButton w="2.5rem" h="2.5rem" aria-label={`Cambiar genero a ${gender === "woman" ? "hombre" : "mujer"}`}
                 onClick={() => {
+                  setChanged(true)
                   setGender(gender === "woman" ? "man" : "woman")
                 }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={colorScheme}>
                 <FontAwesomeIcon icon={genderIcon} />
               </IconButton>
+              <HStack pl="4">
+                <Text>Busco: </Text>
+                <IconButton w="2.5rem" h="2.5rem" aria-label={`Cambiar mi preferencia de genero a ${genderPreference === "woman" ? "hombre" : "mujer"}`}
+                  onClick={() => {
+                    setChanged(true)
+                    setGenderPreference(genderPreference === "woman" ? "man" : "woman")
+                  }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={genderPreference === "woman" ? "pink" : "blue"}>
+                  <FontAwesomeIcon icon={genderPreference === "woman" ? faVenus : faMars} />
+                </IconButton>
+              </HStack>
             </HStack>
             <EditableDescription onSubmit={newDescription => {
               if (newDescription !== description) {
@@ -107,6 +122,7 @@ const Profile: NextPage = () => {
       description !== user?.description
       || name !== user?.name
       || gender !== user?.gender
+      || genderPreference !== user?.genderPreference
       || age !== user?.age
     )
   }
@@ -119,7 +135,8 @@ const Profile: NextPage = () => {
           name: name !== user.name ? name : null,
           description: description !== user.description ? description : null,
           age: age !== user.age ? age : null,
-          gender: gender !== user.gender ? gender : null
+          gender: gender !== user.gender ? gender : null,
+          genderPreference: genderPreference !== user.genderPreference ? genderPreference : null,
         }
       }
     })
