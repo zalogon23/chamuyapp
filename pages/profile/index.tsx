@@ -1,4 +1,5 @@
 import { Button, IconButton } from "@chakra-ui/button";
+import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 import { Badge, Container, HStack } from "@chakra-ui/layout";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
@@ -65,8 +66,16 @@ const Profile: NextPage = () => {
               </TabPanels>
             </Tabs>
             <HStack spacing="2" py="4">
-              <Badge fontSize={fontSize.paragraph} colorScheme={colorScheme}>{user.age}</Badge>
-              <IconButton p="0" aria-label={`Cambiar genero a ${gender === "woman" ? "hombre" : "mujer"}`}
+              <Editable aria-label="Cambiar edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                h="2.5rem" w="2.5rem" bg={`${colorScheme}.500`} p="1" onSubmit={val => {
+                  if (Number(val) > 18) {
+                    setAge(Number(val))
+                  }
+                }} defaultValue={`${age}`}>
+                <EditablePreview />
+                <EditableInput textAlign="center" type="number" />
+              </Editable>
+              <IconButton w="2.5rem" h="2.5rem" aria-label={`Cambiar genero a ${gender === "woman" ? "hombre" : "mujer"}`}
                 onClick={() => {
                   setGender(gender === "woman" ? "man" : "woman")
                 }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={colorScheme}>
@@ -83,6 +92,7 @@ const Profile: NextPage = () => {
 
             {getAnyDifference() && changed && (
               <Button fontSize={fontSize.paragraph} mt="5" mb="10" w="100%"
+                aria-label="Confirmar cambios"
                 onClick={updateUser}>Confirmar cambios</Button>
             )}
           </Container>
