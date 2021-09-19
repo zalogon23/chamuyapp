@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/button";
 import { Badge, Container, HStack } from "@chakra-ui/layout";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +12,8 @@ import ImagesPicker from "../../components/ImagesPicker";
 import ImagesSlider from "../../components/ImagesSlider";
 import Loading from "../../components/Loading";
 import { userContext } from "../../context/user";
+import client from "../../lib/apolloClient";
+import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
 
 const Profile: NextPage = () => {
@@ -20,6 +23,7 @@ const Profile: NextPage = () => {
   const [gender, setGender] = useState("")
   const [age, setAge] = useState(0)
   const [description, setDescription] = useState("")
+  const [changed, setChanged] = useState(false)
   const colorScheme = gender === "woman" ? "pink" : "blue"
   const genderIcon = gender === "woman" ? faVenus : faMars
   useEffect(() => {
@@ -39,7 +43,12 @@ const Profile: NextPage = () => {
         isLoggedIn && user && name && description && age && gender ?
           <Container maxW="container.md">
             <Heading py="10">
-              <EditableDescription m="0" p="0" defaultValue={name} fontSize={fontSize.heading} />
+              <EditableDescription onSubmit={newName => {
+                if (newName !== user.name) {
+                  setChanged(true)
+                  setName(newName)
+                }
+              }} m="0" p="0" defaultValue={name} fontSize={fontSize.heading} />
             </Heading>
             <Tabs index={mode} onChange={i => setMode(i)}>
               <TabList>
@@ -61,14 +70,48 @@ const Profile: NextPage = () => {
                 <FontAwesomeIcon icon={genderIcon} />
               </Badge>
             </HStack>
-            <EditableDescription defaultValue={description} />
+            <EditableDescription onSubmit={newDescription => {
+              if (newDescription !== description) {
+                setChanged(true)
+                setDescription(newDescription)
+              }
+            }}
+              defaultValue={description} />
 
+            {getAnyDifference() && changed && (
+              <Button fontSize={fontSize.paragraph} mt="5" mb="10" w="100%"
+                onClick={updateUser}>Confirmar cambios</Button>
+            )}
           </Container>
           :
           <Loading />
       }
     </>
   )
+
+  function getAnyDifference() {
+    return (
+      description !== user?.description
+      || name !== user?.name
+      || gender !== user?.gender
+      || age !== user?.age
+    )
+  }
+
+  function updateUser() {
+    client.mutate({
+      mutation: queries.editUser, variables: {
+        editUserVariables: {
+          id: user.id ?? null,
+          name: name !== user.name ? name : null,
+          description: description !== user.description ? description : null,
+          age: age !== user.age ? age : null,
+          gender: gender !== user.gender ? gender : null
+        }
+      }
+    })
+    setChanged(false)
+  }
 }
 
 export default Profile
