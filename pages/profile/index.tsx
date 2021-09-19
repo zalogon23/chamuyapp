@@ -15,18 +15,30 @@ import { fontSize } from "../../lib/styles";
 
 const Profile: NextPage = () => {
   const { user, isLoggedIn, isLoggedOut } = useContext(userContext)
-  const colorScheme = user?.gender === "woman" ? "pink" : "blue"
-  const genderIcon = user?.gender === "woman" ? faVenus : faMars
   const [mode, setMode] = useState(0)
+  const [name, setName] = useState("")
+  const [gender, setGender] = useState("")
+  const [age, setAge] = useState(0)
+  const [description, setDescription] = useState("")
+  const colorScheme = gender === "woman" ? "pink" : "blue"
+  const genderIcon = gender === "woman" ? faVenus : faMars
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
+  useEffect(() => {
+    if (user?.name && user?.description && user?.age && user?.gender) {
+      setName(user.name)
+      setDescription(user.description)
+      setGender(user.gender)
+      setAge(user.age)
+    }
+  }, [user])
   return (
     <>
       {
-        isLoggedIn && user ?
+        isLoggedIn && user && name && description && age && gender ?
           <Container maxW="container.md">
-            <Heading py="1em">{user.name}</Heading>
+            <Heading py="1em">{name}</Heading>
             <Tabs index={mode} onChange={i => setMode(i)}>
               <TabList>
                 <Tab>Ver</Tab>
@@ -47,7 +59,7 @@ const Profile: NextPage = () => {
                 <FontAwesomeIcon icon={genderIcon} />
               </Badge>
             </HStack>
-            <EditableDescription defaultValue={user.description} />
+            <EditableDescription defaultValue={description} />
 
           </Container>
           :
