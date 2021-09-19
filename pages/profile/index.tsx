@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/button";
+import { Button, IconButton } from "@chakra-ui/button";
 import { Badge, Container, HStack } from "@chakra-ui/layout";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
@@ -66,9 +66,12 @@ const Profile: NextPage = () => {
             </Tabs>
             <HStack spacing="2" py="4">
               <Badge fontSize={fontSize.paragraph} colorScheme={colorScheme}>{user.age}</Badge>
-              <Badge px="0.5em" fontSize={fontSize.paragraph} colorScheme={colorScheme}>
+              <IconButton p="0" aria-label={`Cambiar genero a ${gender === "woman" ? "hombre" : "mujer"}`}
+                onClick={() => {
+                  setGender(gender === "woman" ? "man" : "woman")
+                }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={colorScheme}>
                 <FontAwesomeIcon icon={genderIcon} />
-              </Badge>
+              </IconButton>
             </HStack>
             <EditableDescription onSubmit={newDescription => {
               if (newDescription !== description) {
