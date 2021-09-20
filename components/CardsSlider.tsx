@@ -5,7 +5,6 @@ import { showingUsersContext } from '../context/showingUsers'
 import Card, { User } from './Card'
 
 interface Props {
-  users: User[]
 }
 
 function CardsSlider({ }: Props): ReactElement {
