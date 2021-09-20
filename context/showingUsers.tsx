@@ -1,5 +1,5 @@
 import { move } from "formik";
-import { createContext, ReactElement, useContext, useEffect, useState } from "react";
+import { createContext, Dispatch, ReactElement, SetStateAction, useContext, useEffect, useState } from "react";
 import { User } from "../components/Card";
 import client from "../lib/apolloClient";
 import queries from "../lib/queries";
@@ -16,12 +16,15 @@ interface Context {
   loading: boolean,
   like: { (): void },
   dislike: { (): void },
-  searchUsers: { (): Promise<boolean> }
+  searchUsers: { (): Promise<boolean> },
+  match: boolean,
+  setMatch: Dispatch<SetStateAction<boolean>>
 }
 
 const showingUsersContext = createContext({} as Context)
 
 export function ShowingUsersProvider({ children }: Props) {
+  const [match, setMatch] = useState(false)
   const { isLoggedIn, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
   const loading = false
@@ -36,6 +39,8 @@ export function ShowingUsersProvider({ children }: Props) {
   }, [user?.id])
   return (
     <showingUsersContext.Provider value={{
+      setMatch,
+      match,
       searchUsers,
       users,
       loading,
@@ -51,6 +56,7 @@ export function ShowingUsersProvider({ children }: Props) {
     if (!user.id || voted.includes(users[currentUser].id)) return
     const showingUser = users[currentUser]
     const match = (await vote(true))?.data?.voteUser || false
+    if (match) setMatch(true)
     await move()
   }
 
