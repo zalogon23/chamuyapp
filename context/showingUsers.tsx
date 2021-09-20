@@ -16,6 +16,7 @@ interface Context {
   loading: boolean,
   like: { (): void },
   dislike: { (): void },
+  searchUsers: { (): Promise<boolean> }
 }
 
 const showingUsersContext = createContext({} as Context)
@@ -35,6 +36,7 @@ export function ShowingUsersProvider({ children }: Props) {
   }, [user?.id])
   return (
     <showingUsersContext.Provider value={{
+      searchUsers,
       users,
       loading,
       currentUser,
@@ -62,7 +64,7 @@ export function ShowingUsersProvider({ children }: Props) {
   async function move() {
     if (currentUser === users.length - 1) {
       const receivedMore = await searchUsers()
-      if (receivedMore) setCurrentUser(0)
+      setCurrentUser(0)
     } else {
       setCurrentUser(currentUser + 1)
     }
@@ -85,10 +87,8 @@ export function ShowingUsersProvider({ children }: Props) {
         getShowingUsersUserId: user.id
       }
     }))?.data?.getShowingUsers as User[]
-    if (showingUsers.length) {
-      setUsers(showingUsers)
-      return true
-    }
+    setUsers(showingUsers)
+    if (showingUsers.length) return true
     return false
   }
 }

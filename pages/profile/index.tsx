@@ -17,9 +17,11 @@ import { userContext } from "../../context/user";
 import client from "../../lib/apolloClient";
 import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
+import { showingUsersContext } from "../../context/showingUsers"
 
 const Profile: NextPage = () => {
-  const { user, isLoggedIn, isLoggedOut } = useContext(userContext)
+  const { user, isLoggedIn, isLoggedOut, setUser } = useContext(userContext)
+  const { searchUsers } = useContext(showingUsersContext)
   const [mode, setMode] = useState(0)
   const [name, setName] = useState("")
   const [gender, setGender] = useState("")
@@ -128,6 +130,8 @@ const Profile: NextPage = () => {
   }
 
   function updateUser() {
+    if (genderPreference !== user.genderPreference) searchUsers()
+    setUser({ ...user, name, description, age, genderPreference, gender })
     client.mutate({
       mutation: queries.editUser, variables: {
         editUserVariables: {
