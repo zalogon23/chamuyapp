@@ -17,14 +17,14 @@ interface Context {
   like: { (): void },
   dislike: { (): void },
   searchUsers: { (): Promise<boolean> },
-  match: boolean,
-  setMatch: Dispatch<SetStateAction<boolean>>
+  match: false | User,
+  setMatch: Dispatch<SetStateAction<false | User>>
 }
 
 const showingUsersContext = createContext({} as Context)
 
 export function ShowingUsersProvider({ children }: Props) {
-  const [match, setMatch] = useState(false)
+  const [match, setMatch] = useState(false as false | User)
   const { isLoggedIn, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
   const loading = false
@@ -54,9 +54,10 @@ export function ShowingUsersProvider({ children }: Props) {
 
   async function like() {
     if (!user.id || voted.includes(users[currentUser].id)) return
-    const showingUser = users[currentUser]
+    const id = currentUser
+    const showingUser = users[id]
     const match = (await vote(true))?.data?.voteUser || false
-    if (match) setMatch(true)
+    if (match) setMatch(showingUser)
     await move()
   }
 
