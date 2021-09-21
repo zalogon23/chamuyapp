@@ -4,9 +4,11 @@ import { useContext } from "react"
 import MatchModal from "../components/MatchModal"
 import CardsSlider from '../components/CardsSlider'
 import { showingUsersContext } from "../context/showingUsers"
+import { messagesContext } from '../context/messages'
 
 const Home: NextPage = () => {
   const { match, setMatch } = useContext(showingUsersContext)
+  const { refetchMessages } = useContext(messagesContext)
   return (
     <>
       <MatchModal
@@ -14,7 +16,8 @@ const Home: NextPage = () => {
         name={match ? match.name : undefined}
         redirect={async () => {
           if (!match) return
-          await Router.push(`/messages/${match.id}`)
+          await refetchMessages()
+          await Router.push(`/messages`)
           setMatch(false)
         }}
         reject={() => {
