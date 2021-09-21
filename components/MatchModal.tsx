@@ -9,14 +9,18 @@ interface Props {
   open?: boolean
   name?: string,
   image?: string
-  redirect?: () => void
+  redirect?: () => void,
+  reject?: () => void
 }
 
-function MatchModal({ open, name, redirect, image }: Props): ReactElement {
+function MatchModal({ open, name, redirect, reject, image }: Props): ReactElement {
   const { isOpen, onOpen, onClose } = useDisclosure()
   useEffect(() => {
     if (!!open) onOpen()
   }, [])
+  useEffect(() => {
+    if (!isOpen && reject) reject()
+  }, [isOpen])
   return (
     <>{
       isOpen ?
