@@ -17,7 +17,7 @@ function MatchModal({ open, name, redirect, reject, image }: Props): ReactElemen
   const { isOpen, onOpen, onClose } = useDisclosure()
   useEffect(() => {
     if (!!open) onOpen()
-  }, [])
+  }, [open])
   useEffect(() => {
     if (!isOpen && reject) reject()
   }, [isOpen])
