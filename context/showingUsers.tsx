@@ -1,5 +1,5 @@
 import { move } from "formik";
-import { createContext, ReactElement, useContext, useEffect, useState } from "react";
+import { createContext, Dispatch, ReactElement, SetStateAction, useContext, useEffect, useState } from "react";
 import { User } from "../components/Card";
 import client from "../lib/apolloClient";
 import queries from "../lib/queries";
@@ -16,14 +16,18 @@ interface Context {
   loading: boolean,
   like: { (): void },
   dislike: { (): void },
+  searchUsers: { (): Promise<boolean> },
+  match: false | User,
+  setMatch: Dispatch<SetStateAction<false | User>>
 }
 
 const showingUsersContext = createContext({} as Context)
 
 export function ShowingUsersProvider({ children }: Props) {
-  const { isLoggedIn, user } = useContext(userContext)
+  const [match, setMatch] = useState(false as false | User)
+  const { isLoggedIn, isLoggedOut, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
-  const loading = false
+  const [loading, setLoading] = useState(true)
   const [voted, setVoted] = useState([] as number[])
   const [users, setUsers] = useState([] as User[])
   useEffect(() => {
@@ -33,8 +37,17 @@ export function ShowingUsersProvider({ children }: Props) {
     }
     searchUsers()
   }, [user?.id])
+  useEffect(() => {
+    if (isLoggedOut) {
+      setLoading(false)
+    }
+  }, [isLoggedOut])
+
   return (
     <showingUsersContext.Provider value={{
+      setMatch,
+      match,
+      searchUsers,
       users,
       loading,
       currentUser,
@@ -47,8 +60,10 @@ export function ShowingUsersProvider({ children }: Props) {
 
   async function like() {
     if (!user.id || voted.includes(users[currentUser].id)) return
-    const showingUser = users[currentUser]
+    const id = currentUser
+    const showingUser = users[id]
     const match = (await vote(true))?.data?.voteUser || false
+    if (match) setMatch(showingUser)
     await move()
   }
 
@@ -62,7 +77,7 @@ export function ShowingUsersProvider({ children }: Props) {
   async function move() {
     if (currentUser === users.length - 1) {
       const receivedMore = await searchUsers()
-      if (receivedMore) setCurrentUser(0)
+      setCurrentUser(0)
     } else {
       setCurrentUser(currentUser + 1)
     }
@@ -80,15 +95,15 @@ export function ShowingUsersProvider({ children }: Props) {
   }
 
   async function searchUsers() {
-    const showingUsers = (await client.query({
+    setLoading(true)
+    const showingUsers = ((await client.query({
       query: queries.getShowingUsers, variables: {
         getShowingUsersUserId: user.id
       }
-    }))?.data?.getShowingUsers as User[]
-    if (showingUsers.length) {
-      setUsers(showingUsers)
-      return true
-    }
+    }))?.data?.getShowingUsers || []) as User[]
+    setUsers(showingUsers)
+    setLoading(false)
+    if (showingUsers.length) return true
     return false
   }
 }

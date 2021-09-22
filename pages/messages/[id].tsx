@@ -2,12 +2,12 @@ import { Avatar } from "@chakra-ui/avatar";
 import { IconButton } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
+import { Box, Container, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { Match } from ".";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
@@ -30,26 +30,24 @@ interface Message {
 
 const MessagesID: NextPage = () => {
   const { isLoggedOut, user } = useContext(userContext)
-  const { matchesMessages, matchesNoMessages, loading: messagesLoading } = useContext(messagesContext)
+  const { matchesMessages, matchesNoMessages, setMatchesMessages, loading: messagesLoading } = useContext(messagesContext)
   const [messages, setMessages] = useState([] as Message[])
   const [anotherUser, setAnotherUser] = useState({} as Match)
   const [name, setName] = useState("")
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    const pathname = window?.location.pathname
-    const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1))
+    const pathname = window?.location?.pathname
+    const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1)) || undefined
     if (id && !messagesLoading) {
       const conversation = matchesMessages.find(match => match.id === id) ?? matchesNoMessages.find(match => match.id === id)
       if (conversation !== undefined) setAnotherUser(conversation)
       const anotherUserName = conversation?.name || ""
       setName(anotherUserName)
-      console.log(conversation)
       if (conversation === undefined) {
         Router.replace("/messages") // If no conversation match then redirect
         return
       }
       const currentMessages = JSON.parse(conversation?.content || "[]") as Message[]
-      console.log(currentMessages)
       const selfAvatar = JSON.parse(user.images)[0]
       const avatarMessages = currentMessages.map(mes => ({
         ...mes,
@@ -65,20 +63,25 @@ const MessagesID: NextPage = () => {
       Router.replace("/login")
     }
   }, [isLoggedOut])
+  useEffect(() => {
+    if (messages.length) {
+      window.scrollTo(0, document.body.scrollHeight)
+    }
+  }, [messages])
   return (
     <>
       {
-        !loading ?
+        !loading && user ?
           <>
             <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="2"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
               py="1.5em">{`Conversación con ${name}`}</Heading>
-            <Box px="4" pb="10rem">
+            <Container maxW="container.lg" px="4" pb="10rem">
               {
                 messages.map((mes, id) => <Line key={id} message={mes} />)
               }
-            </Box>
-            <MessageSender from={user.id} to={anotherUser.anotherID} name={name} />
+            </Container>
+            <MessageSender matchesMessages={matchesMessages} setMatchesMessages={setMatchesMessages} from={user.id} to={anotherUser.anotherID} name={name} />
           </>
           :
           <Loading />
@@ -101,10 +104,12 @@ const MessagesID: NextPage = () => {
 interface SendMessage {
   to: number,
   from: number,
-  name: string
+  name: string,
+  setMatchesMessages: Dispatch<SetStateAction<Match[]>>,
+  matchesMessages: Match[]
 }
 
-export function MessageSender({ name, from, to }: SendMessage) {
+export function MessageSender({ name, from, to, setMatchesMessages, matchesMessages }: SendMessage) {
   const [content, setContent] = useState("")
   const [sending, setSending] = useState(false)
   return (
@@ -131,6 +136,22 @@ export function MessageSender({ name, from, to }: SendMessage) {
           sendMessageFrom: from
         }
       })
+      setMatchesMessages([...matchesMessages.map(match => {
+        if (match.anotherID !== to) return match
+        const contentParsed = JSON.parse(match.content)
+        const newMessage = {
+          id: Date.now(),
+          senderID: from,
+          receiverID: to,
+          content,
+          createdAt: new Date()
+        }
+        contentParsed.unshift(newMessage)
+        return ({
+          ...match,
+          content: JSON.stringify(contentParsed)
+        })
+      })] as Match[])
       if (sent) {
         setContent("")
         setSending(false)

@@ -6,13 +6,15 @@ import React, { ReactElement } from 'react'
 import { fontSize } from '../lib/styles'
 
 interface Props {
-  defaultValue: string
+  defaultValue: string,
+  onSubmit: (value: string) => void,
+  [props: string]: any
 }
 
-function EditableDescription({ defaultValue }: Props): ReactElement {
+function EditableDescription({ defaultValue, onSubmit, ...props }: Props): ReactElement {
 
   return (
-    <Editable fontSize={fontSize.paragraph} pt="0.2em" mb="1.5em" defaultValue={defaultValue} pos="relative">
+    <Editable onSubmit={onSubmit} fontSize={fontSize.paragraph} pt="0.2em" mb="1.5em" defaultValue={defaultValue} pos="relative" {...props}>
       <EditableInput />
       <Logic />
       <EditablePreview pr="2.5em" />

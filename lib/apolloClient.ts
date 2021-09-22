@@ -4,7 +4,7 @@ import { createUploadLink } from "apollo-upload-client"
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: createUploadLink({
-    uri: process.env.URL ? process.env.URL + "/graphql" : "http://192.168.0.2:8000/graphql"
+    uri: process.env.GRAPHQL_URL ? process.env.GRAPHQL_URL : "http://192.168.0.2:8000/graphql"
   }),
   defaultOptions: {
     watchQuery: {

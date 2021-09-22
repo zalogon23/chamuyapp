@@ -1,43 +1,32 @@
 import type { NextPage } from 'next'
-import Card from '../components/Card'
+import Router from "next/router"
+import { useContext } from "react"
+import MatchModal from "../components/MatchModal"
 import CardsSlider from '../components/CardsSlider'
+import { showingUsersContext } from "../context/showingUsers"
+import { messagesContext } from '../context/messages'
 
 const Home: NextPage = () => {
+  const { match, setMatch } = useContext(showingUsersContext)
+  const { refetchMessages } = useContext(messagesContext)
   return (
-    <CardsSlider
-      users={[
-        {
-          id: 3,
-          name: "Juan Lucas del Prado",
-          images: [
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-          ],
-          description: "Obrero de la mina de ajotepec, en la cima del monte iguazu"
-        },
-        {
-          id: 4,
-          name: "Juan Lucas del Prado",
-          images: [
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-          ],
-          description: "Obrero de la mina de ajotepec, en la cima del monte iguazu"
-        },
-        {
-          id: 5,
-          name: "Juan Lucas del Prado",
-          images: [
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-            "https://st4.depositphotos.com/4507459/25236/i/1600/depositphotos_252362736-stock-photo-siberian-tiger-hunting-prey-fowl.jpg",
-          ],
-          description: "Obrero de la mina de ajotepec, en la cima del monte iguazu"
-        },
-      ]}
-    />
+    <>
+      <MatchModal
+        open={Boolean(match)}
+        name={match ? match.name : undefined}
+        redirect={async () => {
+          if (!match) return
+          await refetchMessages()
+          await Router.push(`/messages`)
+          setMatch(false)
+        }}
+        reject={() => {
+          setMatch(false)
+          console.log(match)
+        }}
+        image={match ? JSON.parse(match.images)[0] : undefined} />
+      <CardsSlider />
+    </>
   )
 }
 

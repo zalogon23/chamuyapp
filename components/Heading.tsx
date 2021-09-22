@@ -3,13 +3,13 @@ import { Heading as ChakraHeading } from "@chakra-ui/react"
 import { fontSize, headingLineHeight, lineHeight } from '../lib/styles'
 
 interface Props {
-  children: string,
+  children: string | ReactElement,
   [props: string]: any
 }
 
 function Heading({ children, ...props }: Props): ReactElement {
   return (
-    <ChakraHeading lineHeight={headingLineHeight} fontSize={fontSize.heading} {...props}>
+    <ChakraHeading textAlign="center" lineHeight={headingLineHeight} fontSize={fontSize.heading} {...props}>
       {children}
     </ChakraHeading>
   )
