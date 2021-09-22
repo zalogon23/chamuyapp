@@ -60,7 +60,7 @@ function Header(): ReactElement {
             </IconButton></Link>
           <Link href="/" passHref>
             <ChakraLink fontSize={fontSize.heading} aria-label="Ir a inicio" color="white">
-              <Heading as="h2" color="white">Hola Bateria</Heading>
+              <Heading as="h2" color="white">Chamuyapp</Heading>
             </ChakraLink>
           </Link>
         </HStack>
