@@ -25,7 +25,7 @@ const showingUsersContext = createContext({} as Context)
 
 export function ShowingUsersProvider({ children }: Props) {
   const [match, setMatch] = useState(false as false | User)
-  const { isLoggedIn, user } = useContext(userContext)
+  const { isLoggedIn, isLoggedOut, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
   const [loading, setLoading] = useState(true)
   const [voted, setVoted] = useState([] as number[])
@@ -37,6 +37,12 @@ export function ShowingUsersProvider({ children }: Props) {
     }
     searchUsers()
   }, [user?.id])
+  useEffect(() => {
+    if (isLoggedOut) {
+      setLoading(false)
+    }
+  }, [isLoggedOut])
+
   return (
     <showingUsersContext.Provider value={{
       setMatch,
