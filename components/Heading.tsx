@@ -9,7 +9,7 @@ interface Props {
 
 function Heading({ children, ...props }: Props): ReactElement {
   return (
-    <ChakraHeading lineHeight={headingLineHeight} fontSize={fontSize.heading} {...props}>
+    <ChakraHeading textAlign="center" lineHeight={headingLineHeight} fontSize={fontSize.heading} {...props}>
       {children}
     </ChakraHeading>
   )
