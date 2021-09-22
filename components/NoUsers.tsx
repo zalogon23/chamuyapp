@@ -16,7 +16,7 @@ function NoUsers({ }: Props): ReactElement {
       {isLoggedIn &&
         <>
           <Heading>No hay mas usuarios que mostrar</Heading>
-          <Text pt="4" pb="8">Puedes cambiar tus preferencias para seguir dando "me gusta"!</Text>
+          <Text pt="4" pb="8">Puedes cambiar tus preferencias para seguir dando &quot;me gusta&quot;!</Text>
           <Link href="/profile" passHref><Button aria-label="Ir a mi perfil">Preferencias</Button></Link>
         </>
       }

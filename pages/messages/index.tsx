@@ -56,7 +56,7 @@ function MessagesDisplay({ messages }: { messages: Match[] }) {
           <Link key={id} href={`/messages/${mes.id}`} passHref>
             <ChakraLink _hover={{ textDecoration: "none", filter: "brightness(90%)" }} aria-label={`Ir a la conversacion con ${mes.name}`}>
               <Box display="flex" alignItems="center">
-                <Avatar src={JSON.parse(mes.images)[0]} mr="1rem" />
+                <Avatar alt="" src={JSON.parse(mes.images)[0]} mr="1rem" />
                 <Stack spacing="0">
                   <Heading>{mes.name}</Heading>
                   <Text>{JSON.parse(mes.content)[0].content}</Text>

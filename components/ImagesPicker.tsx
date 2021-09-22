@@ -30,7 +30,7 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
             }} size="sm" pos="absolute" fontSize={fontSize.paragraph} top="0.2rem" right="0.2rem" colorScheme="red" aria-label={`Eliminar foto ${id}`}>
               <FontAwesomeIcon icon={faTimes} />
             </IconButton>
-            <Image fit="contain" h="100%" w="100%" bg="black" src={image} />
+            <Image alt="imagen propia actual" fit="contain" h="100%" w="100%" bg="black" src={image} />
           </WrapItem>
         ))}
         {
@@ -94,7 +94,7 @@ function ImageAdder({ images, num, setUploadedImages, uploadedImages, ...props }
               size="sm" pos="absolute" top="0.2rem" right="0.2rem" onClick={removeImage}>
               <FontAwesomeIcon icon={faTimes} />
             </IconButton>
-            <Image w="100%" h="100%" fit="contain" src={URL.createObjectURL(image)} />
+            <Image alt="imagen propia nueva" w="100%" h="100%" fit="contain" src={URL.createObjectURL(image)} />
           </>
           :
           <>
