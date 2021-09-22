@@ -27,7 +27,7 @@ export function ShowingUsersProvider({ children }: Props) {
   const [match, setMatch] = useState(false as false | User)
   const { isLoggedIn, user } = useContext(userContext)
   const [currentUser, setCurrentUser] = useState(0)
-  const loading = false
+  const [loading, setLoading] = useState(true)
   const [voted, setVoted] = useState([] as number[])
   const [users, setUsers] = useState([] as User[])
   useEffect(() => {
@@ -89,13 +89,15 @@ export function ShowingUsersProvider({ children }: Props) {
   }
 
   async function searchUsers() {
-    const showingUsers = (await client.query({
+    setLoading(true)
+    const showingUsers = ((await client.query({
       query: queries.getShowingUsers, variables: {
         getShowingUsersUserId: user.id
       }
-    }))?.data?.getShowingUsers as User[]
+    }))?.data?.getShowingUsers || []) as User[]
     setUsers(showingUsers)
     if (showingUsers.length) return true
+    setLoading(false)
     return false
   }
 }
