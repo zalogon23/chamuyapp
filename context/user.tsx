@@ -34,9 +34,11 @@ export default function UserProvider({ children }: Props) {
     if (session?.user) {
       setUser(session.user as AppUser)
       setIsLoggedIn(true)
+      setIsLoggedOut(false)
     }
     if (session === null) {
       setIsLoggedOut(true)
+      setIsLoggedIn(false)
     }
   }, [session])
   return (
