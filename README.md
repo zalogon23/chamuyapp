@@ -25,9 +25,12 @@ Librerías auxiliares:
 Contexto:
 - showingUser (Se encarga de solicitar al BACKEND, via apolloClient los usuarios que puede ver nuestro usuario, dependiendo de sus preferencias, y de si ya ha votado a dicha persona. En cuyo caso ya no se le mostrara tal usuario. Estos usuarios son desplegados mediante el COMPONENTE CardsSlider)
 
+- user (Aquí puedes solicitar informacion como "isLoggedIn", "isLoggedOut", "user" que sería el objeto usuario)
+
 Componentes:
 - CardsSlider (Recibe un Array de objetos usuario y lo despliega conforme a la informacion recibida. Utilizando un COMPONENTE Card para cada uno. Muestra botones para pasar de un slide a otro).
 - Card (Recibe un objeto Usuario y lo despliega. Contiene un COMPONENTE ImagesSlider para las imagenes).
 - ImagesSlider (Recibe un Array de images (string) y los despliega. Muestra unos botones para pasar de una imagen a otra).
+- MatchModal (Aparece cuando ocurre un match y te redirecciona a la pagina /messages)
 
 
