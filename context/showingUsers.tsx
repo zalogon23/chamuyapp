@@ -102,8 +102,8 @@ export function ShowingUsersProvider({ children }: Props) {
       }
     }))?.data?.getShowingUsers || []) as User[]
     setUsers(showingUsers)
-    if (showingUsers.length) return true
     setLoading(false)
+    if (showingUsers.length) return true
     return false
   }
 }
