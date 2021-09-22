@@ -1,7 +1,8 @@
 import { useDisclosure } from '@chakra-ui/hooks'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
-import { Button, Avatar, Image } from '@chakra-ui/react'
+import { Button, Box, Image } from '@chakra-ui/react'
 import React, { ReactElement, useEffect } from 'react'
+import { fontSize } from '../lib/styles'
 import Heading from './Heading'
 import Text from './Text'
 
@@ -24,25 +25,26 @@ function MatchModal({ open, name, redirect, reject, image }: Props): ReactElemen
   return (
     <>{
       isOpen ?
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal scrollBehavior="inside" size="xl" isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent mx="4">
             <ModalHeader>
-              <Heading>¡Tuviste un match!</Heading>
+              <Heading mt="4">¡Tuviste un match!</Heading>
             </ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
-              <Image src={image} alt={`Imagen de ${name}`} />
-              <Text>
+            <ModalBody >
+              <Image mx="auto" maxW="10rem" src={image} alt={`Imagen de ${name}`}
+                fallback={<Box mx="auto" w="10rem" h="12.5rem" bg="black" />} />
+              <Text textAlign="center" py="4">
                 {`Ahora puedes hablar con ${name}`}
               </Text>
             </ModalBody>
             <ModalFooter>
-              <Button aria-label={`Ir a chatear con ${name}`}
+              <Button fontSize={fontSize.paragraph} autoFocus colorScheme="red" mr="4" aria-label={`Ir a chatear con ${name}`}
                 onClick={redirect}>
                 Ir a chatear!
               </Button>
-              <Button onClick={onClose}>
+              <Button fontSize={fontSize.paragraph} onClick={onClose}>
                 Cerrar
               </Button>
             </ModalFooter>
