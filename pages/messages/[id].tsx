@@ -11,6 +11,7 @@ import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react
 import { Match } from ".";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
+import SEOHead from "../../components/SEOHead";
 import Text from "../../components/Text";
 import { messagesContext } from "../../context/messages";
 import { userContext } from "../../context/user";
@@ -72,6 +73,11 @@ const MessagesID: NextPage = () => {
   }, [messages])
   return (
     <>
+      <SEOHead
+        title={`Conversacion con ${name}`}
+        keywords="ligar chamuyar romance choque covnersar con amigo amiga y fuga pareja sexo casual amor conocer hobbies gustos"
+        description="Sigue conversando con tu match, quiza sea el/la indicad@."
+      />
       {
         !loading && user ?
           <>
