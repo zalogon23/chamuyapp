@@ -62,7 +62,7 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
       const imagesUpdated = (await client.mutate({
         mutation: queries.updateImages, variables: {
           updateUserImagesImages: JSON.stringify(newProfileURLs),
-          updateUserImagesId: 2 // ERROR: THE ID HERE IS HARD CODED!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          updateUserImagesId: user.id
         }
       }))?.data?.updateUserImages as string
       if (imagesUpdated) {
