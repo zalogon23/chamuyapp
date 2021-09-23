@@ -77,12 +77,16 @@ const MessagesID: NextPage = () => {
           <>
             <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="2"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
-              py="1.5em">{`Conversación con ${name}`}</Heading>
-            <Container maxW="container.lg" px="4" pb="10rem" pos="relative">
-              <IconButton aria-label={`Eliminar match con ${name}`} pos="absolute" top="2" right="2"
-                onClick={removeMatch}>
-                <FontAwesomeIcon icon={faTrash} />
-              </IconButton>
+              py="1.5em">
+              <>
+                {`Conversación con ${name}`}
+                <IconButton colorScheme="red" aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right="2"
+                  transform="translateY(-50%)" onClick={removeMatch}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </IconButton>
+              </>
+            </Heading>
+            <Container maxW="container.lg" px="4" pb="10rem">
               {
                 messages.map((mes, id) => <Line key={id} message={mes} />)
               }
