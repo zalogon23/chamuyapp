@@ -26,9 +26,10 @@ export default function MessagesProvider({ children }: Props) {
 
   useEffect(() => {
     if (isLoggedIn && user) {
-      async () => {
-        fetchMessages()
-      }
+      (async () => {
+        await fetchMessages()
+        setLoading(false)
+      })()
     }
     if (isLoggedOut) {
       setLoading(false)
@@ -41,6 +42,7 @@ export default function MessagesProvider({ children }: Props) {
   )
 
   async function fetchMessages() {
+    setLoading(true)
     const matchesGraphQL = (await client.query({
       query: queries.getMatches, variables: {
         getMatchesUserId: user.id
