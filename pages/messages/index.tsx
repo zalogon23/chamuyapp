@@ -17,6 +17,7 @@ import Text from "../../components/Text"
 import { Link as ChakraLink } from "@chakra-ui/react"
 import { messagesContext } from "../../context/messages"
 import Heading from "../../components/Heading"
+import NoMessages from "../../components/NoMessages"
 
 export interface Match extends User {
   content: string,
@@ -35,21 +36,18 @@ const Messages: NextPage = () => {
         loading ?
           <Loading />
           :
-          (!matchesMessages.length && !matchesNoMessages.length)
+          isLoggedIn && (matchesMessages.length && matchesNoMessages.length)
             ?
-            "No messages, scroll"
+            <>
+              <BubbleCarrousel>
+                {
+                  matchesNoMessages.map((match, id) => <MatchBubble key={id} user={match} />)
+                }
+              </BubbleCarrousel>
+              <MessagesDisplay messages={matchesMessages} />
+            </>
             :
-            isLoggedIn ?
-              <>
-                <BubbleCarrousel>
-                  {
-                    matchesNoMessages.map((match, id) => <MatchBubble key={id} user={match} />)
-                  }
-                </BubbleCarrousel>
-                <MessagesDisplay messages={matchesMessages} />
-              </>
-              :
-              "No messages"
+            <NoMessages />
       }
     </>
   )
