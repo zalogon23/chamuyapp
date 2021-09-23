@@ -1,9 +1,9 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { IconButton } from "@chakra-ui/button";
+import { Button, IconButton } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Container, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
@@ -30,15 +30,17 @@ interface Message {
 
 const MessagesID: NextPage = () => {
   const { isLoggedOut, user } = useContext(userContext)
-  const { matchesMessages, matchesNoMessages, setMatchesMessages, loading: messagesLoading } = useContext(messagesContext)
+  const { matchesMessages, matchesNoMessages, setMatchesMessages, refetchMessages, loading: messagesLoading } = useContext(messagesContext)
   const [messages, setMessages] = useState([] as Message[])
   const [anotherUser, setAnotherUser] = useState({} as Match)
   const [name, setName] = useState("")
   const [loading, setLoading] = useState(true)
+  const [matchID, setMatchID] = useState(undefined as number | undefined)
   useEffect(() => {
     const pathname = window?.location?.pathname
     const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1)) || undefined
     if (id && !messagesLoading) {
+      setMatchID(id)
       const conversation = matchesMessages.find(match => match.id === id) ?? matchesNoMessages.find(match => match.id === id)
       if (conversation !== undefined) setAnotherUser(conversation)
       const anotherUserName = conversation?.name || ""
@@ -76,7 +78,11 @@ const MessagesID: NextPage = () => {
             <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="2"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
               py="1.5em">{`Conversación con ${name}`}</Heading>
-            <Container maxW="container.lg" px="4" pb="10rem">
+            <Container maxW="container.lg" px="4" pb="10rem" pos="relative">
+              <IconButton aria-label={`Eliminar match con ${name}`} pos="absolute" top="2" right="2"
+                onClick={removeMatch}>
+                <FontAwesomeIcon icon={faTrash} />
+              </IconButton>
               {
                 messages.map((mes, id) => <Line key={id} message={mes} />)
               }
@@ -88,6 +94,19 @@ const MessagesID: NextPage = () => {
       }
     </>
   )
+
+  async function removeMatch() {
+    if (!matchID) return
+    const removed = (await client.mutate({
+      mutation: queries.removeMatch, variables: {
+        removeMatchMatchId: matchID
+      }
+    })) as boolean
+    if (removed) {
+      await refetchMessages()
+      Router.push("/messages")
+    }
+  }
 
   function Line({ message }: { message: Message }) {
     return (

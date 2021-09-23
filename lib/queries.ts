@@ -67,6 +67,11 @@ const queries = {
   mutation EditUserMutation($editUserVariables: UserEdit!) {
     editUser(variables: $editUserVariables)
   }  
+  `,
+  removeMatch: gql`
+  mutation RemoveMatchMutation($removeMatchMatchId: Float!) {
+    removeMatch(matchID: $removeMatchMatchId)
+  }
   `
 }
 
