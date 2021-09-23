@@ -129,10 +129,10 @@ const Profile: NextPage = () => {
     )
   }
 
-  function updateUser() {
-    if (genderPreference !== user.genderPreference) searchUsers()
+  async function updateUser() {
+    const genderChange = genderPreference !== user.genderPreference
     setUser({ ...user, name, description, age, genderPreference, gender })
-    client.mutate({
+    await client.mutate({
       mutation: queries.editUser, variables: {
         editUserVariables: {
           id: user.id ?? null,
@@ -144,6 +144,7 @@ const Profile: NextPage = () => {
         }
       }
     })
+    if (genderChange) searchUsers()
     setChanged(false)
   }
 }
