@@ -18,6 +18,7 @@ import { Link as ChakraLink } from "@chakra-ui/react"
 import { messagesContext } from "../../context/messages"
 import Heading from "../../components/Heading"
 import NoMessages from "../../components/NoMessages"
+import SEOHead from "../../components/SEOHead"
 
 export interface Match extends User {
   content: string,
@@ -32,6 +33,11 @@ const Messages: NextPage = () => {
   }, [isLoggedOut])
   return (
     <>
+      <SEOHead
+        title="Tus Conversaciones"
+        keywords="ligar chamuyar conversar mensajes romance choque y fuga pareja sexo casual amor conocer hobbies gustos"
+        description="Revisa tus mensajes y fomenta el interés de tus nuevas amistades."
+      />
       {
         loading ?
           <Loading />
