@@ -40,6 +40,7 @@ export function ShowingUsersProvider({ children }: Props) {
   useEffect(() => {
     if (isLoggedOut) {
       setLoading(false)
+      setUsers([])
     }
   }, [isLoggedOut])
 
