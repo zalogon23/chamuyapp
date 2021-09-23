@@ -10,7 +10,7 @@ interface Props {
 function SEOHead({ title, keywords, description }: Props): ReactElement {
   return (
     <Head>
-      <title>{title}</title>
+      <title>{`${title} | Chamuyapp`}</title>
       <meta name="keywords" content={keywords} />
       <meta name="description" content={description} />
     </Head>
