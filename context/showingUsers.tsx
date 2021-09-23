@@ -63,11 +63,16 @@ export function ShowingUsersProvider({ children }: Props) {
     const id = currentUser
     const showingUser = users[id]
     const match = (await vote(true))?.data?.voteUser || false
-    if (match) setMatch(showingUser)
+    if (match) {
+      setMatch(showingUser)
+    } else {
+      setMatch(false)
+    }
     await move()
   }
 
   async function dislike() {
+    if (match) setMatch(false)
     if (!user.id || voted.includes(users[currentUser].id)) return
     const showingUser = users[currentUser]
     await vote(false)
