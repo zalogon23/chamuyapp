@@ -36,7 +36,7 @@ const Messages: NextPage = () => {
         loading ?
           <Loading />
           :
-          isLoggedIn && (matchesMessages?.length && matchesNoMessages?.length)
+          isLoggedIn && (matchesMessages?.length || matchesNoMessages?.length)
             ?
             <>
               <BubbleCarrousel>
