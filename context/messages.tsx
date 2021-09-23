@@ -33,6 +33,8 @@ export default function MessagesProvider({ children }: Props) {
     }
     if (isLoggedOut) {
       setLoading(false)
+      setMatchesMessages([])
+      setMatchesNoMessages([])
     }
   }, [isLoggedIn, isLoggedOut, user?.id])
   return (
