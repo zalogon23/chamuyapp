@@ -55,12 +55,12 @@ function Header(): ReactElement {
             <IconButton color="red.700" display="inline-block" _hover={{
               transform: "rotate(-35deg)"
             }}
-              rounded="full" aria-label="Ir a inicio" fontSize="1.55em">
+              rounded="full" aria-label="Ir a inicio" fontSize={["1.7em","1.3em"]}>
               <FontAwesomeIcon icon={faHorse} />
             </IconButton></Link>
           <Link href="/" passHref>
             <ChakraLink fontSize={fontSize.heading} aria-label="Ir a inicio" color="white">
-              <Heading as="h2" color="white">Chamuyapp</Heading>
+              <Heading style={{ fontFamily: "Satisfy, cursive" }} fontWeight="thin" as="h2" color="white">Chamuyapp</Heading>
             </ChakraLink>
           </Link>
         </HStack>
