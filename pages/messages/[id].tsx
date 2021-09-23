@@ -75,7 +75,7 @@ const MessagesID: NextPage = () => {
       {
         !loading && user ?
           <>
-            <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="2"
+            <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="1rem"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
               py="1.5em">
               <>
@@ -103,7 +103,9 @@ const MessagesID: NextPage = () => {
     if (!matchID) return
     const removed = (await client.mutate({
       mutation: queries.removeMatch, variables: {
-        removeMatchMatchId: matchID
+        removeMatchMatchId: matchID,
+        removeMatchAnotherId: anotherUser.anotherID,
+        removeMatchUserId: user.id
       }
     })) as boolean
     if (removed) {
