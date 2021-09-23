@@ -18,6 +18,7 @@ import client from "../../lib/apolloClient";
 import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
 import { showingUsersContext } from "../../context/showingUsers"
+import SEOHead from "../../components/SEOHead";
 
 const Profile: NextPage = () => {
   const { user, isLoggedIn, isLoggedOut, setUser } = useContext(userContext)
@@ -45,6 +46,11 @@ const Profile: NextPage = () => {
   }, [user])
   return (
     <>
+      <SEOHead
+        title="Tu Perfil"
+        keywords="ligar chamuyar editar perfil romance choque y fuga pareja sexo casual amor conocer hobbies gustos"
+        description="Muestra tu lado mas emotivo, tus hobbies, tus aventuras, cuenta un poco sobre ti."
+      />
       {
         isLoggedIn && user && name && description && age && gender ?
           <Container maxW="container.md">
