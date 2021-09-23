@@ -48,7 +48,7 @@ const Profile: NextPage = () => {
       {
         isLoggedIn && user && name && description && age && gender ?
           <Container maxW="container.md">
-            <Heading py="10">
+            <Heading py={["4", "6", "10"]}>
               <EditableDescription onSubmit={newName => {
                 if (newName !== user.name) {
                   setChanged(true)
