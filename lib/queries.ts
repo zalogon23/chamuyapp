@@ -69,9 +69,10 @@ const queries = {
   }  
   `,
   removeMatch: gql`
-  mutation RemoveMatchMutation($removeMatchMatchId: Float!) {
-    removeMatch(matchID: $removeMatchMatchId)
+  mutation RemoveMatchMutation($removeMatchUserId: Float!, $removeMatchAnotherId: Float!, $removeMatchMatchId: Float!) {
+    removeMatch(userID: $removeMatchUserId, anotherID: $removeMatchAnotherId, matchID: $removeMatchMatchId)
   }
+  
   `
 }
 

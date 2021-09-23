@@ -75,7 +75,7 @@ const MessagesID: NextPage = () => {
       {
         !loading && user ?
           <>
-            <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="1rem"
+            <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="3.5rem"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
               py="1.5em">
               <>
