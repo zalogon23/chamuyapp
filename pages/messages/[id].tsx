@@ -30,7 +30,7 @@ interface Message {
 
 const MessagesID: NextPage = () => {
   const { isLoggedOut, user } = useContext(userContext)
-  const { matchesMessages, matchesNoMessages, setMatchesMessages, refetchMessages, loading: messagesLoading } = useContext(messagesContext)
+  const { matchesMessages, setMatchesMessages, refetchMessages, loading: messagesLoading } = useContext(messagesContext)
   const [messages, setMessages] = useState([] as Message[])
   const [anotherUser, setAnotherUser] = useState({} as Match)
   const [name, setName] = useState("")
@@ -41,7 +41,7 @@ const MessagesID: NextPage = () => {
     const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1)) || undefined
     if (id && !messagesLoading) {
       setMatchID(id)
-      const conversation = matchesMessages.find(match => match.id === id) ?? matchesNoMessages.find(match => match.id === id)
+      const conversation = matchesMessages.find(match => match.id === id)
       if (conversation !== undefined) setAnotherUser(conversation)
       const anotherUserName = conversation?.name || ""
       setName(anotherUserName)

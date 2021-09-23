@@ -6,7 +6,6 @@ import { userContext } from "./user";
 
 interface Context {
   matchesMessages: Match[],
-  matchesNoMessages: Match[],
   setMatchesMessages: Dispatch<SetStateAction<Match[]>>,
   loading: boolean,
   refetchMessages: () => Promise<void>
@@ -22,7 +21,6 @@ export default function MessagesProvider({ children }: Props) {
   const { user, isLoggedIn, isLoggedOut } = useContext(userContext)
   const [loading, setLoading] = useState(true)
   const [matchesMessages, setMatchesMessages] = useState([] as Match[])
-  const [matchesNoMessages, setMatchesNoMessages] = useState([] as Match[])
 
   useEffect(() => {
     if (isLoggedIn && user) {
@@ -34,11 +32,10 @@ export default function MessagesProvider({ children }: Props) {
     if (isLoggedOut) {
       setLoading(false)
       setMatchesMessages([])
-      setMatchesNoMessages([])
     }
   }, [isLoggedIn, isLoggedOut, user?.id])
   return (
-    <messagesContext.Provider value={{ matchesMessages, refetchMessages: fetchMessages, matchesNoMessages, setMatchesMessages, loading }}>
+    <messagesContext.Provider value={{ matchesMessages, refetchMessages: fetchMessages, setMatchesMessages, loading }}>
       {children}
     </messagesContext.Provider>
   )
@@ -51,8 +48,7 @@ export default function MessagesProvider({ children }: Props) {
       }
     }))?.data?.getMatches as Match[] | undefined
     if (Array.isArray(matchesGraphQL)) {
-      setMatchesNoMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length < 1))
-      setMatchesMessages(matchesGraphQL.filter(match => JSON.parse(match.content).length > 0))
+      setMatchesMessages(matchesGraphQL)
     }
     setLoading(false)
   }

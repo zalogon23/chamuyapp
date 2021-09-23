@@ -26,7 +26,7 @@ export interface Match extends User {
 
 const Messages: NextPage = () => {
   const { isLoggedIn, isLoggedOut } = useContext(userContext)
-  const { matchesMessages, matchesNoMessages, loading } = useContext(messagesContext)
+  const { matchesMessages, loading } = useContext(messagesContext)
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
@@ -36,15 +36,15 @@ const Messages: NextPage = () => {
         loading ?
           <Loading />
           :
-          isLoggedIn && (matchesMessages?.length || matchesNoMessages?.length)
+          isLoggedIn && (matchesMessages?.length)
             ?
             <>
               <BubbleCarrousel>
                 {
-                  matchesNoMessages.map((match, id) => <MatchBubble key={id} user={match} />)
+                  matchesMessages.filter(match => JSON.parse(match.content).length < 1).map((match, id) => <MatchBubble key={id} user={match} />)
                 }
               </BubbleCarrousel>
-              <MessagesDisplay messages={matchesMessages} />
+              <MessagesDisplay messages={matchesMessages.filter(match => JSON.parse(match.content).length > 0)} />
             </>
             :
             <NoMessages />
