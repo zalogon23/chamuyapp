@@ -15,14 +15,14 @@ function NoUsers({ }: Props): ReactElement {
     <Square flexDir="column" minH="90vh" p="4">
       {isLoggedIn &&
         <>
-          <Heading>No hay mas usuarios que mostrar</Heading>
+          <Heading textAlign="center">No hay mas usuarios que mostrar</Heading>
           <Text pt="4" pb="8">Puedes cambiar tus preferencias para seguir dando &quot;me gusta&quot;!</Text>
           <Link href="/profile" passHref><Button aria-label="Ir a mi perfil">Preferencias</Button></Link>
         </>
       }
       {isLoggedOut &&
         <>
-          <Heading>No estas logueado</Heading>
+          <Heading textAlign="center">No estas logueado</Heading>
           <Text pt="4" pb="8">Logueate para poder ver usuarios</Text>
           <Link href="/login" passHref><Button aria-label="Ir a loguearme">Loguearme</Button></Link>
         </>
