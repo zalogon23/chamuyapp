@@ -12,6 +12,7 @@ import Router from "next/router";
 import { useContext, useEffect } from "react";
 import Heading from "../../components/Heading";
 import Loading from "../../components/Loading";
+import SEOHead from "../../components/SEOHead";
 import Text from "../../components/Text";
 import { userContext } from "../../context/user";
 
@@ -26,54 +27,61 @@ const Login: NextPage = () => {
     if (isLoggedIn) Router.replace("/profile")
   }, [isLoggedIn])
   return (
-    <Container>
-      {
-        isLoggedOut ?
-          <>
-            <Formik
-              initialValues={{
-                email: "",
-                password: "",
-              }}
-              validate={values => validate(values)}
-              onSubmit={async (values, { setErrors }) => {
-                const result = await signIn("credentials", { ...values, redirect: false })
-                if (!result?.ok) setErrors({ email: "Email inválido", password: "O contraseña inválida" })
-              }}
-            >
-              {({
-                values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting
-              }) => (
-                <Form onSubmit={handleSubmit}>
-                  <Stack px="4" pb="10" spacing="3">
-                    <Heading pt="1.5em" pb="1em">Logueate</Heading>
-                    <FormControl>
-                      <FormLabel htmlFor="email" id="emailLabel">Email:</FormLabel>
-                      <Input id="email" borderColor={errors.email && touched.email ? "red.500" : ""} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" />
-                      <FormHelperText id="emailHelp">{touched.email && errors.email}</FormHelperText>
-                    </FormControl>
-                    <FormControl>
-                      <FormLabel htmlFor="password" id="passwordLabel">Contraseña:</FormLabel>
-                      <Input id="password" borderColor={errors.password && touched.password ? "red.500" : ""} value={values.password} onBlur={handleBlur} onChange={handleChange} name="password" type="password" />
-                      <FormHelperText id="passwordHelp">{touched.password && errors.password}</FormHelperText>
-                    </FormControl>
-                    <Button isLoading={isSubmitting} type="submit">Entrar</Button>
-                  </Stack>
-                </Form>
-              )}
-            </Formik>
-            <Divider borderColor="gray.500" />
-            <Text pt="4" pb="6" textAlign="center">o</Text>
-            <Wrap justify="center" pb="8">
-              <Button flexGrow={1} colorScheme="green" leftIcon={
-                <FontAwesomeIcon icon={faCat} />
-              } onClick={() => signIn("github")}>Entrar con GitHub</Button>
-            </Wrap>
-          </>
-          :
-          <Loading />
-      }
-    </Container>
+    <>
+      <SEOHead
+        title="Logueate para empezar con la diversión"
+        keywords="ligar logueate entra chamuyar romance choque y fuga pareja sexo casual amor conocer hobbies gustos"
+        description="¡Entra en tu cuenta para que puedas seguir conociendo nuevas personas!"
+      />
+      <Container>
+        {
+          isLoggedOut ?
+            <>
+              <Formik
+                initialValues={{
+                  email: "",
+                  password: "",
+                }}
+                validate={values => validate(values)}
+                onSubmit={async (values, { setErrors }) => {
+                  const result = await signIn("credentials", { ...values, redirect: false })
+                  if (!result?.ok) setErrors({ email: "Email inválido", password: "O contraseña inválida" })
+                }}
+              >
+                {({
+                  values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting
+                }) => (
+                  <Form onSubmit={handleSubmit}>
+                    <Stack px="4" pb="10" spacing="3">
+                      <Heading pt="1.5em" pb="1em">Logueate</Heading>
+                      <FormControl>
+                        <FormLabel htmlFor="email" id="emailLabel">Email:</FormLabel>
+                        <Input id="email" borderColor={errors.email && touched.email ? "red.500" : ""} value={values.email} onBlur={handleBlur} onChange={handleChange} name="email" type="email" />
+                        <FormHelperText id="emailHelp">{touched.email && errors.email}</FormHelperText>
+                      </FormControl>
+                      <FormControl>
+                        <FormLabel htmlFor="password" id="passwordLabel">Contraseña:</FormLabel>
+                        <Input id="password" borderColor={errors.password && touched.password ? "red.500" : ""} value={values.password} onBlur={handleBlur} onChange={handleChange} name="password" type="password" />
+                        <FormHelperText id="passwordHelp">{touched.password && errors.password}</FormHelperText>
+                      </FormControl>
+                      <Button isLoading={isSubmitting} type="submit">Entrar</Button>
+                    </Stack>
+                  </Form>
+                )}
+              </Formik>
+              <Divider borderColor="gray.500" />
+              <Text pt="4" pb="6" textAlign="center">o</Text>
+              <Wrap justify="center" pb="8">
+                <Button flexGrow={1} colorScheme="green" leftIcon={
+                  <FontAwesomeIcon icon={faCat} />
+                } onClick={() => signIn("github")}>Entrar con GitHub</Button>
+              </Wrap>
+            </>
+            :
+            <Loading />
+        }
+      </Container>
+    </>
   )
   function validate(values: Values): Values {
     const errors = {} as Values;
