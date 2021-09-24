@@ -118,7 +118,7 @@ const MessagesID: NextPage = () => {
                 </Link>
               </>
             </Heading>
-            <Container maxW="container.lg" px="4" pb="10rem">
+            <Container maxW="container.lg" px="4" pt="1rem" pb="10rem">
               {
                 messages.map((mes, id) => <Line key={id} message={mes} />)
               }
