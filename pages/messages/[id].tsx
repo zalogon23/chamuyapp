@@ -214,30 +214,30 @@ export function MessageSender({ name, from, to, setMatchesMessages, matchesMessa
   async function sendMessage() {
     if (content.length) {
       setSending(true)
-      const sent = await client.mutate({
+      const sent = (await client.mutate({
         mutation: queries.sendMessage, variables: {
           sendMessageContent: content,
           sendMessageTo: to,
           sendMessageFrom: from
         }
-      })
-      setMatchesMessages([...matchesMessages.map(match => {
-        if (match.anotherID !== to) return match
-        const contentParsed = JSON.parse(match.content)
-        const newMessage = {
-          id: Date.now(),
-          senderID: from,
-          receiverID: to,
-          content,
-          createdAt: new Date()
-        }
-        contentParsed.unshift(newMessage)
-        return ({
-          ...match,
-          content: JSON.stringify(contentParsed)
-        })
-      })] as Match[])
+      }))?.data?.sendMessage?.id as number | undefined
       if (sent) {
+        setMatchesMessages([...matchesMessages.map(match => {
+          if (match.anotherID !== to) return match
+          const contentParsed = JSON.parse(match.content)
+          const newMessage = {
+            id: sent,
+            senderID: from,
+            receiverID: to,
+            content,
+            createdAt: new Date()
+          }
+          contentParsed.unshift(newMessage)
+          return ({
+            ...match,
+            content: JSON.stringify(contentParsed)
+          })
+        })] as Match[])
         setContent("")
         setSending(false)
       }
