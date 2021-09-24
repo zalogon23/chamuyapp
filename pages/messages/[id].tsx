@@ -3,7 +3,7 @@ import { Button, IconButton } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Container, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
-import { faPaperPlane, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
@@ -18,6 +18,7 @@ import { userContext } from "../../context/user";
 import client from "../../lib/apolloClient";
 import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
+import Link from "next/link"
 
 interface Message {
   avatar: string,
@@ -83,13 +84,19 @@ const MessagesID: NextPage = () => {
           <>
             <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="3.5rem"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
-              py="0.5em">
+              py="0.8em">
               <>
                 {`Conversación con ${name}`}
-                <IconButton colorScheme="red" aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right="2"
+                <IconButton colorScheme="red" fontSize={fontSize.paragraph} aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right="2"
                   transform="translateY(-50%)" onClick={removeMatch}>
                   <FontAwesomeIcon icon={faTrash} />
                 </IconButton>
+                <Link href={`/users/${anotherUser.anotherID}`} passHref>
+                  <IconButton aria-label={`Ir al perfil de ${name}`} fontSize={fontSize.paragraph} pos="absolute" top="50%" left="2"
+                    transform="translateY(-50%)">
+                    <FontAwesomeIcon icon={faUser} />
+                  </IconButton>
+                </Link>
               </>
             </Heading>
             <Container maxW="container.lg" px="4" pb="10rem">
