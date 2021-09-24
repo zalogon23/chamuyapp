@@ -15,11 +15,14 @@ import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
 import Link from "next/link"
 import { Button, IconButton } from "@chakra-ui/button";
+import { userContext } from "../../context/user";
+import Router from "next/router";
 
 const UserID: NextPage = () => {
   const [userID, setUserID] = useState(undefined as undefined | number)
   const [userVisited, setUserVisited] = useState({} as User)
   const { matchesMessages } = useContext(messagesContext)
+  const { user, isLoggedOut } = useContext(userContext)
   const [isMatch, setIsMatch] = useState(false)
   const [loading, setLoading] = useState(true)
   const [chatID, setChatID] = useState(undefined as undefined | number)
@@ -31,8 +34,11 @@ const UserID: NextPage = () => {
     }
   }, [])
   useEffect(() => {
+    if (userID && user?.id && userID === user.id) {
+      Router.replace("/profile")
+    }
     (async () => {
-      if (userID) {
+      if ((userID && isLoggedOut) || (user?.id && userID !== user.id)) {
         const data = (await client.query({ query: queries.getUserByID, variables: { getUserByIdId: userID } }))
         if (!data) return ({ error: "There's no user with that ID" })
         const userVisitedResult = data?.data?.getUserByID as User
@@ -40,7 +46,7 @@ const UserID: NextPage = () => {
         setLoading(false)
       }
     })()
-  }, [userID])
+  }, [userID, isLoggedOut, user?.id])
   useEffect(() => {
     if (!matchesMessages?.length || !userID) return
     const conversation = matchesMessages.find(match => match.anotherID === userID)
