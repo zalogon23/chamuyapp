@@ -6,6 +6,8 @@ import { Button } from '@chakra-ui/button'
 import { signOut } from 'next-auth/client'
 import { userContext } from '../context/user'
 import Router from 'next/router'
+import { messagesContext } from '../context/messages'
+import Spot from './Spot'
 
 export interface Link {
   url: string,
@@ -22,6 +24,7 @@ export interface Props {
 
 function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
   const { session, isLoggedIn } = useContext(userContext)
+  const { notification } = useContext(messagesContext)
   return (
     <Box aria-label="Barra de Navegacion Vertical" bg="red.700" as="nav" display={{ "lg": "none" }}
       transitionDuration="400ms" overflow="hidden" visibility={open ? "visible" : "hidden"}
@@ -30,7 +33,8 @@ function VNavBar({ open, setOpen, links, children }: Props): ReactElement {
         {
           links.map((link, id) => (
             <Link key={id} href={link.url} passHref>
-              <ChakraLink onClick={() => setOpen(false)} letterSpacing="0.15em" my="0.2rem" h="3.2rem" display="flex" alignItems="center" justifyContent="center" color="white" textAlign="center" fontSize={fontSize.paragraph} aria-label={link.aria}>
+              <ChakraLink pos="relative" onClick={() => setOpen(false)} letterSpacing="0.15em" my="0.2rem" h="3.2rem" display="flex" alignItems="center" justifyContent="center" color="white" textAlign="center" fontSize={fontSize.paragraph} aria-label={link.aria}>
+                {/mensaje/i.test(link.to) && notification && open && <Spot right="1rem" />}
                 {link.to}
               </ChakraLink>
             </Link>

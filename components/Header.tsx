@@ -4,10 +4,12 @@ import { faBars, faHorse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from "next/link"
 import React, { ReactElement, useContext, useState } from 'react'
+import { messagesContext } from '../context/messages'
 import { userContext } from '../context/user'
 import { fontSize } from '../lib/styles'
 import Heading from './Heading'
 import HNavBar from './HNavBar'
+import Spot from './Spot'
 import VNavBar from './VNavBar'
 
 interface Link {
@@ -47,6 +49,7 @@ const links: Link[] = [
 function Header(): ReactElement {
   const [openNav, setOpenNav] = useState(false)
   const { isLoggedIn } = useContext(userContext)
+  const { notification } = useContext(messagesContext)
   return (
     <Box bg="red.500" as="header">
       <Flex py="2" px="3" align="center">
@@ -55,7 +58,7 @@ function Header(): ReactElement {
             <IconButton color="red.700" display="inline-block" _hover={{
               transform: "rotate(-35deg)"
             }}
-              rounded="full" aria-label="Ir a inicio" fontSize={["1.7em","1.3em"]}>
+              rounded="full" aria-label="Ir a inicio" fontSize={["1.7em", "1.3em"]}>
               <FontAwesomeIcon icon={faHorse} />
             </IconButton></Link>
           <Link href="/" passHref>
@@ -66,7 +69,8 @@ function Header(): ReactElement {
         </HStack>
         <Spacer />
         {/* Small Device */}
-        <Button display={{ "lg": "none" }} onClick={() => setOpenNav(!openNav)} fontSize={fontSize.heading} colorScheme="red" aria-label="Abrir menu">
+        <Button pos="relative" display={{ "lg": "none" }} onClick={() => setOpenNav(!openNav)} fontSize={fontSize.heading} colorScheme="red" aria-label="Abrir menu">
+          {notification && !openNav && <Spot />}
           <FontAwesomeIcon icon={faBars} />
         </Button>
         {/* Big Device */}
