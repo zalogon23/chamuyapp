@@ -73,6 +73,11 @@ const queries = {
     removeMatch(userID: $removeMatchUserId, anotherID: $removeMatchAnotherId, matchID: $removeMatchMatchId)
   }
   
+  `,
+  setMatchSeen: gql`
+  mutation SetMatchSeenMutation($setMatchSeenAnotherId: Float!, $setMatchSeenUserId: Float!, $setMatchSeenMatchId: Float!) {
+    setMatchSeen(anotherID: $setMatchSeenAnotherId, userID: $setMatchSeenUserId, matchID: $setMatchSeenMatchId)
+  }
   `
 }
 
