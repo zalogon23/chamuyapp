@@ -19,6 +19,7 @@ import { messagesContext } from "../../context/messages"
 import Heading from "../../components/Heading"
 import NoMessages from "../../components/NoMessages"
 import SEOHead from "../../components/SEOHead"
+import Spot from "../../components/Spot"
 
 export interface Match extends User {
   content: string,
@@ -66,13 +67,15 @@ function MessagesDisplay({ messages }: { messages: Match[] }) {
       {
         messages.map((mes, id) => (
           <Link key={id} href={`/messages/${mes.id}`} passHref>
-            <ChakraLink _hover={{ textDecoration: "none", filter: "brightness(90%)" }} aria-label={`Ir a la conversacion con ${mes.name}`}>
-              <Box display="flex" alignItems="center">
+            <ChakraLink borderBottom="1px solid" borderBottomColor="gray.200"
+              _hover={{ textDecoration: "none", filter: "brightness(90%)" }} aria-label={`Ir a la conversacion con ${mes.name}`}>
+              <Box display="flex" py="4" pos="relative" alignItems="center">
                 <Avatar alt="" src={JSON.parse(mes.images)[0]} mr="1rem" />
                 <Stack spacing="0">
                   <Heading>{mes.name}</Heading>
                   <Text>{JSON.parse(mes.content)[0].content}</Text>
                 </Stack>
+                {!mes.seen && <Spot bg="red.500" top="1rem" />}
               </Box>
             </ChakraLink>
           </Link>
@@ -82,13 +85,14 @@ function MessagesDisplay({ messages }: { messages: Match[] }) {
   )
 }
 
-function MatchBubble({ user }: { user: User }): ReactElement {
+function MatchBubble({ user }: { user: Match }): ReactElement {
   return (
     <>
       <Link href={`/messages/${user.id}`} passHref>
-        <IconButton rounded="full" w="5rem" h="5rem" aria-label={`Ir a la conversacion con ${user.name}`}>
+        <Box role="button" pos="relative" rounded="full" w="5rem" h="5rem" aria-label={`Ir a la conversacion con ${user.name}`}>
           <Image rounded="full" w="5rem" h="5rem" fit="cover" src={JSON.parse(user.images)[0]} fallback={<Box rounded="full" w="5rem" h="5rem" bg="black" />} />
-        </IconButton>
+          {!user.seen && <Spot bg="red.500" right="-0.6rem" w="0.7rem" h="0.7rem" />}
+        </Box>
       </Link>
     </>
   )
