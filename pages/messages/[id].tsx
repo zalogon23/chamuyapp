@@ -72,6 +72,25 @@ const MessagesID: NextPage = () => {
       window.scrollTo(0, document.body.scrollHeight)
     }
   }, [messages])
+  useEffect(() => {
+    (async () => {
+      if (anotherUser?.anotherID && matchID && user?.id) {
+        const updated = (await client.mutate({
+          mutation: queries.setMatchSeen, variables: {
+            setMatchSeenAnotherId: anotherUser.anotherID,
+            setMatchSeenUserId: user.id,
+            setMatchSeenMatchId: matchID
+          }
+        }))?.data?.setMatchSeen as boolean
+        if (updated) {
+          setMatchesMessages(matchesMessages.map(match => {
+            if (match.anotherID !== anotherUser.anotherID) return match
+            return { ...match, seen: true }
+          }))
+        }
+      }
+    })()
+  }, [anotherUser, matchID, user])
   return (
     <>
       <SEOHead
