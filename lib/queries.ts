@@ -60,8 +60,10 @@ const queries = {
   `,
   sendMessage: gql`
   mutation SendMessageMutation($sendMessageContent: String!, $sendMessageTo: Float!, $sendMessageFrom: Float!) {
-    sendMessage(content: $sendMessageContent, to: $sendMessageTo, from: $sendMessageFrom)
-  }  
+    sendMessage(content: $sendMessageContent, to: $sendMessageTo, from: $sendMessageFrom) {
+      id
+    }
+  }
   `,
   editUser: gql`
   mutation EditUserMutation($editUserVariables: UserEdit!) {
