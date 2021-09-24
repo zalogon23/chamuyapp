@@ -178,7 +178,10 @@ const MessagesID: NextPage = () => {
                 (JSON.parse(match.content) as { id: number }[]).filter(mes => mes.id !== messageID)
               )
             }
-          }))
+          }).sort((a, b) => {
+            return JSON.parse(a.content)[0].createdAt > JSON.parse(b.content)[0].createdAt ? -1 : 1
+          })
+          )
         }
       }
     }
@@ -222,7 +225,7 @@ export function MessageSender({ name, from, to, setMatchesMessages, matchesMessa
         }
       }))?.data?.sendMessage?.id as number | undefined
       if (sent) {
-        setMatchesMessages([...matchesMessages.map(match => {
+        setMatchesMessages(matchesMessages.map(match => {
           if (match.anotherID !== to) return match
           const contentParsed = JSON.parse(match.content)
           const newMessage = {
@@ -237,7 +240,9 @@ export function MessageSender({ name, from, to, setMatchesMessages, matchesMessa
             ...match,
             content: JSON.stringify(contentParsed)
           })
-        })] as Match[])
+        }).sort((a, b) => {
+          return JSON.parse(a.content)[0].createdAt > JSON.parse(b.content)[0].createdAt ? -1 : 1
+        }))
         setContent("")
         setSending(false)
       }
