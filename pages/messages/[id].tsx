@@ -83,7 +83,7 @@ const MessagesID: NextPage = () => {
           <>
             <Heading zIndex={20} pos="sticky" boxShadow="0 0 1rem #4445" top="0" bg="white" px="3.5rem"
               borderBottom="1px solid" borderBottomColor="gray.200" textAlign="center"
-              py="1.5em">
+              py="0.5em">
               <>
                 {`Conversación con ${name}`}
                 <IconButton colorScheme="red" aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right="2"
@@ -149,7 +149,7 @@ export function MessageSender({ name, from, to, setMatchesMessages, matchesMessa
       <HStack onSubmit={(e) => {
         sendMessage()
         e.preventDefault()
-      }} w="100%" px="4" py="8" maxW="45rem" as="form">
+      }} w="100%" px="4" py="0.5em" maxW="45rem" as="form">
         <Input value={content} onChange={e => setContent(e.target.value)} fontSize={fontSize.paragraph} />
         <IconButton disabled={sending} onClick={sendMessage} fontSize={fontSize.paragraph} aria-label={`Enviar mensaje a ${name}`}>
           <FontAwesomeIcon icon={faPaperPlane} />
