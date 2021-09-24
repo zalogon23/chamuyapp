@@ -25,7 +25,7 @@ const queries = {
   getUserByID: gql`
   query Query($getUserByIdId: Float!) {
     getUserByID(id: $getUserByIdId) {
-      id, name, gender, age, description, images, votedUsers, likedUsers, matchedUsers,genderPreference
+      id, name, gender, age, description, images, genderPreference
     }
   }
   `,
