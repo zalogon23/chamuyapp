@@ -148,7 +148,7 @@ const MessagesID: NextPage = () => {
 
   function Line({ message }: { message: Message }) {
     return (
-      <Flex py="0.5em" borderBottom="1px solid" justify="space-between" borderBottomColor="gray.200"
+      <Flex py="0.5em" px="0.3em" borderBottom="1px solid" justify="space-between" borderBottomColor="gray.200"
         direction={message.self ? "row-reverse" : "row"} alignItems="center" overflow="hidden">
         <Flex direction={message.self ? "row-reverse" : "row"}>
           <Avatar zIndex={9} src={message.avatar} />
