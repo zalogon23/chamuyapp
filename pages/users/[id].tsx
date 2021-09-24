@@ -1,5 +1,5 @@
 import { Badge, Container, HStack } from "@chakra-ui/layout";
-import { faMailBulk, faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faMailBulk, faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import { useContext, useEffect, useState } from "react";
@@ -91,7 +91,7 @@ const UserID: NextPage = () => {
               {isMatch && chatID &&
                 <Link href={`/messages/${chatID}`} passHref>
                   <IconButton ml="auto" aria-label={`Ir a chatear con ${userVisited.name}`} fontSize={fontSize.paragraph}>
-                    <FontAwesomeIcon icon={faMailBulk} />
+                    <FontAwesomeIcon icon={faEnvelope} />
                   </IconButton>
                 </Link>
               }
