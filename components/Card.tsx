@@ -11,6 +11,9 @@ import Text from './Text'
 export interface User {
   id: number,
   description: string,
+  gender: string,
+  age: number,
+  genderPreference: string,
   name: string,
   images: string,
   [props: string]: any
