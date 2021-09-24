@@ -38,7 +38,8 @@ const UserID: NextPage = () => {
       Router.replace("/profile")
     }
     (async () => {
-      if ((userID && isLoggedOut) || (user?.id && userID !== user.id)) {
+      if (isLoggedOut || (user?.id && userID !== user.id)) {
+        if (!userID) return
         const data = (await client.query({ query: queries.getUserByID, variables: { getUserByIdId: userID } }))
         if (!data) return ({ error: "There's no user with that ID" })
         const userVisitedResult = data?.data?.getUserByID as User
