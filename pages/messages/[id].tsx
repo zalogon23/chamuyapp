@@ -3,7 +3,7 @@ import { Button, IconButton } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Container, Flex, HStack, Square, Stack } from "@chakra-ui/layout";
-import { faPaperPlane, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faTimes, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
@@ -148,12 +148,40 @@ const MessagesID: NextPage = () => {
 
   function Line({ message }: { message: Message }) {
     return (
-      <Flex py="0.5em" borderBottom="1px solid" borderBottomColor="gray.200"
+      <Flex py="0.5em" borderBottom="1px solid" justify="space-between" borderBottomColor="gray.200"
         direction={message.self ? "row-reverse" : "row"} alignItems="center" overflow="hidden">
-        <Avatar zIndex={9} src={message.avatar} />
-        <Text px="1.5rem" wordBreak="break-word">{message.content}</Text>
+        <Flex direction={message.self ? "row-reverse" : "row"}>
+          <Avatar zIndex={9} src={message.avatar} />
+          <Text px="1.5rem" wordBreak="break-word">{message.content}</Text>
+        </Flex>
+        {message.self &&
+          <IconButton onClick={() => removeMessage(user?.id, message.id)} colorScheme="red" aria-label="Eliminar mensaje">
+            <FontAwesomeIcon icon={faTimes} />
+          </IconButton>}
       </Flex>
     )
+
+    async function removeMessage(userID: number, messageID: number) {
+      if (userID && messageID) {
+        console.log(userID, messageID)
+        const removed = (await client.mutate({
+          mutation: queries.deleteMessage, variables: {
+            deleteMessageUserId: userID,
+            deleteMessageMessageId: messageID
+          }
+        }))?.data?.deleteMessage as boolean
+        if (removed) {
+          setMatchesMessages(matchesMessages.map(match => {
+            if (match.anotherID !== anotherUser.anotherID) return match
+            return {
+              ...match, content: JSON.stringify(
+                (JSON.parse(match.content) as { id: number }[]).filter(mes => mes.id !== messageID)
+              )
+            }
+          }))
+        }
+      }
+    }
   }
 
 }
