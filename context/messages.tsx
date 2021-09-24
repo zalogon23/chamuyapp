@@ -8,7 +8,8 @@ interface Context {
   matchesMessages: Match[],
   setMatchesMessages: Dispatch<SetStateAction<Match[]>>,
   loading: boolean,
-  refetchMessages: () => Promise<void>
+  refetchMessages: () => Promise<void>,
+  notification: boolean
 }
 
 const messagesContext = createContext({} as Context)
@@ -21,6 +22,7 @@ export default function MessagesProvider({ children }: Props) {
   const { user, isLoggedIn, isLoggedOut } = useContext(userContext)
   const [loading, setLoading] = useState(true)
   const [matchesMessages, setMatchesMessages] = useState([] as Match[])
+  const [notification, setNotification] = useState(false)
 
   useEffect(() => {
     if (isLoggedIn && user) {
@@ -34,8 +36,16 @@ export default function MessagesProvider({ children }: Props) {
       setMatchesMessages([])
     }
   }, [isLoggedIn, isLoggedOut, user?.id])
+  useEffect(() => {
+    const notification = matchesMessages.find(match => !match.seen)
+    if (notification) {
+      setNotification(true)
+    } else {
+      setNotification(false)
+    }
+  }, [matchesMessages])
   return (
-    <messagesContext.Provider value={{ matchesMessages, refetchMessages: fetchMessages, setMatchesMessages, loading }}>
+    <messagesContext.Provider value={{ notification, matchesMessages, refetchMessages: fetchMessages, setMatchesMessages, loading }}>
       {children}
     </messagesContext.Provider>
   )

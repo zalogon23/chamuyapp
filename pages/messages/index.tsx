@@ -22,7 +22,8 @@ import SEOHead from "../../components/SEOHead"
 
 export interface Match extends User {
   content: string,
-  anotherID: number
+  anotherID: number,
+  seen: boolean
 }
 
 const Messages: NextPage = () => {
