@@ -106,12 +106,12 @@ const MessagesID: NextPage = () => {
               py="0.8em">
               <>
                 {`Conversación con ${name}`}
-                <IconButton colorScheme="red" fontSize={fontSize.paragraph} aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right="2"
+                <IconButton size="sm" colorScheme="red" fontSize={fontSize.paragraph} aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right="2"
                   transform="translateY(-50%)" onClick={removeMatch}>
                   <FontAwesomeIcon icon={faTrash} />
                 </IconButton>
                 <Link href={`/users/${anotherUser.anotherID}`} passHref>
-                  <IconButton aria-label={`Ir al perfil de ${name}`} fontSize={fontSize.paragraph} pos="absolute" top="50%" left="2"
+                  <IconButton size="sm" aria-label={`Ir al perfil de ${name}`} fontSize={fontSize.paragraph} pos="absolute" top="50%" left="2"
                     transform="translateY(-50%)">
                     <FontAwesomeIcon icon={faUser} />
                   </IconButton>
@@ -150,15 +150,15 @@ const MessagesID: NextPage = () => {
     return (
       <Flex py="0.5em" px="0.3em" borderBottom="1px solid" justify="space-between" borderBottomColor="gray.200"
         direction={message.self ? "row-reverse" : "row"} alignItems="center" overflow="hidden">
-        <Flex direction={message.self ? "row-reverse" : "row"}>
+        <Flex py="4" direction={message.self ? "row-reverse" : "row"}>
           <Avatar zIndex={9} src={message.avatar} />
           <Text px="1.5rem" wordBreak="break-word">{message.content}</Text>
         </Flex>
         {message.self &&
-          <IconButton onClick={() => removeMessage(user?.id, message.id)} colorScheme="red" aria-label="Eliminar mensaje">
+          <IconButton size="sm" onClick={() => removeMessage(user?.id, message.id)} colorScheme="red" bg="red.400" color="white" aria-label="Eliminar mensaje">
             <FontAwesomeIcon icon={faTimes} />
           </IconButton>}
-      </Flex>
+      </Flex >
     )
 
     async function removeMessage(userID: number, messageID: number) {
