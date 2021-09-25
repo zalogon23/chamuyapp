@@ -67,7 +67,7 @@ const UserID: NextPage = () => {
         loading ?
           <Loading />
           :
-          <Container maxW="container.md">
+          <Container maxW="container.md" pb="12">
             <Heading py={["4", "6", "10"]}>{userVisited.name ?? "guest"}</Heading>
             <ImagesSlider images={JSON.parse(userVisited.images)} />
             <HStack justify="space-between" py="4">

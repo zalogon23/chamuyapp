@@ -53,7 +53,7 @@ const Profile: NextPage = () => {
       />
       {
         isLoggedIn && user && name && description && age && gender ?
-          <Container maxW="container.md">
+          <Container maxW="container.md" pb="12">
             <Heading py={["4", "6", "10"]}>
               <EditableDescription onSubmit={newName => {
                 if (newName !== user.name) {
@@ -114,7 +114,7 @@ const Profile: NextPage = () => {
               defaultValue={description} />
 
             {getAnyDifference() && changed && (
-              <Button fontSize={fontSize.paragraph} mt="5" mb="10" w="100%"
+              <Button fontSize={fontSize.paragraph} mt="5" w="100%"
                 aria-label="Confirmar cambios"
                 onClick={updateUser}>Confirmar cambios</Button>
             )}
