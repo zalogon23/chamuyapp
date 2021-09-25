@@ -25,12 +25,16 @@ function ImagesSlider({ images, ...props }: Props): ReactElement {
               ))
             }
           </Box>
-          <IconButton opacity={first() ? "0.25" : "1"} colorScheme="whiteAlpha" rounded="full" aria-label="Ir a la imagen anterior" pos="absolute" top="50%" transform="translateY(-50%)" left="0.5rem" onClick={left}>
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </IconButton>
-          <IconButton opacity={last() ? "0.25" : "1"} colorScheme="whiteAlpha" rounded="full" aria-label="Ir a la siguiente imagen" pos="absolute" top="50%" transform="translateY(-50%)" right="0.5rem" onClick={right}>
-            <FontAwesomeIcon icon={faArrowRight} />
-          </IconButton>
+          {images.length > 1 &&
+            <>
+              <IconButton opacity={first() ? "0.25" : "1"} boxShadow="0 0 1rem #0008" colorScheme="whiteAlpha" rounded="full" aria-label="Ir a la imagen anterior" pos="absolute" top="50%" transform="translateY(-50%)" left="0.5rem" onClick={left}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </IconButton>
+              <IconButton opacity={last() ? "0.25" : "1"} boxShadow="0 0 1rem #0008" colorScheme="whiteAlpha" rounded="full" aria-label="Ir a la siguiente imagen" pos="absolute" top="50%" transform="translateY(-50%)" right="0.5rem" onClick={right}>
+                <FontAwesomeIcon icon={faArrowRight} />
+              </IconButton>
+            </>
+          }
         </>
         :
         <ImagePlaceholder />
