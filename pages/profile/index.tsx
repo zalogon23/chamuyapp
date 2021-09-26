@@ -111,7 +111,7 @@ const Profile: NextPage = () => {
                 <HStack>
                   <Editable aria-label="Cambiar preferencia edad minima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
                     h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
-                      if (Number(val) > 17) {
+                      if (Number(val) > 17 && Number(val) < maxAgePreference) {
                         setChanged(true)
                         setMinAgePreference(Number(val))
                       }
@@ -122,7 +122,7 @@ const Profile: NextPage = () => {
                   <Text>{"-"}</Text>
                   <Editable aria-label="Cambiar preferencia edad maxima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
                     h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
-                      if (Number(val) > minAgePreference) {
+                      if (Number(val) > minAgePreference && maxAgePreference < 130) {
                         setChanged(true)
                         setMaxAgePreference(Number(val))
                       }
