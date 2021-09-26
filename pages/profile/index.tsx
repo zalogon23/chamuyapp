@@ -141,7 +141,7 @@ const Profile: NextPage = () => {
               <HStack p="4" flexGrow={1} border="1px solid" borderColor="gray.300" rounded="md">
                 <Text>Máxima distancia: </Text>
                 <Editable aria-label="Cambiar preferencia de distancia maxima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
-                  h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
+                  h="2.5rem" minW="2.5rem" maxW="4rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
                     if (Number(val) > 0) {
                       setChanged(true)
                       setMaxDistancePreference(Number(val))
