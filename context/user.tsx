@@ -9,8 +9,11 @@ interface Props {
 interface AppUser {
   id: number,
   description: string,
+  age: number,
   name: string,
   images: string,
+  minAgePreference: number,
+  maxAgePreference: number,
   genderPreference: string,
   [props: string]: any
 }

@@ -28,6 +28,8 @@ const Profile: NextPage = () => {
   const [gender, setGender] = useState("")
   const [genderPreference, setGenderPreference] = useState("")
   const [age, setAge] = useState(0)
+  const [maxAgePreference, setMaxAgePreference] = useState(35)
+  const [minAgePreference, setMinAgePreference] = useState(18)
   const [description, setDescription] = useState("")
   const [changed, setChanged] = useState(false)
   const colorScheme = gender === "woman" ? "pink" : "blue"
@@ -42,6 +44,8 @@ const Profile: NextPage = () => {
       setGender(user.gender)
       setGenderPreference(user.genderPreference)
       setAge(user.age)
+      setMinAgePreference(user.minAgePreference ?? 18)
+      setMaxAgePreference(user.maxAgePreference ?? 35)
     }
   }, [user])
   return (
@@ -79,7 +83,7 @@ const Profile: NextPage = () => {
             <HStack spacing="2" py="4">
               <Editable aria-label="Cambiar edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
                 h="2.5rem" w="2.5rem" bg={`${colorScheme}.500`} p="1" onSubmit={val => {
-                  if (Number(val) > 18) {
+                  if (Number(val) > 17) {
                     setChanged(true)
                     setAge(Number(val))
                   }
@@ -103,6 +107,30 @@ const Profile: NextPage = () => {
                   }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={genderPreference === "woman" ? "pink" : "blue"}>
                   <FontAwesomeIcon icon={genderPreference === "woman" ? faVenus : faMars} />
                 </IconButton>
+                <Text>Entre: </Text>
+                <HStack>
+                  <Editable aria-label="Cambiar preferencia edad minima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                    h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
+                      if (Number(val) > 17) {
+                        setChanged(true)
+                        setMinAgePreference(Number(val))
+                      }
+                    }} defaultValue={`${minAgePreference}`}>
+                    <EditablePreview />
+                    <EditableInput textAlign="center" type="number" />
+                  </Editable>
+                  <Text>{"-"}</Text>
+                  <Editable aria-label="Cambiar preferencia edad maxima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                    h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
+                      if (Number(val) > minAgePreference) {
+                        setChanged(true)
+                        setMaxAgePreference(Number(val))
+                      }
+                    }} defaultValue={`${maxAgePreference}`}>
+                    <EditablePreview />
+                    <EditableInput textAlign="center" type="number" />
+                  </Editable>
+                </HStack>
               </HStack>
             </HStack>
             <EditableDescription onSubmit={newDescription => {
@@ -132,11 +160,16 @@ const Profile: NextPage = () => {
       || gender !== user?.gender
       || genderPreference !== user?.genderPreference
       || age !== user?.age
+      || minAgePreference !== user?.minAgePreference
+      || maxAgePreference !== user?.maxAgePreference
     )
   }
 
   async function updateUser() {
-    const genderChange = genderPreference !== user.genderPreference
+    const preferencesChanges = genderPreference !== user.genderPreference ||
+      minAgePreference !== user?.minAgePreference ||
+      maxAgePreference !== user?.maxAgePreference
+
     setUser({ ...user, name, description, age, genderPreference, gender })
     await client.mutate({
       mutation: queries.editUser, variables: {
@@ -147,10 +180,12 @@ const Profile: NextPage = () => {
           age: age !== user.age ? age : null,
           gender: gender !== user.gender ? gender : null,
           genderPreference: genderPreference !== user.genderPreference ? genderPreference : null,
+          minAgePreference: minAgePreference !== user.minAgePreference ? minAgePreference : null,
+          maxAgePreference: maxAgePreference !== user.maxAgePreference ? maxAgePreference : null,
         }
       }
     })
-    if (genderChange) searchUsers()
+    if (preferencesChanges) searchUsers()
     setChanged(false)
   }
 }
