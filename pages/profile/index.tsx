@@ -1,8 +1,8 @@
 import { Button, IconButton } from "@chakra-ui/button";
 import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
-import { Badge, Container, HStack, Wrap } from "@chakra-ui/layout";
+import { Badge, Container, HStack, Square, Wrap } from "@chakra-ui/layout";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
-import { faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
+import { faGlobeAfrica, faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Router from "next/router";
@@ -19,6 +19,7 @@ import queries from "../../lib/queries";
 import { fontSize } from "../../lib/styles";
 import { showingUsersContext } from "../../context/showingUsers"
 import SEOHead from "../../components/SEOHead";
+import { Tooltip } from "@chakra-ui/tooltip";
 
 const Profile: NextPage = () => {
   const { user, isLoggedIn, isLoggedOut, setUser } = useContext(userContext)
@@ -80,65 +81,68 @@ const Profile: NextPage = () => {
                 </TabPanel>
               </TabPanels>
             </Tabs>
-            <HStack spacing="2" py="4">
-              <Wrap>
-                <HStack p="4" border="1px solid" borderColor="gray.300" rounded="md">
-                  <Text>Tu información:</Text>
-                  <Editable aria-label="Cambiar edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
-                    h="2.5rem" w="2.5rem" bg={`${colorScheme}.500`} p="1" onSubmit={val => {
-                      if (Number(val) > 17) {
+            <Wrap justify="center" >
+              <HStack flexGrow={1} p="4" border="1px solid" borderColor="gray.300" rounded="md">
+                <Text>Tu información:</Text>
+                <Editable aria-label="Cambiar edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                  h="2.5rem" w="2.5rem" bg={`${colorScheme}.500`} p="1" onSubmit={val => {
+                    if (Number(val) > 17) {
+                      setChanged(true)
+                      setAge(Number(val))
+                    }
+                  }} defaultValue={`${age}`}>
+                  <EditablePreview />
+                  <EditableInput textAlign="center" type="number" />
+                </Editable>
+                <IconButton w="2.5rem" h="2.5rem" aria-label={`Cambiar genero a ${gender === "woman" ? "hombre" : "mujer"}`}
+                  onClick={() => {
+                    setChanged(true)
+                    setGender(gender === "woman" ? "man" : "woman")
+                  }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={colorScheme}>
+                  <FontAwesomeIcon icon={genderIcon} />
+                </IconButton>
+              </HStack>
+              <HStack p="4" flexGrow={1} border="1px solid" borderColor="gray.300" rounded="md">
+                <Text>Busco: </Text>
+                <IconButton w="2.5rem" h="2.5rem" aria-label={`Cambiar mi preferencia de genero a ${genderPreference === "woman" ? "hombre" : "mujer"}`}
+                  onClick={() => {
+                    setChanged(true)
+                    setGenderPreference(genderPreference === "woman" ? "man" : "woman")
+                  }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={genderPreference === "woman" ? "pink" : "blue"}>
+                  <FontAwesomeIcon icon={genderPreference === "woman" ? faVenus : faMars} />
+                </IconButton>
+                <Text>Entre: </Text>
+                <HStack>
+                  <Editable aria-label="Cambiar preferencia edad minima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                    h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
+                      if (Number(val) > 17 && Number(val) < maxAgePreference) {
                         setChanged(true)
-                        setAge(Number(val))
+                        setMinAgePreference(Number(val))
                       }
-                    }} defaultValue={`${age}`}>
+                    }} defaultValue={`${minAgePreference}`}>
                     <EditablePreview />
                     <EditableInput textAlign="center" type="number" />
                   </Editable>
-                  <IconButton w="2.5rem" h="2.5rem" aria-label={`Cambiar genero a ${gender === "woman" ? "hombre" : "mujer"}`}
-                    onClick={() => {
-                      setChanged(true)
-                      setGender(gender === "woman" ? "man" : "woman")
-                    }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={colorScheme}>
-                    <FontAwesomeIcon icon={genderIcon} />
-                  </IconButton>
+                  <Text>{"-"}</Text>
+                  <Editable aria-label="Cambiar preferencia edad maxima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                    h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
+                      if (Number(val) > minAgePreference && Number(val) < 130) {
+                        setChanged(true)
+                        setMaxAgePreference(Number(val))
+                      }
+                    }} defaultValue={`${maxAgePreference}`}>
+                    <EditablePreview />
+                    <EditableInput textAlign="center" type="number" />
+                  </Editable>
                 </HStack>
-                <HStack p="4" border="1px solid" borderColor="gray.300" rounded="md">
-                  <Text>Busco: </Text>
-                  <IconButton w="2.5rem" h="2.5rem" aria-label={`Cambiar mi preferencia de genero a ${genderPreference === "woman" ? "hombre" : "mujer"}`}
-                    onClick={() => {
-                      setChanged(true)
-                      setGenderPreference(genderPreference === "woman" ? "man" : "woman")
-                    }} px="0.5em" fontSize={fontSize.paragraph} colorScheme={genderPreference === "woman" ? "pink" : "blue"}>
-                    <FontAwesomeIcon icon={genderPreference === "woman" ? faVenus : faMars} />
-                  </IconButton>
-                  <Text>Entre: </Text>
-                  <HStack>
-                    <Editable aria-label="Cambiar preferencia edad minima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
-                      h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
-                        if (Number(val) > 17 && Number(val) < maxAgePreference) {
-                          setChanged(true)
-                          setMinAgePreference(Number(val))
-                        }
-                      }} defaultValue={`${minAgePreference}`}>
-                      <EditablePreview />
-                      <EditableInput textAlign="center" type="number" />
-                    </Editable>
-                    <Text>{"-"}</Text>
-                    <Editable aria-label="Cambiar preferencia edad maxima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
-                      h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
-                        if (Number(val) > minAgePreference && Number(val) < 130) {
-                          setChanged(true)
-                          setMaxAgePreference(Number(val))
-                        }
-                      }} defaultValue={`${maxAgePreference}`}>
-                      <EditablePreview />
-                      <EditableInput textAlign="center" type="number" />
-                    </Editable>
-                  </HStack>
-                </HStack>
-              </Wrap>
-            </HStack>
-            <EditableDescription onSubmit={newDescription => {
+              </HStack>
+              <Tooltip label="Actualizar geolocalizacion">
+                <IconButton onClick={updateGeolocation} w="100%" colorScheme={colorScheme} aria-label="Actualizar geolocalizacion">
+                  <FontAwesomeIcon icon={faGlobeAfrica} />
+                </IconButton>
+              </Tooltip>
+            </Wrap>
+            <EditableDescription pt="8" onSubmit={newDescription => {
               if (newDescription !== description) {
                 setChanged(true)
                 setDescription(newDescription)
@@ -192,6 +196,27 @@ const Profile: NextPage = () => {
     })
     if (preferencesChanges) searchUsers()
     setChanged(false)
+  }
+
+  async function updateGeolocation() {
+    const location = navigator.geolocation
+    if (!location) {
+      console.log("There's no access to the geolocation.")
+      return
+    }
+    const position = (await new Promise(res => location.getCurrentPosition(val => res(val)))) as GeolocationPosition
+    if (!position?.coords?.latitude || !position?.coords?.longitude) return
+    const { latitude, longitude } = position.coords
+    const result = await client.mutate({
+      mutation: queries.editUser, variables: {
+        editUserVariables: {
+          id: user.id ?? null,
+          x: longitude,
+          y: latitude
+        }
+      }
+    })
+    if (result?.data?.editUser) console.log("Edited succesfully")
   }
 }
 
