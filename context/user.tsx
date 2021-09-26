@@ -12,9 +12,12 @@ interface AppUser {
   age: number,
   name: string,
   images: string,
+  x: number,
+  y: number,
   minAgePreference: number,
   maxAgePreference: number,
   genderPreference: string,
+  maxDistancePreference: number
   [props: string]: any
 }
 

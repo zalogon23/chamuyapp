@@ -33,13 +33,14 @@ const Profile: NextPage = () => {
   const [minAgePreference, setMinAgePreference] = useState(18)
   const [description, setDescription] = useState("")
   const [changed, setChanged] = useState(false)
+  const [maxDistancePreference, setMaxDistancePreference] = useState(0)
   const colorScheme = gender === "woman" ? "pink" : "blue"
   const genderIcon = gender === "woman" ? faVenus : faMars
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
   useEffect(() => {
-    if (user?.name && user?.description && user?.age && user?.gender && user?.genderPreference) {
+    if (user?.name) {
       setName(user.name)
       setDescription(user.description)
       setGender(user.gender)
@@ -47,6 +48,7 @@ const Profile: NextPage = () => {
       setAge(user.age)
       setMinAgePreference(user.minAgePreference ?? 18)
       setMaxAgePreference(user.maxAgePreference ?? 35)
+      setMaxDistancePreference(user.maxDistancePreference ?? 0)
     }
   }, [user])
   return (
@@ -136,6 +138,19 @@ const Profile: NextPage = () => {
                   </Editable>
                 </HStack>
               </HStack>
+              <HStack p="4" flexGrow={1} border="1px solid" borderColor="gray.300" rounded="md">
+                <Text>Máxima distancia: </Text>
+                <Editable aria-label="Cambiar preferencia de distancia maxima" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                  h="2.5rem" w="2.5rem" bg={`${genderPreference === "woman" ? "pink" : "blue"}.500`} p="1" onChange={val => {
+                    if (Number(val) > 0) {
+                      setChanged(true)
+                      setMaxDistancePreference(Number(val))
+                    }
+                  }} defaultValue={`${maxDistancePreference}`}>
+                  <EditablePreview />
+                  <EditableInput textAlign="center" type="number" />
+                </Editable>
+              </HStack>
               <Tooltip label="Actualizar geolocalizacion">
                 <IconButton onClick={updateGeolocation} w="100%" colorScheme={colorScheme} aria-label="Actualizar geolocalizacion">
                   <FontAwesomeIcon icon={faGlobeAfrica} />
@@ -171,13 +186,16 @@ const Profile: NextPage = () => {
       || age !== user?.age
       || minAgePreference !== user?.minAgePreference
       || maxAgePreference !== user?.maxAgePreference
+      || maxDistancePreference !== user?.maxDistancePreference
     )
   }
 
   async function updateUser() {
     const preferencesChanges = genderPreference !== user.genderPreference ||
       minAgePreference !== user?.minAgePreference ||
-      maxAgePreference !== user?.maxAgePreference
+      maxAgePreference !== user?.maxAgePreference ||
+      maxDistancePreference !== user?.maxDistancePreference
+
 
     setUser({ ...user, name, description, age, genderPreference, gender })
     await client.mutate({
@@ -191,6 +209,7 @@ const Profile: NextPage = () => {
           genderPreference: genderPreference !== user.genderPreference ? genderPreference : null,
           minAgePreference: minAgePreference !== user.minAgePreference ? minAgePreference : null,
           maxAgePreference: maxAgePreference !== user.maxAgePreference ? maxAgePreference : null,
+          maxDistancePreference: maxDistancePreference !== user.maxDistancePreference ? maxDistancePreference : null,
         }
       }
     })
