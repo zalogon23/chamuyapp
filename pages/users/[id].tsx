@@ -72,7 +72,7 @@ const UserID: NextPage = () => {
             <ImagesSlider images={JSON.parse(userVisited.images)} />
             <HStack justify="space-between" py="4">
               <HStack spacing="2">
-                <Badge aria-label="Cambiar edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                <Badge aria-label="Edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
                   h="2.5rem" w="2.5rem" bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`} p="1">
                   {userVisited.age}
                 </Badge>

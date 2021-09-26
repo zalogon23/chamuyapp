@@ -106,12 +106,12 @@ const MessagesID: NextPage = () => {
               py="0.8em">
               <>
                 {`Conversación con ${name}`}
-                <IconButton size="sm" colorScheme="red" fontSize={fontSize.paragraph} aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right="2"
+                <IconButton size="sm" colorScheme="red" fontSize={fontSize.paragraph} aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right={["2","4", "6"]}
                   transform="translateY(-50%)" onClick={removeMatch}>
                   <FontAwesomeIcon icon={faTrash} />
                 </IconButton>
                 <Link href={`/users/${anotherUser.anotherID}`} passHref>
-                  <IconButton size="sm" aria-label={`Ir al perfil de ${name}`} fontSize={fontSize.paragraph} pos="absolute" top="50%" left="2"
+                  <IconButton size="sm" aria-label={`Ir al perfil de ${name}`} fontSize={fontSize.paragraph} pos="absolute" top="50%" left={["2","2", "6"]}
                     transform="translateY(-50%)">
                     <FontAwesomeIcon icon={faUser} />
                   </IconButton>

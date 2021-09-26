@@ -63,7 +63,7 @@ const Messages: NextPage = () => {
 
 function MessagesDisplay({ messages }: { messages: Match[] }) {
   return (
-    <Stack px="4">
+    <Stack px="4" maxW="container.lg" mx="auto">
       {
         messages.map((mes, id) => (
           <Link key={id} href={`/messages/${mes.id}`} passHref>
