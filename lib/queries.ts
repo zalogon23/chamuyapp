@@ -25,7 +25,7 @@ const queries = {
   getUserByID: gql`
   query Query($getUserByIdId: Float!) {
     getUserByID(id: $getUserByIdId) {
-      id, name, gender, age, description, images, genderPreference, minAgePreference, maxAgePreference, maxDistancePreference
+      id, name, gender, age, description, images, genderPreference, minAgePreference, maxAgePreference, maxDistancePreference, x, y
     }
   }
   `,
@@ -42,7 +42,7 @@ const queries = {
   getShowingUsers: gql`
   query Query($getShowingUsersUserId: Float!) {
     getShowingUsers(userID: $getShowingUsersUserId) {
-      id, name, description, age, gender, images
+      id, name, description, age, gender, images, x, y
     }
   }
   `,

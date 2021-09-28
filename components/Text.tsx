@@ -3,7 +3,7 @@ import { Text as ChakraText } from "@chakra-ui/react"
 import { fontSize, lineHeight } from '../lib/styles'
 
 interface Props {
-  children: string,
+  children: string | ReactElement,
   [props: string]: any
 }
 
