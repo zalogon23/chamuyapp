@@ -27,6 +27,7 @@ interface Message {
   createdAt: Date,
   receiverID: number,
   senderID: number,
+  seen: boolean,
   self: boolean
 }
 
@@ -74,7 +75,8 @@ const MessagesID: NextPage = () => {
   }, [messages])
   useEffect(() => {
     (async () => {
-      if (anotherUser?.anotherID && matchID && user?.id) {
+      const requiredData = anotherUser?.anotherID && matchID && user?.id
+      if (requiredData && !anotherUser.seen) {
         const updated = (await client.mutate({
           mutation: queries.setMatchSeen, variables: {
             setMatchSeenAnotherId: anotherUser.anotherID,
@@ -89,8 +91,40 @@ const MessagesID: NextPage = () => {
           }))
         }
       }
+      if (requiredData && messages.length && !sawLastMessage(anotherUser)) {
+        const updated = (await client.mutate({
+          mutation: queries.setMessageSeen, variables: {
+            setMessageSeenUserId: user.id,
+            setMessageSeenMessageId: messages[0].id
+          }
+        }))?.data?.setMessageSeen as boolean
+        if (updated) {
+          setMatchesMessages(matchesMessages.map(match => {
+            if (match.anotherID !== anotherUser.anotherID) return match
+            return {
+              ...match, content: JSON.stringify(JSON.parse(match.content)
+                .map((mes: Message, id: number) => {
+                  if (id === 0) {
+                    return { ...mes, seen: true }
+                  }
+                  return mes
+                }))
+            }
+          }))
+        }
+      }
+
+      function sawLastMessage(mes: Match) {
+        const lastMessage = JSON.parse(mes.content)[0]
+        if (lastMessage.senderID === user.id) {
+          return true
+        } else if (!lastMessage.seen) {
+          return false
+        }
+        return true
+      }
     })()
-  }, [anotherUser, matchID, user])
+  }, [anotherUser, matchID, user, messages])
   return (
     <>
       <SEOHead
@@ -106,12 +140,12 @@ const MessagesID: NextPage = () => {
               py="0.8em">
               <>
                 {`Conversación con ${name}`}
-                <IconButton size="sm" colorScheme="red" fontSize={fontSize.paragraph} aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right={["2","4", "6"]}
+                <IconButton size="sm" colorScheme="red" fontSize={fontSize.paragraph} aria-label={`Eliminar match con ${name}`} pos="absolute" top="50%" right={["2", "4", "6"]}
                   transform="translateY(-50%)" onClick={removeMatch}>
                   <FontAwesomeIcon icon={faTrash} />
                 </IconButton>
                 <Link href={`/users/${anotherUser.anotherID}`} passHref>
-                  <IconButton size="sm" aria-label={`Ir al perfil de ${name}`} fontSize={fontSize.paragraph} pos="absolute" top="50%" left={["2","2", "6"]}
+                  <IconButton size="sm" aria-label={`Ir al perfil de ${name}`} fontSize={fontSize.paragraph} pos="absolute" top="50%" left={["2", "2", "6"]}
                     transform="translateY(-50%)">
                     <FontAwesomeIcon icon={faUser} />
                   </IconButton>

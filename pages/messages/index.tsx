@@ -28,7 +28,7 @@ export interface Match extends User {
 }
 
 const Messages: NextPage = () => {
-  const { isLoggedIn, isLoggedOut } = useContext(userContext)
+  const { isLoggedIn, isLoggedOut, user } = useContext(userContext)
   const { matchesMessages, loading } = useContext(messagesContext)
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
@@ -59,30 +59,40 @@ const Messages: NextPage = () => {
       }
     </>
   )
-}
 
-function MessagesDisplay({ messages }: { messages: Match[] }) {
-  return (
-    <Stack px="4" maxW="container.lg" mx="auto">
-      {
-        messages.map((mes, id) => (
-          <Link key={id} href={`/messages/${mes.id}`} passHref>
-            <ChakraLink borderBottom="1px solid" borderBottomColor="gray.200"
-              _hover={{ textDecoration: "none", filter: "brightness(90%)" }} aria-label={`Ir a la conversacion con ${mes.name}`}>
-              <Box display="flex" py="4" pos="relative" alignItems="center">
-                <Avatar alt="" src={JSON.parse(mes.images)[0]} mr="1rem" />
-                <Stack spacing="0">
-                  <Heading>{mes.name}</Heading>
-                  <Text>{JSON.parse(mes.content)[0].content}</Text>
-                </Stack>
-                {!mes.seen && <Spot bg="red.500" top="1rem" />}
-              </Box>
-            </ChakraLink>
-          </Link>
-        ))
+  function MessagesDisplay({ messages }: { messages: Match[] }) {
+    return (
+      <Stack px="4" maxW="container.lg" mx="auto">
+        {
+          messages.map((mes, id) => (
+            <Link key={id} href={`/messages/${mes.id}`} passHref>
+              <ChakraLink borderBottom="1px solid" borderBottomColor="gray.200"
+                _hover={{ textDecoration: "none", filter: "brightness(90%)" }} aria-label={`Ir a la conversacion con ${mes.name}`}>
+                <Box display="flex" py="4" pos="relative" alignItems="center">
+                  <Avatar alt="" src={JSON.parse(mes.images)[0]} mr="1rem" />
+                  <Stack spacing="0">
+                    <Heading>{mes.name}</Heading>
+                    <Text>{JSON.parse(mes.content)[0].content}</Text>
+                  </Stack>
+                  {!mes.seen || !sawLastMessage(mes) && <Spot bg="red.500" top="1rem" />}
+                </Box>
+              </ChakraLink>
+            </Link>
+          ))
+        }
+      </Stack>
+    )
+
+    function sawLastMessage(mes: Match) {
+      const lastMessage = JSON.parse(mes.content)[0]
+      if (lastMessage.senderID === user.id) {
+        return true
+      } else if (!lastMessage.seen) {
+        return false
       }
-    </Stack>
-  )
+      return true
+    }
+  }
 }
 
 function MatchBubble({ user }: { user: Match }): ReactElement {
