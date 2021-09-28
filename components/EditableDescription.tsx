@@ -15,7 +15,7 @@ interface Props {
 function EditableDescription({ defaultValue, color = "gray.400", onSubmit, ...props }: Props): ReactElement {
 
   return (
-    <Editable onSubmit={onSubmit} fontSize={fontSize.paragraph} pt="0.2em" mb="1.5em" defaultValue={defaultValue} pos="relative" {...props}>
+    <Editable onSubmit={onSubmit} fontSize={fontSize.paragraph} mb="1.5em" defaultValue={defaultValue} pos="relative" {...props}>
       <EditableInput pl="3" color={color} />
       <Logic />
       <EditablePreview color={color} pr="2.5em" />

@@ -160,7 +160,7 @@ const Profile: NextPage = () => {
                 </IconButton>
               </Tooltip>
             </Wrap>
-            <EditableDescription pt="8" onSubmit={newDescription => {
+            <EditableDescription mt="8" onSubmit={newDescription => {
               if (newDescription !== description) {
                 setChanged(true)
                 setDescription(newDescription)
