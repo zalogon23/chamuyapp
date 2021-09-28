@@ -81,6 +81,11 @@ const queries = {
     setMatchSeen(anotherID: $setMatchSeenAnotherId, userID: $setMatchSeenUserId, matchID: $setMatchSeenMatchId)
   }
   `,
+  setMessageSeen: gql`
+  mutation SetMessageSeenMutation($setMessageSeenUserId: Float!, $setMessageSeenMessageId: Float!) {
+    setMessageSeen(userID: $setMessageSeenUserId, messageID: $setMessageSeenMessageId)
+  }
+  `,
   deleteMessage: gql`
   mutation DeleteMessageMutation($deleteMessageUserId: Float!, $deleteMessageMessageId: Float!) {
     deleteMessage(userID: $deleteMessageUserId, messageID: $deleteMessageMessageId)
