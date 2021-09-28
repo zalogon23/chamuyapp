@@ -75,26 +75,28 @@ const UserID: NextPage = () => {
           <Container maxW="container.md" pb="12">
             <Heading py={["4", "6", "10"]}>{userVisited.name ?? "guest"}</Heading>
             <ImagesSlider images={JSON.parse(userVisited.images)} />
-            <HStack justify="space-between" py="4">
-              <Wrap spacing="2">
-                <Badge aria-label="Edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
-                  h="2.5rem" w="2.5rem" bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`} p="1">
-                  {userVisited.age}
-                </Badge>
-                <Badge w="2.5rem" h="2.5rem" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
-                  px="0.5em" fontSize={fontSize.paragraph} bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`}>
-                  <FontAwesomeIcon icon={userVisited.gender === "man" ? faMars : faVenus} />
-                </Badge>
-                <HStack pl="4">
-                  <Text>Busco: </Text>
-                  <Badge w="2.5rem" h="2.5rem" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
-                    px="0.5em" fontSize={fontSize.paragraph} bg={`${userVisited.genderPreference === "man" ? "blue" : "pink"}.500`}>
-                    <FontAwesomeIcon icon={userVisited.genderPreference === "man" ? faMars : faVenus} />
+            <Wrap justify="space-between" alignItems="stretch" py="4">
+              <Wrap w="100%" spacing="2">
+                <HStack flexGrow={1} border="1px solid" borderColor="gray.200" rounded="md" p="4" >
+                  <Badge aria-label="Edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                    h="2.5rem" w="2.5rem" bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`} p="1">
+                    {userVisited.age}
                   </Badge>
+                  <Badge w="2.5rem" h="2.5rem" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                    px="0.5em" fontSize={fontSize.paragraph} bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`}>
+                    <FontAwesomeIcon icon={userVisited.gender === "man" ? faMars : faVenus} />
+                  </Badge>
+                  <HStack pl="4">
+                    <Text>Busco: </Text>
+                    <Badge w="2.5rem" h="2.5rem" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                      px="0.5em" fontSize={fontSize.paragraph} bg={`${userVisited.genderPreference === "man" ? "blue" : "pink"}.500`}>
+                      <FontAwesomeIcon icon={userVisited.genderPreference === "man" ? faMars : faVenus} />
+                    </Badge>
+                  </HStack>
                 </HStack>
                 {
                   phrase &&
-                  <HStack pl="4">
+                  <HStack flexGrow={1} border="1px solid" borderColor="gray.200" rounded="md" p="4">
                     <Text>{phrase}</Text>
                     <Badge w="2.5rem" h="2.5rem" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
                       px="0.5em" fontSize={fontSize.paragraph} bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`}>
@@ -105,12 +107,12 @@ const UserID: NextPage = () => {
               </Wrap>
               {isMatch && chatID &&
                 <Link href={`/messages/${chatID}`} passHref>
-                  <IconButton ml="auto" aria-label={`Ir a chatear con ${userVisited.name}`} fontSize={fontSize.paragraph}>
+                  <IconButton w="100%" ml="auto" aria-label={`Ir a chatear con ${userVisited.name}`} fontSize={fontSize.paragraph}>
                     <FontAwesomeIcon icon={faEnvelope} />
                   </IconButton>
                 </Link>
               }
-            </HStack>
+            </Wrap>
             <Text>{userVisited.description}</Text>
           </Container>
       }
