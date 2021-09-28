@@ -37,7 +37,7 @@ export default function MessagesProvider({ children }: Props) {
     }
   }, [isLoggedIn, isLoggedOut, user?.id])
   useEffect(() => {
-    const notification = matchesMessages.find(match => !match.seen)
+    const notification = matchesMessages.find(match => somethingNew(match))
     if (notification) {
       setNotification(true)
     } else {
@@ -49,6 +49,17 @@ export default function MessagesProvider({ children }: Props) {
       {children}
     </messagesContext.Provider>
   )
+
+  function somethingNew(match: Match) {
+    if (!match.seen) return true
+    if (JSON.parse(match.content)[0] === undefined) return false
+    if (JSON.parse(match.content)[0].senderID === user.id) {
+      return false
+    } else if (!JSON.parse(match.content)[0].seen) {
+      return true
+    }
+    return false
+  }
 
   async function fetchMessages() {
     setLoading(true)
