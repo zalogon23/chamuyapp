@@ -20,6 +20,7 @@ import { fontSize } from "../../lib/styles";
 import { showingUsersContext } from "../../context/showingUsers"
 import SEOHead from "../../components/SEOHead";
 import { Tooltip } from "@chakra-ui/tooltip";
+import { useToast } from "@chakra-ui/toast";
 
 const Profile: NextPage = () => {
   const { user, isLoggedIn, isLoggedOut, setUser } = useContext(userContext)
@@ -36,6 +37,7 @@ const Profile: NextPage = () => {
   const [maxDistancePreference, setMaxDistancePreference] = useState(0)
   const colorScheme = gender === "woman" ? "pink" : "blue"
   const genderIcon = gender === "woman" ? faVenus : faMars
+  const toast = useToast()
   useEffect(() => {
     if (isLoggedOut) Router.replace("/login")
   }, [isLoggedOut])
@@ -235,7 +237,23 @@ const Profile: NextPage = () => {
         }
       }
     })
-    if (result?.data?.editUser) console.log("Edited succesfully")
+    if (result?.data?.editUser) {
+      toast({
+        title: "Bien hecho!",
+        description: "Tu ubicación está actualizada.",
+        status: "success",
+        duration: 2000,
+        isClosable: true
+      })
+    } else {
+      toast({
+        title: "Error",
+        description: "Tu ubicación no se pudo actualizar...",
+        status: "error",
+        duration: 2000,
+        isClosable: true
+      })
+    }
   }
 }
 
