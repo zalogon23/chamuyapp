@@ -95,7 +95,7 @@ const MessagesID: NextPage = () => {
         const updated = (await client.mutate({
           mutation: queries.setMessageSeen, variables: {
             setMessageSeenUserId: user.id,
-            setMessageSeenMessageId: messages[0].id
+            setMessageSeenMessageId: messages[messages.length - 1].id
           }
         }))?.data?.setMessageSeen as boolean
         if (updated) {
