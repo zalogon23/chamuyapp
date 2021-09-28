@@ -1,9 +1,10 @@
 import { Button, IconButton } from '@chakra-ui/button'
 import { Box, Flex, HStack, Link as ChakraLink, Spacer } from '@chakra-ui/layout'
+import { useToast } from '@chakra-ui/react'
 import { faBars, faHorse } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from "next/link"
-import React, { ReactElement, useContext, useState } from 'react'
+import React, { ReactElement, useContext, useEffect, useState } from 'react'
 import { messagesContext } from '../context/messages'
 import { userContext } from '../context/user'
 import { fontSize } from '../lib/styles'
@@ -50,6 +51,18 @@ function Header(): ReactElement {
   const [openNav, setOpenNav] = useState(false)
   const { isLoggedIn } = useContext(userContext)
   const { notification } = useContext(messagesContext)
+  const toast = useToast()
+  useEffect(() => {
+    if (notification) {
+      toast({
+        status: "info",
+        title: "Nueva notificación",
+        description: "Enterate de que paso mientras no estabas!",
+        duration: 2000,
+        isClosable: true
+      })
+    }
+  }, [notification])
   return (
     <Box bg="red.500" as="header">
       <Flex py="2" px="3" align="center">
