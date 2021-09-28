@@ -73,7 +73,7 @@ const Login: NextPage = () => {
               </Formik>
               <Text pb="4" textAlign="center">
                 <>
-                  {"¿No tienes un cuenta aún?"}
+                  {"¿No tienes una cuenta aún?"}
                   <Link href="/register" passHref>
                     <ChakraLink color="red.200" pl="2" aria-label="Ir a registrarme">
                       Registrate
