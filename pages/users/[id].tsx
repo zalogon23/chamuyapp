@@ -1,4 +1,4 @@
-import { Badge, Container, HStack } from "@chakra-ui/layout";
+import { Badge, Container, HStack, Wrap } from "@chakra-ui/layout";
 import { faEnvelope, faGlobeAmericas, faMailBulk, faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
@@ -48,7 +48,7 @@ const UserID: NextPage = () => {
         if (userVisitedResult) setUserVisited(userVisitedResult)
 
         const distance = Math.round(headingDistanceTo({ lat: user.y, lon: user.x }, { lat: userVisitedResult?.y, lon: userVisitedResult?.x }).distance / 1000)
-        setPhrase(distance < 1 ? "Está a menos de un kilometro." : distance === 1 ? `Está a un kilometro.` : `Está a ${distance} kilometros.`)
+        setPhrase(distance < 1 ? "Está a menos de un kilometro" : distance === 1 ? `Está a un kilometro` : `Está a ${distance} kilometros`)
         setLoading(false)
       }
     })()
@@ -76,7 +76,7 @@ const UserID: NextPage = () => {
             <Heading py={["4", "6", "10"]}>{userVisited.name ?? "guest"}</Heading>
             <ImagesSlider images={JSON.parse(userVisited.images)} />
             <HStack justify="space-between" py="4">
-              <HStack spacing="2">
+              <Wrap spacing="2">
                 <Badge aria-label="Edad" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
                   h="2.5rem" w="2.5rem" bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`} p="1">
                   {userVisited.age}
@@ -102,7 +102,7 @@ const UserID: NextPage = () => {
                     </Badge>
                   </HStack>
                 }
-              </HStack>
+              </Wrap>
               {isMatch && chatID &&
                 <Link href={`/messages/${chatID}`} passHref>
                   <IconButton ml="auto" aria-label={`Ir a chatear con ${userVisited.name}`} fontSize={fontSize.paragraph}>
