@@ -1,5 +1,5 @@
 import { Badge, Container, HStack } from "@chakra-ui/layout";
-import { faEnvelope, faMailBulk, faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faGlobeAmericas, faMailBulk, faMars, faVenus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import { useContext, useEffect, useState } from "react";
@@ -17,6 +17,7 @@ import Link from "next/link"
 import { Button, IconButton } from "@chakra-ui/button";
 import { userContext } from "../../context/user";
 import Router from "next/router";
+import { headingDistanceTo } from "geolocation-utils";
 
 const UserID: NextPage = () => {
   const [userID, setUserID] = useState(undefined as undefined | number)
@@ -26,6 +27,7 @@ const UserID: NextPage = () => {
   const [isMatch, setIsMatch] = useState(false)
   const [loading, setLoading] = useState(true)
   const [chatID, setChatID] = useState(undefined as undefined | number)
+  const [phrase, setPhrase] = useState("")
   useEffect(() => {
     const pathname = window?.location?.pathname
     const id = Number(pathname.slice(pathname.indexOf("/", 1) + 1)) || undefined
@@ -44,6 +46,9 @@ const UserID: NextPage = () => {
         if (!data) return ({ error: "There's no user with that ID" })
         const userVisitedResult = data?.data?.getUserByID as User
         if (userVisitedResult) setUserVisited(userVisitedResult)
+
+        const distance = Math.round(headingDistanceTo({ lat: user.y, lon: user.x }, { lat: userVisitedResult?.y, lon: userVisitedResult?.x }).distance / 1000)
+        setPhrase(distance < 1 ? "Está a menos de un kilometro." : distance === 1 ? `Está a un kilometro.` : `Está a ${distance} kilometros.`)
         setLoading(false)
       }
     })()
@@ -87,6 +92,16 @@ const UserID: NextPage = () => {
                     <FontAwesomeIcon icon={userVisited.genderPreference === "man" ? faMars : faVenus} />
                   </Badge>
                 </HStack>
+                {
+                  phrase &&
+                  <HStack pl="4">
+                    <Text>{phrase}</Text>
+                    <Badge w="2.5rem" h="2.5rem" rounded="md" color="white" display="flex" justifyContent="center" alignItems="center"
+                      px="0.5em" fontSize={fontSize.paragraph} bg={`${userVisited.gender === "man" ? "blue" : "pink"}.500`}>
+                      <FontAwesomeIcon icon={faGlobeAmericas} />
+                    </Badge>
+                  </HStack>
+                }
               </HStack>
               {isMatch && chatID &&
                 <Link href={`/messages/${chatID}`} passHref>
