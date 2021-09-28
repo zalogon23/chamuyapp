@@ -15,6 +15,8 @@ import Loading from "../../components/Loading";
 import SEOHead from "../../components/SEOHead";
 import Text from "../../components/Text";
 import { userContext } from "../../context/user";
+import Link from "next/link"
+import { Link as ChakraLink } from "@chakra-ui/react"
 
 interface Values {
   email: string,
@@ -69,6 +71,16 @@ const Login: NextPage = () => {
                   </Form>
                 )}
               </Formik>
+              <Text pb="4" textAlign="center">
+                <>
+                  {"¿No tienes un cuenta aún?"}
+                  <Link href="/register" passHref>
+                    <ChakraLink color="red.200" pl="2" aria-label="Ir a registrarme">
+                      Registrate
+                    </ChakraLink>
+                  </Link>
+                </>
+              </Text>
               <Divider borderColor="gray.500" />
               <Text pt="4" pb="6" textAlign="center">o</Text>
               <Wrap justify="center" pb="8">
