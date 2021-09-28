@@ -152,6 +152,7 @@ const Profile: NextPage = () => {
                   <EditablePreview />
                   <EditableInput textAlign="center" type="number" />
                 </Editable>
+                <Text>KM</Text>
               </HStack>
               <Tooltip label="Actualizar geolocalizacion">
                 <IconButton onClick={updateGeolocation} w="100%" colorScheme={colorScheme} aria-label="Actualizar geolocalizacion">
