@@ -240,7 +240,7 @@ const Profile: NextPage = () => {
     if (result?.data?.editUser) {
       toast({
         title: "Bien hecho!",
-        description: "Tu ubicación está actualizada.",
+        description: "Tu ubicación fue actualizada.",
         status: "success",
         duration: 2000,
         isClosable: true
