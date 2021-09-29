@@ -209,6 +209,10 @@ const MessagesID: NextPage = () => {
               )
             }
           }).sort((a, b) => {
+            if (!a?.content || !b?.content) return 0
+            if (!JSON.parse(a.content)[0] || !JSON.parse(b.content)[0]) return 0
+            if (!JSON.parse(a.content)[0].createdAt || !JSON.parse(b.content)[0].createdAt) return 0
+            return JSON.parse(a.content)[0].createdAt > JSON.parse(b.content)[0].createdAt ? -1 : 1
             return JSON.parse(a.content)[0].createdAt > JSON.parse(b.content)[0].createdAt ? -1 : 1
           })
           )
@@ -271,7 +275,10 @@ export function MessageSender({ name, from, to, setMatchesMessages, matchesMessa
             content: JSON.stringify(contentParsed)
           })
         }).sort((a, b) => {
-          return (JSON.parse(a.content)[0]?.createdAt || 0) > (JSON.parse(b.content)[0]?.createdAt || 0) ? -1 : 1
+          if (!a?.content || !b?.content) return 0
+          if (!JSON.parse(a.content)[0] || !JSON.parse(b.content)[0]) return 0
+          if (!JSON.parse(a.content)[0].createdAt || !JSON.parse(b.content)[0].createdAt) return 0
+          return JSON.parse(a.content)[0].createdAt > JSON.parse(b.content)[0].createdAt ? -1 : 1
         }))
         setContent("")
         setSending(false)
