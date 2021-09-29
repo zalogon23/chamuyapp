@@ -2,6 +2,7 @@ import { Button, IconButton } from '@chakra-ui/button'
 import { Image } from '@chakra-ui/image'
 import { Input } from '@chakra-ui/input'
 import { Box, Stack, Wrap, WrapItem } from '@chakra-ui/layout'
+import { useToast } from '@chakra-ui/react'
 import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
@@ -20,6 +21,7 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
   const [currentImages, setCurrentImages] = useState(images)
   const [uploadedImages, setUploadedImages] = useState([] as File[])
   const { setUser, user } = useContext(userContext)
+  const toast = useToast()
   return (
     <Stack p="4" border="2px solid" borderColor="gray.200" rounded="lg" spacing="1em">
       <Wrap minH="60vh">
@@ -46,6 +48,13 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
     </Stack>
   )
   async function updateImages() {
+    toast({
+      title: "Procesando...",
+      description: "Tus imágenes estarán listas en un momento!",
+      status: "info",
+      isClosable: true,
+      duration: 2000
+    })
     setMode(0)
     let updatedImages = [] as string[];
     if (uploadedImages.length > 0) {
@@ -68,6 +77,22 @@ function ImagesPicker({ images, setMode }: Props): ReactElement {
       if (imagesUpdated) {
         //Update user on session
         setUser({ ...user, images: imagesUpdated })
+        toast({
+          title: "Imágenes actualizadas",
+          description: "Ya están visibles para tus futuros matches!",
+          status: "success",
+          isClosable: true,
+          duration: 2000
+        })
+      } else {
+
+        toast({
+          title: "Imágenes no actualizadas",
+          description: "Hubo un problema en el proceso",
+          status: "error",
+          isClosable: true,
+          duration: 2000
+        })
       }
     }
   }
