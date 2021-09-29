@@ -74,7 +74,7 @@ const Messages: NextPage = () => {
                     <Heading>{mes.name}</Heading>
                     <Text>{JSON.parse(mes.content)[0].content}</Text>
                   </Stack>
-                  {!mes.seen || !sawLastMessage(mes) && <Spot bg="red.500" top="1rem" />}
+                  {(!mes.seen || !sawLastMessage(mes)) && <Spot bg="red.500" top="1rem" />}
                 </Box>
               </ChakraLink>
             </Link>

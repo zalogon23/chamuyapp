@@ -77,41 +77,37 @@ const MessagesID: NextPage = () => {
     (async () => {
       const requiredData = anotherUser?.anotherID && matchID && user?.id
       if (requiredData && !anotherUser.seen) {
-        const updated = (await client.mutate({
+        await client.mutate({
           mutation: queries.setMatchSeen, variables: {
             setMatchSeenAnotherId: anotherUser.anotherID,
             setMatchSeenUserId: user.id,
             setMatchSeenMatchId: matchID
           }
-        }))?.data?.setMatchSeen as boolean
-        if (updated) {
-          setMatchesMessages(matchesMessages.map(match => {
-            if (match.anotherID !== anotherUser.anotherID) return match
-            return { ...match, seen: true }
-          }))
-        }
+        })
+        setMatchesMessages(matchesMessages.map(match => {
+          if (match.anotherID !== anotherUser.anotherID) return match
+          return { ...match, seen: true }
+        }))
       }
       if (requiredData && messages.length && !sawLastMessage(anotherUser)) {
-        const updated = (await client.mutate({
+        await client.mutate({
           mutation: queries.setMessageSeen, variables: {
             setMessageSeenUserId: user.id,
             setMessageSeenMessageId: messages[messages.length - 1].id
           }
-        }))?.data?.setMessageSeen as boolean
-        if (updated) {
-          setMatchesMessages(matchesMessages.map(match => {
-            if (match.anotherID !== anotherUser.anotherID) return match
-            return {
-              ...match, content: JSON.stringify(JSON.parse(match.content)
-                .map((mes: Message, id: number) => {
-                  if (id === 0) {
-                    return { ...mes, seen: true }
-                  }
-                  return mes
-                }))
-            }
-          }))
-        }
+        })
+        setMatchesMessages(matchesMessages.map(match => {
+          if (match.anotherID !== anotherUser.anotherID) return match
+          return {
+            ...match, content: JSON.stringify(JSON.parse(match.content)
+              .map((mes: Message, id: number) => {
+                if (id === 0) {
+                  return { ...mes, seen: true }
+                }
+                return mes
+              }))
+          }
+        }))
       }
 
       function sawLastMessage(mes: Match) {
