@@ -246,6 +246,7 @@ const Profile: NextPage = () => {
         duration: 2000,
         isClosable: true
       })
+      searchUsers()
     } else {
       toast({
         title: "Error",
