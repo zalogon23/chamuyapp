@@ -62,7 +62,7 @@ const Profile: NextPage = () => {
       />
       {
         isLoggedIn && user && name && description && age && gender ?
-          <Container maxW="container.md" pb="12">
+          <Container maxW="container.md" pb="6">
             <Heading py={["4", "6", "10"]}>
               <EditableDescription color="black" onSubmit={newName => {
                 if (newName !== user.name) {
@@ -160,7 +160,8 @@ const Profile: NextPage = () => {
                 </IconButton>
               </Tooltip>
             </Wrap>
-            <EditableDescription mt="8" onSubmit={newDescription => {
+            <EditableDescription border="1px solid" borderColor="gray.300" my="4" 
+            p="4" borderRadius="md" onSubmit={newDescription => {
               if (newDescription !== description) {
                 setChanged(true)
                 setDescription(newDescription)
@@ -169,7 +170,7 @@ const Profile: NextPage = () => {
               defaultValue={description} />
 
             {getAnyDifference() && changed && (
-              <Button fontSize={fontSize.paragraph} mt="5" w="100%"
+              <Button fontSize={fontSize.paragraph} w="100%"
                 aria-label="Confirmar cambios"
                 onClick={updateUser}>Confirmar cambios</Button>
             )}

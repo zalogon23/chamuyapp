@@ -34,7 +34,7 @@ function Logic() {
     <>
       {
         isEditing ?
-          <ButtonGroup py="4">
+          <ButtonGroup pt="2">
             <IconButton aria-label="Confirmar cambios en descripcion"
               {...getSubmitButtonProps()}>
               <FontAwesomeIcon icon={faCheck} /></IconButton>
@@ -43,7 +43,7 @@ function Logic() {
               <FontAwesomeIcon icon={faTimes} /></IconButton>
           </ButtonGroup>
           :
-          <IconButton pos="absolute" right="0" top="50%" transform="translateY(-50%)" aria-label="Editar descripcion"
+          <IconButton pos="absolute" right="2" top="50%" transform="translateY(-50%)" aria-label="Editar descripcion"
             {...getEditButtonProps()}>
             <FontAwesomeIcon icon={faEdit} />
           </IconButton>
