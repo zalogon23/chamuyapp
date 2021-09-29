@@ -201,7 +201,7 @@ const Profile: NextPage = () => {
 
 
     setUser({ ...user, name, description, age, genderPreference, gender })
-    await client.mutate({
+    const success = (await client.mutate({
       mutation: queries.editUser, variables: {
         editUserVariables: {
           id: user.id ?? null,
@@ -215,8 +215,25 @@ const Profile: NextPage = () => {
           maxDistancePreference: maxDistancePreference !== user.maxDistancePreference ? maxDistancePreference : null,
         }
       }
-    })
+    }))?.data?.editUser as boolean
     if (preferencesChanges) searchUsers()
+    if (success) {
+      toast({
+        title: "Actualización completada",
+        description: "Tu información ya está al día",
+        status: "success",
+        duration: 2000,
+        isClosable: true
+      })
+    } else {
+      toast({
+        title: "Error actualizando",
+        description: "Hubo un error en el proceso",
+        status: "error",
+        duration: 2000,
+        isClosable: true
+      })
+    }
     setChanged(false)
   }
 
