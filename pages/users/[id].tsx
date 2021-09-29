@@ -113,7 +113,7 @@ const UserID: NextPage = () => {
                 </Link>
               }
             </Wrap>
-            <Text border="1px solid" borderColor="gray.300" p="4" rounded="md">{userVisited.description}</Text>
+            <Text border="1px solid" borderColor="gray.200" p="4" rounded="md">{userVisited.description}</Text>
           </Container>
       }
     </>
